@@ -22,5 +22,6 @@ namespace cugonlineWebAPI.Models
         public string Busy { get; set; }
         public string CategoryN { get; set; }
         public int Id { get; set; }
+        public System.DateTime LastUpdated { get; set; }
     }
 }

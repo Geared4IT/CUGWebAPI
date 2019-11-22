@@ -21,10 +21,8 @@ namespace cugonlineWebAPI.Controllers
             try
             {
                 UserMaster u = new UserMaster();
-                if (u.ID == 0)
-                {
-                    u.Email = Reg.Email;
-                    //u.ID = Reg.Id;
+                
+                    u.Email = Reg.Email;                 
                     u.Name = Reg.Name;
                     u.Password = Reg.Password;
                     u.Surname = Reg.Surname;
@@ -33,14 +31,14 @@ namespace cugonlineWebAPI.Controllers
                     cugDB.SaveChanges();
                     return new Response
                     { Status = "Success", Message = "Record SuccessFully Saved." };
-                }
+                
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-                throw;
+                
+                return new Response   { Status = "Error" + ex.Message, Message = "Invalid Data." };
             }
-            return new Response
-            { Status = "Error", Message = "Invalid Data." };
+           
         }
 
         [Route("Login")]
@@ -65,9 +63,13 @@ namespace cugonlineWebAPI.Controllers
         [HttpGet]
         public List<FiguresDTO> getFigures()
         {
-            var results = cugDB.Mains.Select(m => new FiguresDTO {
-                                             Title = m.Title.ToUpper(),
-                                                Idx = m.Idx.ToUpper() }).OrderBy(m => m.Title).ToList();
+            var results = cugDB.Mains.Select(m => new FiguresDTO
+            {
+                Id = m.Id,
+                //Idx = m.Idx.ToUpper(),
+                Title = m.Title.ToUpper(),
+                //Meaning = m.Meaning.ToUpper()                
+            }).OrderBy(m => m.Title).ToList();
 
             if (results != null)
             {
@@ -76,11 +78,80 @@ namespace cugonlineWebAPI.Controllers
             else
                 return null;
         }
+
+        [Route("GetFigureById")]
+        [HttpGet]
+        public FiguresDTO GetFigureById(int id)
+        {
+            var result = cugDB.Mains.Where(m => m.Id.Equals(id)).Select(m => new FiguresDTO
+            {
+                Id = m.Id,
+                Idx = m.Idx,
+                Title = m.Title,
+                Meaning = m.Meaning,
+                Body = m.Body
+
+            }).FirstOrDefault();
+
+            if (result != null)
+            {
+                return result;
+            }
+            else
+                return new FiguresDTO();
+        }
+
+        [Route("EditFigure")]
+        [HttpPost]
+        public object EditFigure(Figure fig)
+        {
+            try
+            {
+               
+                if (fig.Id != 0)
+                {
+
+                    var Update = cugDB.Mains.Find(fig.Id);
+
+                    Update.Title = fig.Title;
+                    Update.Meaning = fig.Meaning;
+                    Update.Body = fig.Body;
+                    Update.Idx = fig.Idx;
+                    Update.LastUpdated = DateTime.Now.Date;
+                    cugDB.Entry(Update).State = System.Data.Entity.EntityState.Modified;
+                    cugDB.SaveChanges();
+                    return new Response
+                    { Status = "Success", Message = "Record SuccessFully Saved." };
+                }
+                else
+                {
+                    Main m = new Main();
+
+                    m.Title = fig.Title;
+                    m.Body = fig.Body;
+                    m.Meaning = fig.Meaning;
+                    
+                    cugDB.Mains.Add(m);
+                    cugDB.SaveChanges();
+                    return new Response
+                    { Status = "Success", Message = "Record SuccessFully Saved." };
+                }
+            }
+            catch (Exception ex)
+            {               
+                return new Response
+            { Status = "Error" + ex.Message, Message = "Invalid Data." };
+            }
+            
+        }
     }
 
     public class FiguresDTO
     {
-        public string Title { get; set; }   
+        public int Id { get; set; }        
         public string Idx { get; set; }
+        public string Title { get; set; }
+        public string Meaning { get; set; }
+        public string Body { get; set; }
     }
 }

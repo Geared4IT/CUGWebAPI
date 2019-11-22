@@ -68,8 +68,6 @@ warning 6002: The table/view 'test.dbo.Images' does not have a primary key defin
           <Property Name="Image" Type="nvarchar" MaxLength="50" />
           <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
         </EntityType>
-        <!--Errors Found During Generation:
-warning 6002: The table/view 'test.dbo.Main' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
         <EntityType Name="Main">
           <Key>
             <PropertyRef Name="Id" />
@@ -82,6 +80,7 @@ warning 6002: The table/view 'test.dbo.Main' does not have a primary key defined
           <Property Name="Busy" Type="nvarchar" MaxLength="255" />
           <Property Name="CategoryN" Type="nchar" MaxLength="10" />
           <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="LastUpdated" Type="datetime" Nullable="false" />
         </EntityType>
         <EntityType Name="ReciprocalSeeMainRef">
           <Key>
@@ -163,6 +162,7 @@ warning 6002: The table/view 'test.dbo.txtBox' does not have a primary key defin
           <Property Name="UserName" Type="varchar" MaxLength="20" />
         </EntityType>
         <EntityContainer Name="testModelStoreContainer">
+          <EntitySet Name="Main" EntityType="Self.Main" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="ReciprocalSeeMainRef" EntityType="Self.ReciprocalSeeMainRef" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="UserMaster" EntityType="Self.UserMaster" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="FileExtensions" EntityType="Self.FileExtensions" store:Type="Tables" store:Schema="dbo">
@@ -209,18 +209,6 @@ warning 6002: The table/view 'test.dbo.txtBox' does not have a primary key defin
     [Images].[Image] AS [Image], 
     [Images].[Id] AS [Id]
     FROM [dbo].[Images] AS [Images]</DefiningQuery>
-          </EntitySet>
-          <EntitySet Name="Main" EntityType="Self.Main" store:Type="Tables" store:Schema="dbo">
-            <DefiningQuery>SELECT 
-    [Main].[Idx] AS [Idx], 
-    [Main].[Body] AS [Body], 
-    [Main].[Meaning] AS [Meaning], 
-    [Main].[Title] AS [Title], 
-    [Main].[AFirst] AS [AFirst], 
-    [Main].[Busy] AS [Busy], 
-    [Main].[CategoryN] AS [CategoryN], 
-    [Main].[Id] AS [Id]
-    FROM [dbo].[Main] AS [Main]</DefiningQuery>
           </EntitySet>
           <EntitySet Name="Request_detail" EntityType="Self.Request_detail" store:Type="Tables" store:Schema="dbo">
             <DefiningQuery>SELECT 
@@ -336,6 +324,7 @@ warning 6002: The table/view 'test.dbo.txtBox' does not have a primary key defin
           <Property Name="Busy" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
           <Property Name="CategoryN" Type="String" MaxLength="10" FixedLength="true" Unicode="true" />
           <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="LastUpdated" Type="DateTime" Nullable="false" Precision="3" />
         </EntityType>
         <EntityType Name="Request_detail">
           <Key>
@@ -490,6 +479,7 @@ warning 6002: The table/view 'test.dbo.txtBox' does not have a primary key defin
           <EntitySetMapping Name="Mains">
             <EntityTypeMapping TypeName="testModel.Main">
               <MappingFragment StoreEntitySet="Main">
+                <ScalarProperty Name="LastUpdated" ColumnName="LastUpdated" />
                 <ScalarProperty Name="Idx" ColumnName="Idx" />
                 <ScalarProperty Name="Body" ColumnName="Body" />
                 <ScalarProperty Name="Meaning" ColumnName="Meaning" />
