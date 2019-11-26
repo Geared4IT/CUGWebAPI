@@ -34,11 +34,9 @@ namespace cugonlineWebAPI.Controllers
                 
             }
             catch (Exception ex)
-            {
-                
+            {                
                 return new Response   { Status = "Error" + ex.Message, Message = "Invalid Data." };
-            }
-           
+            }           
         }
 
         [Route("Login")]
