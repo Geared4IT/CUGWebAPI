@@ -104,8 +104,7 @@ namespace cugonlineWebAPI.Controllers
         public object EditFigure(Figure fig)
         {
             try
-            {
-               
+            {               
                 if (fig.Id != 0)
                 {
 
