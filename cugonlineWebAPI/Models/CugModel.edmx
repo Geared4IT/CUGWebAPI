@@ -28,6 +28,7 @@ warning 6002: The table/view 'test.dbo.Files' does not have a primary key define
           <Property Name="fType" Type="nvarchar" MaxLength="255" />
           <Property Name="fExported" Type="nvarchar" MaxLength="1" />
           <Property Name="fThumbs" Type="nvarchar" MaxLength="16" />
+          <Property Name="filePath" Type="varchar" MaxLength="255" />
         </EntityType>
         <!--Errors Found During Generation:
 warning 6002: The table/view 'test.dbo.FilesLink' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
@@ -180,7 +181,8 @@ warning 6002: The table/view 'test.dbo.txtBox' does not have a primary key defin
     [Files].[fComment] AS [fComment], 
     [Files].[fType] AS [fType], 
     [Files].[fExported] AS [fExported], 
-    [Files].[fThumbs] AS [fThumbs]
+    [Files].[fThumbs] AS [fThumbs], 
+    [Files].[filePath] AS [filePath]
     FROM [dbo].[Files] AS [Files]</DefiningQuery>
           </EntitySet>
           <EntitySet Name="FilesLink" EntityType="Self.FilesLink" store:Type="Tables" store:Schema="dbo">
@@ -280,6 +282,7 @@ warning 6002: The table/view 'test.dbo.txtBox' does not have a primary key defin
           <Property Name="fType" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
           <Property Name="fExported" Type="String" MaxLength="1" FixedLength="false" Unicode="true" />
           <Property Name="fThumbs" Type="String" MaxLength="16" FixedLength="false" Unicode="true" />
+          <Property Name="filePath" Type="String" MaxLength="255" FixedLength="false" Unicode="false" />
         </EntityType>
         <EntityType Name="FilesLink">
           <Key>
@@ -431,6 +434,7 @@ warning 6002: The table/view 'test.dbo.txtBox' does not have a primary key defin
           <EntitySetMapping Name="Files">
             <EntityTypeMapping TypeName="testModel.File">
               <MappingFragment StoreEntitySet="Files">
+                <ScalarProperty Name="filePath" ColumnName="filePath" />
                 <ScalarProperty Name="id" ColumnName="id" />
                 <ScalarProperty Name="fName" ColumnName="fName" />
                 <ScalarProperty Name="fNamePath" ColumnName="fNamePath" />
