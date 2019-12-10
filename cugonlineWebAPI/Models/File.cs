@@ -14,7 +14,6 @@ namespace cugonlineWebAPI.Models
     
     public partial class File
     {
-        public int id { get; set; }
         public string fName { get; set; }
         public string fNamePath { get; set; }
         public string fComment { get; set; }
@@ -22,5 +21,7 @@ namespace cugonlineWebAPI.Models
         public string fExported { get; set; }
         public string fThumbs { get; set; }
         public string filePath { get; set; }
+        public int fMainId { get; set; }
+        public int fileID { get; set; }
     }
 }

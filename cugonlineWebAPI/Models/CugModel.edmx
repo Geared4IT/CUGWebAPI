@@ -15,13 +15,10 @@ warning 6002: The table/view 'test.dbo.FileExtensions' does not have a primary k
           <Property Name="fileExtension" Type="nvarchar" MaxLength="255" />
           <Property Name="fileTypeID" Type="int" />
         </EntityType>
-        <!--Errors Found During Generation:
-warning 6002: The table/view 'test.dbo.Files' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
         <EntityType Name="Files">
           <Key>
-            <PropertyRef Name="id" />
+            <PropertyRef Name="fileID" />
           </Key>
-          <Property Name="id" Type="int" Nullable="false" />
           <Property Name="fName" Type="nvarchar" MaxLength="255" />
           <Property Name="fNamePath" Type="nvarchar" MaxLength="255" />
           <Property Name="fComment" Type="nvarchar(max)" />
@@ -29,6 +26,8 @@ warning 6002: The table/view 'test.dbo.Files' does not have a primary key define
           <Property Name="fExported" Type="nvarchar" MaxLength="1" />
           <Property Name="fThumbs" Type="nvarchar" MaxLength="16" />
           <Property Name="filePath" Type="varchar" MaxLength="255" />
+          <Property Name="fMainId" Type="int" Nullable="false" />
+          <Property Name="fileID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
         </EntityType>
         <!--Errors Found During Generation:
 warning 6002: The table/view 'test.dbo.FilesLink' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
@@ -123,8 +122,6 @@ warning 6002: The table/view 'test.dbo.Request_master' does not have a primary k
           <Property Name="Date_fin" Type="datetime" />
           <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
         </EntityType>
-        <!--Errors Found During Generation:
-warning 6002: The table/view 'test.dbo.SeeMain' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
         <EntityType Name="SeeMain">
           <Key>
             <PropertyRef Name="Id" />
@@ -163,8 +160,10 @@ warning 6002: The table/view 'test.dbo.txtBox' does not have a primary key defin
           <Property Name="UserName" Type="varchar" MaxLength="20" />
         </EntityType>
         <EntityContainer Name="testModelStoreContainer">
+          <EntitySet Name="Files" EntityType="Self.Files" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Main" EntityType="Self.Main" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="ReciprocalSeeMainRef" EntityType="Self.ReciprocalSeeMainRef" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="SeeMain" EntityType="Self.SeeMain" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="UserMaster" EntityType="Self.UserMaster" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="FileExtensions" EntityType="Self.FileExtensions" store:Type="Tables" store:Schema="dbo">
             <DefiningQuery>SELECT 
@@ -172,18 +171,6 @@ warning 6002: The table/view 'test.dbo.txtBox' does not have a primary key defin
     [FileExtensions].[fileExtension] AS [fileExtension], 
     [FileExtensions].[fileTypeID] AS [fileTypeID]
     FROM [dbo].[FileExtensions] AS [FileExtensions]</DefiningQuery>
-          </EntitySet>
-          <EntitySet Name="Files" EntityType="Self.Files" store:Type="Tables" store:Schema="dbo">
-            <DefiningQuery>SELECT 
-    [Files].[id] AS [id], 
-    [Files].[fName] AS [fName], 
-    [Files].[fNamePath] AS [fNamePath], 
-    [Files].[fComment] AS [fComment], 
-    [Files].[fType] AS [fType], 
-    [Files].[fExported] AS [fExported], 
-    [Files].[fThumbs] AS [fThumbs], 
-    [Files].[filePath] AS [filePath]
-    FROM [dbo].[Files] AS [Files]</DefiningQuery>
           </EntitySet>
           <EntitySet Name="FilesLink" EntityType="Self.FilesLink" store:Type="Tables" store:Schema="dbo">
             <DefiningQuery>SELECT 
@@ -229,16 +216,6 @@ warning 6002: The table/view 'test.dbo.txtBox' does not have a primary key defin
     [Request_master].[Id] AS [Id]
     FROM [dbo].[Request_master] AS [Request_master]</DefiningQuery>
           </EntitySet>
-          <EntitySet Name="SeeMain" EntityType="Self.SeeMain" store:Type="Tables" store:Schema="dbo">
-            <DefiningQuery>SELECT 
-    [SeeMain].[Idx] AS [Idx], 
-    [SeeMain].[Link] AS [Link], 
-    [SeeMain].[Title] AS [Title], 
-    [SeeMain].[categoryN] AS [categoryN], 
-    [SeeMain].[catFlag] AS [catFlag], 
-    [SeeMain].[Id] AS [Id]
-    FROM [dbo].[SeeMain] AS [SeeMain]</DefiningQuery>
-          </EntitySet>
           <EntitySet Name="txtBox" EntityType="Self.txtBox" store:Type="Tables" store:Schema="dbo">
             <DefiningQuery>SELECT 
     [txtBox].[ID] AS [ID], 
@@ -270,19 +247,6 @@ warning 6002: The table/view 'test.dbo.txtBox' does not have a primary key defin
           <Property Name="id" Type="Int32" Nullable="false" />
           <Property Name="fileExtension1" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
           <Property Name="fileTypeID" Type="Int32" />
-        </EntityType>
-        <EntityType Name="File">
-          <Key>
-            <PropertyRef Name="id" />
-          </Key>
-          <Property Name="id" Type="Int32" Nullable="false" />
-          <Property Name="fName" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
-          <Property Name="fNamePath" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
-          <Property Name="fComment" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
-          <Property Name="fType" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
-          <Property Name="fExported" Type="String" MaxLength="1" FixedLength="false" Unicode="true" />
-          <Property Name="fThumbs" Type="String" MaxLength="16" FixedLength="false" Unicode="true" />
-          <Property Name="filePath" Type="String" MaxLength="255" FixedLength="false" Unicode="false" />
         </EntityType>
         <EntityType Name="FilesLink">
           <Key>
@@ -375,7 +339,6 @@ warning 6002: The table/view 'test.dbo.txtBox' does not have a primary key defin
         <EntityContainer Name="testEntities" annotation:LazyLoadingEnabled="true">
           <EntitySet Name="ReciprocalSeeMainRefs" EntityType="Self.ReciprocalSeeMainRef" />
           <EntitySet Name="FileExtensions" EntityType="Self.FileExtension" />
-          <EntitySet Name="Files" EntityType="Self.File" />
           <EntitySet Name="FilesLinks" EntityType="Self.FilesLink" />
           <EntitySet Name="FileTypes" EntityType="Self.FileType" />
           <EntitySet Name="IdxMains" EntityType="Self.IdxMain" />
@@ -386,6 +349,7 @@ warning 6002: The table/view 'test.dbo.txtBox' does not have a primary key defin
           <EntitySet Name="SeeMains" EntityType="Self.SeeMain" />
           <EntitySet Name="txtBoxes" EntityType="Self.txtBox" />
           <EntitySet Name="UserMasters" EntityType="testModel.UserMaster" />
+          <EntitySet Name="Files" EntityType="testModel.File" />
         </EntityContainer>
         <EntityType Name="UserMaster">
           <Key>
@@ -402,6 +366,20 @@ warning 6002: The table/view 'test.dbo.txtBox' does not have a primary key defin
           <Property Name="ID" Type="Int32" Nullable="false" />
           <Property Name="categoryN" Type="String" MaxLength="10" FixedLength="true" Unicode="true" />
           <Property Name="UserName" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
+        </EntityType>
+        <EntityType Name="File">
+          <Key>
+            <PropertyRef Name="fileID" />
+          </Key>
+          <Property Name="fName" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
+          <Property Name="fNamePath" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
+          <Property Name="fComment" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="fType" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
+          <Property Name="fExported" Type="String" MaxLength="1" FixedLength="false" Unicode="true" />
+          <Property Name="fThumbs" Type="String" MaxLength="16" FixedLength="false" Unicode="true" />
+          <Property Name="filePath" Type="String" MaxLength="255" FixedLength="false" Unicode="false" />
+          <Property Name="fMainId" Type="Int32" Nullable="false" />
+          <Property Name="fileID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
         </EntityType>
       </Schema>
     </edmx:ConceptualModels>
@@ -428,20 +406,6 @@ warning 6002: The table/view 'test.dbo.txtBox' does not have a primary key defin
                 <ScalarProperty Name="id" ColumnName="id" />
                 <ScalarProperty Name="fileExtension1" ColumnName="fileExtension" />
                 <ScalarProperty Name="fileTypeID" ColumnName="fileTypeID" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="Files">
-            <EntityTypeMapping TypeName="testModel.File">
-              <MappingFragment StoreEntitySet="Files">
-                <ScalarProperty Name="filePath" ColumnName="filePath" />
-                <ScalarProperty Name="id" ColumnName="id" />
-                <ScalarProperty Name="fName" ColumnName="fName" />
-                <ScalarProperty Name="fNamePath" ColumnName="fNamePath" />
-                <ScalarProperty Name="fComment" ColumnName="fComment" />
-                <ScalarProperty Name="fType" ColumnName="fType" />
-                <ScalarProperty Name="fExported" ColumnName="fExported" />
-                <ScalarProperty Name="fThumbs" ColumnName="fThumbs" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
@@ -551,6 +515,21 @@ warning 6002: The table/view 'test.dbo.txtBox' does not have a primary key defin
                 <ScalarProperty Name="Email" ColumnName="Email" />
                 <ScalarProperty Name="Surname" ColumnName="Surname" />
                 <ScalarProperty Name="Name" ColumnName="Name" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Files">
+            <EntityTypeMapping TypeName="testModel.File">
+              <MappingFragment StoreEntitySet="Files">
+                <ScalarProperty Name="fileID" ColumnName="fileID" />
+                <ScalarProperty Name="fMainId" ColumnName="fMainId" />
+                <ScalarProperty Name="filePath" ColumnName="filePath" />
+                <ScalarProperty Name="fThumbs" ColumnName="fThumbs" />
+                <ScalarProperty Name="fExported" ColumnName="fExported" />
+                <ScalarProperty Name="fType" ColumnName="fType" />
+                <ScalarProperty Name="fComment" ColumnName="fComment" />
+                <ScalarProperty Name="fNamePath" ColumnName="fNamePath" />
+                <ScalarProperty Name="fName" ColumnName="fName" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>

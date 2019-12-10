@@ -27,7 +27,6 @@ namespace cugonlineWebAPI.Models
     
         public virtual DbSet<ReciprocalSeeMainRef> ReciprocalSeeMainRefs { get; set; }
         public virtual DbSet<FileExtension> FileExtensions { get; set; }
-        public virtual DbSet<File> Files { get; set; }
         public virtual DbSet<FilesLink> FilesLinks { get; set; }
         public virtual DbSet<FileType> FileTypes { get; set; }
         public virtual DbSet<IdxMain> IdxMains { get; set; }
@@ -38,5 +37,6 @@ namespace cugonlineWebAPI.Models
         public virtual DbSet<SeeMain> SeeMains { get; set; }
         public virtual DbSet<txtBox> txtBoxes { get; set; }
         public virtual DbSet<UserMaster> UserMasters { get; set; }
+        public virtual DbSet<File> Files { get; set; }
     }
 }

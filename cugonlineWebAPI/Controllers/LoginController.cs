@@ -76,17 +76,15 @@ namespace cugonlineWebAPI.Controllers
         /// <summary>
         /// get list of Figures
         /// </summary>
-        /// <returns></returns>
+        /// <returns>list of figures</returns>
         [Route("Figures")]
         [HttpGet]
         public List<FiguresDTO> getFigures()
         {
             var results = cugDB.Mains.Select(m => new FiguresDTO
             {
-                Id = m.Id,
-                //Idx = m.Idx.ToUpper(),
-                Title = m.Title.ToUpper(),
-                //Meaning = m.Meaning.ToUpper()                
+                Id = m.Id,                
+                Title = m.Title.ToUpper(),               
             }).OrderBy(m => m.Title).ToList();
 
             if (results != null)
@@ -95,6 +93,22 @@ namespace cugonlineWebAPI.Controllers
             }
             else
                 return null;
+        }
+
+
+        [Route("GetFigureLinksById")]
+        [HttpGet]
+        public List<FigureLinksDTO> GetFigureLinksById(string id)
+        {
+            var idx = "South_Africa";
+            var results = cugDB.SeeMains.Where(m => m.Idx.Equals(idx)).Select(m => new FigureLinksDTO
+            {
+                LinkId = m.Id,
+                LinkTitle = m.Title
+            }).ToList();
+
+            if (results != null) return results;
+                                 return null;
         }
 
         [Route("GetFigureById")]
@@ -173,20 +187,18 @@ namespace cugonlineWebAPI.Controllers
         public List<FilesInfo> GetFilesById(string idx)
         {
             List<FilesInfo> files = new List<FilesInfo>();
-            idx = "SOUTH_AFRICA";
-            var filePath = "https://cugonlinestorage.blob.core.windows.net/$web/Images_t/0776_t.jpg";
-            filePath = "https://cugonlinestorage.blob.core.windows.net/images/download.jpg";
+            var id = int.Parse(idx);
+            //var filePath = "";
+            //filePath = "https://cugonlinestorage.blob.core.windows.net/images/!cid_00ba01ca6c31%245f9e07f0%240f01a8c0%40desktoptammy_t.jpg";//
 
             using (testEntities db = new testEntities())
             {
-                var images = (from fl in db.FilesLinks
-                              join f in db.Files
-                                on fl.idFiles equals f.id
-                              where fl.Idx.Equals(idx)
+                var images = (from f in db.Files                              
+                              where f.fMainId.Equals(id)
                               select new FilesInfo()
                               {
                                   FileName = f.fName,
-                                  FilePath = filePath,//rootPath + "" + f.fName,
+                                  FilePath = f.filePath,
                                   FileComment = f.fComment
                               }).ToList();
 
@@ -224,7 +236,7 @@ namespace cugonlineWebAPI.Controllers
                         
                         try//saving to database...
                         {
-                            if (figureId != 0)//edit
+                            if (figureId == 0)//edit
                             {
                                 var Update = cugDB.Files.Find(figureId);
                                 Update.fComment = "GetComment";
@@ -237,9 +249,10 @@ namespace cugonlineWebAPI.Controllers
 
                                 f.fName = file.FileName;
                                 f.filePath = rootPath + uniquefileName;
-                                f.fComment = "GetComment";
+                                f.fComment = file.FileName + "GetComment";
                                 f.fType = Path.GetExtension(file.FileName);
                                 f.fExported = "N";
+                                f.fMainId = figureId;
 
                                 cugDB.Files.Add(f);
                                 cugDB.SaveChanges();
@@ -328,6 +341,12 @@ namespace cugonlineWebAPI.Controllers
         public string Title { get; set; }
         public string Meaning { get; set; }
         public string Body { get; set; }
+    }
+
+    public class FigureLinksDTO
+    {
+        public int LinkId { get; set; }
+        public string LinkTitle { get; set; }
     }
 
     public class FilesInfo
