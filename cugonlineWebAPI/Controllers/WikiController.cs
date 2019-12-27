@@ -21,6 +21,11 @@ namespace cugonlineWebAPI.Controllers
             var _test_rootPath = HostingEnvironment.MapPath("~/images/");            
         }
 
+        /// <summary>
+        /// search filter
+        /// </summary>
+        /// <param name="filter"></param>
+        /// <returns></returns>
         [Route("GetSearchResultsBy")]
         [HttpGet]
         public List<FiguresDTO> GetSearchResultsBy(string filter)
