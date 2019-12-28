@@ -186,7 +186,7 @@ namespace cugonlineWebAPI.Controllers
         public List<FilesInfo> GetFilesById(string idx)
         {
             List<FilesInfo> files = new List<FilesInfo>();
-            var id = int.Parse(idx);
+            var id = 908;// int.Parse(idx);
             //var filePath = "";
             //filePath = "https://cugonlinestorage.blob.core.windows.net/images/!cid_00ba01ca6c31%245f9e07f0%240f01a8c0%40desktoptammy_t.jpg";//
 
