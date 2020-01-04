@@ -33,6 +33,7 @@ namespace cugonlineWebAPI.Controllers
                                                 ).Select(m => new FiguresDTO
             {
                 Id = m.Id,
+                Idx = m.Idx,
                 Title = m.Title,
                 Meaning = m.Meaning//,
                // Body = (m.Body.Length >100) ? m.Body.Substring(0,100) : m.Body

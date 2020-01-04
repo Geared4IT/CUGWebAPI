@@ -83,6 +83,7 @@ namespace cugonlineWebAPI.Controllers
             var results = cugDB.Mains.Select(m => new FiguresDTO
             {
                 Id = m.Id,                
+                Idx = m.Idx,
                 Title = m.Title.ToUpper(),               
             }).OrderBy(m => m.Title).ToList();
 
@@ -95,26 +96,37 @@ namespace cugonlineWebAPI.Controllers
         }
 
 
-        [Route("GetFigureLinksById")]
+        [Route("GetFigureLinksByIdx")]
         [HttpGet]
-        public List<FigureLinksDTO> GetFigureLinksById(string id)
+        public List<FigureLinksDTO> GetFigureLinksById(string idx)
         {
-            var idx = "South_Africa";
-            var results = cugDB.SeeMains.Where(m => m.Idx.Equals(idx)).Select(m => new FigureLinksDTO
-            {
-                LinkId = m.Id,
-                LinkTitle = m.Title
-            }).ToList();
+            var mainIdx = idx;// cugDB.Mains.Where(m => m.Id.Equals(id)).Select(sm => sm.Idx).FirstOrDefault();
+
+            //var results = cugDB.SeeMains.Where(m => m.Idx.Equals(idx)).Select(m => new FigureLinksDTO
+            //{
+            //    LinkId = m.Id,
+            //    LinkTitle = m.Title
+            //}).ToList();
+
+            var results = (from sm in cugDB.SeeMains
+                          join m in cugDB.Mains on sm.Idx equals m.Idx
+                          where m.Idx == mainIdx
+                           select new FigureLinksDTO
+                          {
+                               LinkId = sm.Id,
+                              LinkIdx = sm.Link,// sm.Idx,
+                              LinkTitle = sm.Link
+                          }).ToList();
 
             if (results != null) return results;
                                  return null;
         }
 
-        [Route("GetFigureById")]
+        [Route("GetFigureByIdx")]
         [HttpGet]
-        public FiguresDTO GetFigureById(int id)
+        public FiguresDTO GetFigureById(string idx)
         {
-            var result = cugDB.Mains.Where(m => m.Id.Equals(id)).Select(m => new FiguresDTO
+            var result = cugDB.Mains.Where(m => m.Idx.Equals(idx)).Select(m => new FiguresDTO
             {
                 Id = m.Id,
                 Idx = m.Idx,
@@ -346,6 +358,7 @@ namespace cugonlineWebAPI.Controllers
     {
         public int LinkId { get; set; }
         public string LinkTitle { get; set; }
+        public string LinkIdx { get;  set; }
     }
 
     public class FilesInfo
