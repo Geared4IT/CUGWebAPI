@@ -219,10 +219,13 @@
     <Compile Include="Models\IdxMain.cs">
       <DependentUpon>CugModel.tt</DependentUpon>
     </Compile>
-    <Compile Include="Models\Image.cs">
+    <Compile Include="Models\Main.cs">
       <DependentUpon>CugModel.tt</DependentUpon>
     </Compile>
-    <Compile Include="Models\Main.cs">
+    <Compile Include="Models\MainFile.cs">
+      <DependentUpon>CugModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\MainFilesLink.cs">
       <DependentUpon>CugModel.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\ReciprocalSeeMainRef.cs">

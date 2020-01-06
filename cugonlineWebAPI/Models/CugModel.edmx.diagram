@@ -8,16 +8,17 @@
         <EntityTypeShape EntityType="testModel.ReciprocalSeeMainRef" Width="1.5" PointX="0.75" PointY="0.75" IsExpanded="true" />
         <EntityTypeShape EntityType="testModel.FileExtension" Width="1.5" PointX="2.75" PointY="0.75" IsExpanded="true" />
         <EntityTypeShape EntityType="testModel.FilesLink" Width="1.5" PointX="4.75" PointY="0.75" IsExpanded="true" />
-        <EntityTypeShape EntityType="testModel.FileType" Width="1.5" PointX="4.75" PointY="3.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="testModel.FileType" Width="1.5" PointX="4.75" PointY="2.5" IsExpanded="true" />
         <EntityTypeShape EntityType="testModel.IdxMain" Width="1.5" PointX="6.75" PointY="0.75" IsExpanded="true" />
-        <EntityTypeShape EntityType="testModel.Image" Width="1.5" PointX="6.75" PointY="3.75" IsExpanded="true" />
-        <EntityTypeShape EntityType="testModel.Main" Width="1.5" PointX="4.75" PointY="6.75" IsExpanded="true" />
-        <EntityTypeShape EntityType="testModel.Request_detail" Width="1.5" PointX="6.75" PointY="6.75" IsExpanded="true" />
-        <EntityTypeShape EntityType="testModel.Request_master" Width="1.5" PointX="0.75" PointY="7.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="testModel.Main" Width="1.5" PointX="4.5" PointY="4.875" IsExpanded="true" />
+        <EntityTypeShape EntityType="testModel.Request_detail" Width="1.5" PointX="6.875" PointY="2.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="testModel.Request_master" Width="1.5" PointX="0.75" PointY="3.25" IsExpanded="true" />
         <EntityTypeShape EntityType="testModel.SeeMain" Width="1.5" PointX="8.75" PointY="0.75" IsExpanded="true" />
-        <EntityTypeShape EntityType="testModel.txtBox" Width="1.5" PointX="8.75" PointY="3.75" IsExpanded="true" />
-        <EntityTypeShape EntityType="testModel.UserMaster" Width="1.5" PointX="9.375" PointY="6.75" />
-        <EntityTypeShape EntityType="testModel.File" Width="1.5" PointX="0.75" PointY="10.75" />
+        <EntityTypeShape EntityType="testModel.txtBox" Width="1.5" PointX="8.75" PointY="3.125" IsExpanded="true" />
+        <EntityTypeShape EntityType="testModel.UserMaster" Width="1.5" PointX="9.125" PointY="4.875" />
+        <EntityTypeShape EntityType="testModel.File" Width="1.5" PointX="2.75" PointY="2.625" />
+        <EntityTypeShape EntityType="testModel.MainFile" Width="1.5" PointX="0.75" PointY="5.625" />
+        <EntityTypeShape EntityType="testModel.MainFilesLink" Width="1.5" PointX="2.75" PointY="5.625" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

@@ -58,16 +58,6 @@ warning 6002: The table/view 'test.dbo.IdxMain' does not have a primary key defi
           <Property Name="ID" Type="int" Nullable="false" />
           <Property Name="Idx" Type="nvarchar" MaxLength="250" />
         </EntityType>
-        <!--Errors Found During Generation:
-warning 6002: The table/view 'test.dbo.Images' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
-        <EntityType Name="Images">
-          <Key>
-            <PropertyRef Name="Id" />
-          </Key>
-          <Property Name="Idx" Type="nvarchar" MaxLength="50" />
-          <Property Name="Image" Type="nvarchar" MaxLength="50" />
-          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
-        </EntityType>
         <EntityType Name="Main">
           <Key>
             <PropertyRef Name="Id" />
@@ -81,6 +71,27 @@ warning 6002: The table/view 'test.dbo.Images' does not have a primary key defin
           <Property Name="CategoryN" Type="nchar" MaxLength="10" />
           <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="LastUpdated" Type="datetime" Nullable="false" />
+        </EntityType>
+        <EntityType Name="MainFiles">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="int" Nullable="false" />
+          <Property Name="fName" Type="nvarchar" MaxLength="255" />
+          <Property Name="fNamePath" Type="nvarchar" MaxLength="255" />
+          <Property Name="fComment" Type="nvarchar" MaxLength="255" />
+          <Property Name="fType" Type="nvarchar" MaxLength="255" />
+          <Property Name="fExported" Type="nvarchar" MaxLength="255" />
+          <Property Name="fThumbs" Type="nvarchar" MaxLength="255" />
+        </EntityType>
+        <EntityType Name="MainFilesLink">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Idx" Type="nvarchar" MaxLength="255" />
+          <Property Name="idFiles" Type="int" />
+          <Property Name="fSorted" Type="nvarchar" MaxLength="255" />
+          <Property Name="Id" Type="int" Nullable="false" />
         </EntityType>
         <EntityType Name="ReciprocalSeeMainRef">
           <Key>
@@ -162,6 +173,8 @@ warning 6002: The table/view 'test.dbo.txtBox' does not have a primary key defin
         <EntityContainer Name="testModelStoreContainer">
           <EntitySet Name="Files" EntityType="Self.Files" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Main" EntityType="Self.Main" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="MainFiles" EntityType="Self.MainFiles" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="MainFilesLink" EntityType="Self.MainFilesLink" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="ReciprocalSeeMainRef" EntityType="Self.ReciprocalSeeMainRef" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="SeeMain" EntityType="Self.SeeMain" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="UserMaster" EntityType="Self.UserMaster" Schema="dbo" store:Type="Tables" />
@@ -191,13 +204,6 @@ warning 6002: The table/view 'test.dbo.txtBox' does not have a primary key defin
     [IdxMain].[ID] AS [ID], 
     [IdxMain].[Idx] AS [Idx]
     FROM [dbo].[IdxMain] AS [IdxMain]</DefiningQuery>
-          </EntitySet>
-          <EntitySet Name="Images" EntityType="Self.Images" store:Type="Tables" store:Schema="dbo">
-            <DefiningQuery>SELECT 
-    [Images].[Idx] AS [Idx], 
-    [Images].[Image] AS [Image], 
-    [Images].[Id] AS [Id]
-    FROM [dbo].[Images] AS [Images]</DefiningQuery>
           </EntitySet>
           <EntitySet Name="Request_detail" EntityType="Self.Request_detail" store:Type="Tables" store:Schema="dbo">
             <DefiningQuery>SELECT 
@@ -271,14 +277,6 @@ warning 6002: The table/view 'test.dbo.txtBox' does not have a primary key defin
           <Property Name="ID" Type="Int32" Nullable="false" />
           <Property Name="Idx" Type="String" MaxLength="250" FixedLength="false" Unicode="true" />
         </EntityType>
-        <EntityType Name="Image">
-          <Key>
-            <PropertyRef Name="Id" />
-          </Key>
-          <Property Name="Idx" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Name="Image1" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-        </EntityType>
         <EntityType Name="Main">
           <Key>
             <PropertyRef Name="Id" />
@@ -342,7 +340,6 @@ warning 6002: The table/view 'test.dbo.txtBox' does not have a primary key defin
           <EntitySet Name="FilesLinks" EntityType="Self.FilesLink" />
           <EntitySet Name="FileTypes" EntityType="Self.FileType" />
           <EntitySet Name="IdxMains" EntityType="Self.IdxMain" />
-          <EntitySet Name="Images" EntityType="Self.Image" />
           <EntitySet Name="Mains" EntityType="Self.Main" />
           <EntitySet Name="Request_detail" EntityType="Self.Request_detail" />
           <EntitySet Name="Request_master" EntityType="Self.Request_master" />
@@ -350,6 +347,8 @@ warning 6002: The table/view 'test.dbo.txtBox' does not have a primary key defin
           <EntitySet Name="txtBoxes" EntityType="Self.txtBox" />
           <EntitySet Name="UserMasters" EntityType="testModel.UserMaster" />
           <EntitySet Name="Files" EntityType="testModel.File" />
+          <EntitySet Name="MainFiles" EntityType="testModel.MainFile" />
+          <EntitySet Name="MainFilesLinks" EntityType="testModel.MainFilesLink" />
         </EntityContainer>
         <EntityType Name="UserMaster">
           <Key>
@@ -380,6 +379,27 @@ warning 6002: The table/view 'test.dbo.txtBox' does not have a primary key defin
           <Property Name="filePath" Type="String" MaxLength="255" FixedLength="false" Unicode="false" />
           <Property Name="fMainId" Type="Int32" Nullable="false" />
           <Property Name="fileID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+        </EntityType>
+        <EntityType Name="MainFile">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Int32" Nullable="false" />
+          <Property Name="fName" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
+          <Property Name="fNamePath" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
+          <Property Name="fComment" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
+          <Property Name="fType" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
+          <Property Name="fExported" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
+          <Property Name="fThumbs" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
+        </EntityType>
+        <EntityType Name="MainFilesLink">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Idx" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
+          <Property Name="idFiles" Type="Int32" />
+          <Property Name="fSorted" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
+          <Property Name="Id" Type="Int32" Nullable="false" />
         </EntityType>
       </Schema>
     </edmx:ConceptualModels>
@@ -432,15 +452,6 @@ warning 6002: The table/view 'test.dbo.txtBox' does not have a primary key defin
               <MappingFragment StoreEntitySet="IdxMain">
                 <ScalarProperty Name="ID" ColumnName="ID" />
                 <ScalarProperty Name="Idx" ColumnName="Idx" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="Images">
-            <EntityTypeMapping TypeName="testModel.Image">
-              <MappingFragment StoreEntitySet="Images">
-                <ScalarProperty Name="Idx" ColumnName="Idx" />
-                <ScalarProperty Name="Image1" ColumnName="Image" />
-                <ScalarProperty Name="Id" ColumnName="Id" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
@@ -530,6 +541,29 @@ warning 6002: The table/view 'test.dbo.txtBox' does not have a primary key defin
                 <ScalarProperty Name="fComment" ColumnName="fComment" />
                 <ScalarProperty Name="fNamePath" ColumnName="fNamePath" />
                 <ScalarProperty Name="fName" ColumnName="fName" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="MainFiles">
+            <EntityTypeMapping TypeName="testModel.MainFile">
+              <MappingFragment StoreEntitySet="MainFiles">
+                <ScalarProperty Name="fThumbs" ColumnName="fThumbs" />
+                <ScalarProperty Name="fExported" ColumnName="fExported" />
+                <ScalarProperty Name="fType" ColumnName="fType" />
+                <ScalarProperty Name="fComment" ColumnName="fComment" />
+                <ScalarProperty Name="fNamePath" ColumnName="fNamePath" />
+                <ScalarProperty Name="fName" ColumnName="fName" />
+                <ScalarProperty Name="id" ColumnName="id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="MainFilesLinks">
+            <EntityTypeMapping TypeName="testModel.MainFilesLink">
+              <MappingFragment StoreEntitySet="MainFilesLink">
+                <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="fSorted" ColumnName="fSorted" />
+                <ScalarProperty Name="idFiles" ColumnName="idFiles" />
+                <ScalarProperty Name="Idx" ColumnName="Idx" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>

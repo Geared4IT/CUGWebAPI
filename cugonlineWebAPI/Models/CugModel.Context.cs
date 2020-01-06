@@ -30,7 +30,6 @@ namespace cugonlineWebAPI.Models
         public virtual DbSet<FilesLink> FilesLinks { get; set; }
         public virtual DbSet<FileType> FileTypes { get; set; }
         public virtual DbSet<IdxMain> IdxMains { get; set; }
-        public virtual DbSet<Image> Images { get; set; }
         public virtual DbSet<Main> Mains { get; set; }
         public virtual DbSet<Request_detail> Request_detail { get; set; }
         public virtual DbSet<Request_master> Request_master { get; set; }
@@ -38,5 +37,7 @@ namespace cugonlineWebAPI.Models
         public virtual DbSet<txtBox> txtBoxes { get; set; }
         public virtual DbSet<UserMaster> UserMasters { get; set; }
         public virtual DbSet<File> Files { get; set; }
+        public virtual DbSet<MainFile> MainFiles { get; set; }
+        public virtual DbSet<MainFilesLink> MainFilesLinks { get; set; }
     }
 }

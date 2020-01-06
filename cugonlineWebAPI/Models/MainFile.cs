@@ -12,10 +12,14 @@ namespace cugonlineWebAPI.Models
     using System;
     using System.Collections.Generic;
     
-    public partial class Image
+    public partial class MainFile
     {
-        public string Idx { get; set; }
-        public string Image1 { get; set; }
-        public int Id { get; set; }
+        public int id { get; set; }
+        public string fName { get; set; }
+        public string fNamePath { get; set; }
+        public string fComment { get; set; }
+        public string fType { get; set; }
+        public string fExported { get; set; }
+        public string fThumbs { get; set; }
     }
 }

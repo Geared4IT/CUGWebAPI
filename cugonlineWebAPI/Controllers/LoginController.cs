@@ -100,7 +100,7 @@ namespace cugonlineWebAPI.Controllers
         [HttpGet]
         public List<FigureLinksDTO> GetFigureLinksById(string idx)
         {
-            var mainIdx = idx;// cugDB.Mains.Where(m => m.Id.Equals(id)).Select(sm => sm.Idx).FirstOrDefault();
+            //var mainIdx = "SOUTH_AFRICA";// idx;// cugDB.Mains.Where(m => m.Id.Equals(id)).Select(sm => sm.Idx).FirstOrDefault();
 
             //var results = cugDB.SeeMains.Where(m => m.Idx.Equals(idx)).Select(m => new FigureLinksDTO
             //{
@@ -110,7 +110,7 @@ namespace cugonlineWebAPI.Controllers
 
             var results = (from sm in cugDB.SeeMains
                           join m in cugDB.Mains on sm.Idx equals m.Idx
-                          where m.Idx == mainIdx
+                          where m.Idx == idx
                            select new FigureLinksDTO
                           {
                                LinkId = sm.Id,
@@ -202,15 +202,30 @@ namespace cugonlineWebAPI.Controllers
             //var filePath = "";
             //filePath = "https://cugonlinestorage.blob.core.windows.net/images/!cid_00ba01ca6c31%245f9e07f0%240f01a8c0%40desktoptammy_t.jpg";//
 
+            //using (testEntities db = new testEntities())
+            //{
+            //    var images = (from f in db.Files                              
+            //                  where f.fMainId.Equals(id)
+            //                  select new FilesInfo()
+            //                  {
+            //                      FileName = f.fName,
+            //                      FilePath = f.filePath,
+            //                      FileComment = f.fComment
+            //                  }).ToList();
+
+            //    return images;
+            //}
+
             using (testEntities db = new testEntities())
             {
-                var images = (from f in db.Files                              
-                              where f.fMainId.Equals(id)
+                var images = (from mfl in cugDB.MainFilesLinks
+                              join mf in cugDB.MainFiles on mfl.idFiles equals mf.id
+                              where mfl.Idx == idx
                               select new FilesInfo()
                               {
-                                  FileName = f.fName,
-                                  FilePath = f.filePath,
-                                  FileComment = f.fComment
+                                  FileName = mf.fName,
+                                  FilePath = "http://cugonline.co.za/images/" + mf.fName,
+                                  FileComment = mf.fComment
                               }).ToList();
 
                 return images;
