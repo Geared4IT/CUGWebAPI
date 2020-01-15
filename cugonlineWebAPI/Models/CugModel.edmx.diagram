@@ -13,12 +13,12 @@
         <EntityTypeShape EntityType="testModel.Main" Width="1.5" PointX="4.5" PointY="4.875" IsExpanded="true" />
         <EntityTypeShape EntityType="testModel.Request_detail" Width="1.5" PointX="6.875" PointY="2.375" IsExpanded="true" />
         <EntityTypeShape EntityType="testModel.Request_master" Width="1.5" PointX="0.75" PointY="3.25" IsExpanded="true" />
-        <EntityTypeShape EntityType="testModel.SeeMain" Width="1.5" PointX="8.75" PointY="0.75" IsExpanded="true" />
         <EntityTypeShape EntityType="testModel.txtBox" Width="1.5" PointX="8.75" PointY="3.125" IsExpanded="true" />
-        <EntityTypeShape EntityType="testModel.UserMaster" Width="1.5" PointX="9.125" PointY="4.875" />
         <EntityTypeShape EntityType="testModel.File" Width="1.5" PointX="2.75" PointY="2.625" />
-        <EntityTypeShape EntityType="testModel.MainFile" Width="1.5" PointX="0.75" PointY="5.625" />
         <EntityTypeShape EntityType="testModel.MainFilesLink" Width="1.5" PointX="2.75" PointY="5.625" />
+        <EntityTypeShape EntityType="testModel.MainFile" Width="1.5" PointX="7.75" PointY="5.75" />
+        <EntityTypeShape EntityType="testModel.SeeMain" Width="1.5" PointX="0.75" PointY="8.75" />
+        <EntityTypeShape EntityType="testModel.UserMaster" Width="1.5" PointX="2.75" PointY="8.75" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

@@ -83,6 +83,7 @@ warning 6002: The table/view 'test.dbo.IdxMain' does not have a primary key defi
           <Property Name="fType" Type="nvarchar" MaxLength="255" />
           <Property Name="fExported" Type="nvarchar" MaxLength="255" />
           <Property Name="fThumbs" Type="nvarchar" MaxLength="255" />
+          <Property Name="IsDeleted" Type="bit" />
         </EntityType>
         <EntityType Name="MainFilesLink">
           <Key>
@@ -143,6 +144,7 @@ warning 6002: The table/view 'test.dbo.Request_master' does not have a primary k
           <Property Name="categoryN" Type="nchar" MaxLength="10" />
           <Property Name="catFlag" Type="nvarchar(max)" />
           <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="IsDeleted" Type="bit" />
         </EntityType>
         <!--Errors Found During Generation:
 warning 6002: The table/view 'test.dbo.txtBox' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
@@ -169,6 +171,7 @@ warning 6002: The table/view 'test.dbo.txtBox' does not have a primary key defin
           <Property Name="ID" Type="int" Nullable="false" />
           <Property Name="categoryN" Type="nchar" MaxLength="10" />
           <Property Name="UserName" Type="varchar" MaxLength="20" />
+          <Property Name="IsDeleted" Type="bit" />
         </EntityType>
         <EntityContainer Name="testModelStoreContainer">
           <EntitySet Name="Files" EntityType="Self.Files" Schema="dbo" store:Type="Tables" />
@@ -315,17 +318,6 @@ warning 6002: The table/view 'test.dbo.txtBox' does not have a primary key defin
           <Property Name="Date_fin" Type="DateTime" Precision="3" />
           <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
         </EntityType>
-        <EntityType Name="SeeMain">
-          <Key>
-            <PropertyRef Name="Id" />
-          </Key>
-          <Property Name="Idx" Type="String" MaxLength="250" FixedLength="false" Unicode="true" />
-          <Property Name="Link" Type="String" MaxLength="250" FixedLength="false" Unicode="true" />
-          <Property Name="Title" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Name="categoryN" Type="String" MaxLength="10" FixedLength="true" Unicode="true" />
-          <Property Name="catFlag" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
-          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-        </EntityType>
         <EntityType Name="txtBox">
           <Key>
             <PropertyRef Name="ID" />
@@ -343,13 +335,61 @@ warning 6002: The table/view 'test.dbo.txtBox' does not have a primary key defin
           <EntitySet Name="Mains" EntityType="Self.Main" />
           <EntitySet Name="Request_detail" EntityType="Self.Request_detail" />
           <EntitySet Name="Request_master" EntityType="Self.Request_master" />
-          <EntitySet Name="SeeMains" EntityType="Self.SeeMain" />
           <EntitySet Name="txtBoxes" EntityType="Self.txtBox" />
-          <EntitySet Name="UserMasters" EntityType="testModel.UserMaster" />
           <EntitySet Name="Files" EntityType="testModel.File" />
-          <EntitySet Name="MainFiles" EntityType="testModel.MainFile" />
           <EntitySet Name="MainFilesLinks" EntityType="testModel.MainFilesLink" />
+          <EntitySet Name="MainFiles" EntityType="testModel.MainFile" />
+          <EntitySet Name="SeeMains" EntityType="testModel.SeeMain" />
+          <EntitySet Name="UserMasters" EntityType="testModel.UserMaster" />
         </EntityContainer>
+        <EntityType Name="File">
+          <Key>
+            <PropertyRef Name="fileID" />
+          </Key>
+          <Property Name="fName" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
+          <Property Name="fNamePath" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
+          <Property Name="fComment" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="fType" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
+          <Property Name="fExported" Type="String" MaxLength="1" FixedLength="false" Unicode="true" />
+          <Property Name="fThumbs" Type="String" MaxLength="16" FixedLength="false" Unicode="true" />
+          <Property Name="filePath" Type="String" MaxLength="255" FixedLength="false" Unicode="false" />
+          <Property Name="fMainId" Type="Int32" Nullable="false" />
+          <Property Name="fileID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+        </EntityType>
+        <EntityType Name="MainFilesLink">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Idx" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
+          <Property Name="idFiles" Type="Int32" />
+          <Property Name="fSorted" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
+          <Property Name="Id" Type="Int32" Nullable="false" />
+        </EntityType>
+        <EntityType Name="MainFile">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Int32" Nullable="false" />
+          <Property Name="fName" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
+          <Property Name="fNamePath" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
+          <Property Name="fComment" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
+          <Property Name="fType" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
+          <Property Name="fExported" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
+          <Property Name="fThumbs" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
+          <Property Name="IsDeleted" Type="Boolean" />
+        </EntityType>
+        <EntityType Name="SeeMain">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Idx" Type="String" MaxLength="250" FixedLength="false" Unicode="true" />
+          <Property Name="Link" Type="String" MaxLength="250" FixedLength="false" Unicode="true" />
+          <Property Name="Title" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="categoryN" Type="String" MaxLength="10" FixedLength="true" Unicode="true" />
+          <Property Name="catFlag" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="IsDeleted" Type="Boolean" />
+        </EntityType>
         <EntityType Name="UserMaster">
           <Key>
             <PropertyRef Name="ID" />
@@ -365,41 +405,7 @@ warning 6002: The table/view 'test.dbo.txtBox' does not have a primary key defin
           <Property Name="ID" Type="Int32" Nullable="false" />
           <Property Name="categoryN" Type="String" MaxLength="10" FixedLength="true" Unicode="true" />
           <Property Name="UserName" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
-        </EntityType>
-        <EntityType Name="File">
-          <Key>
-            <PropertyRef Name="fileID" />
-          </Key>
-          <Property Name="fName" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
-          <Property Name="fNamePath" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
-          <Property Name="fComment" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
-          <Property Name="fType" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
-          <Property Name="fExported" Type="String" MaxLength="1" FixedLength="false" Unicode="true" />
-          <Property Name="fThumbs" Type="String" MaxLength="16" FixedLength="false" Unicode="true" />
-          <Property Name="filePath" Type="String" MaxLength="255" FixedLength="false" Unicode="false" />
-          <Property Name="fMainId" Type="Int32" Nullable="false" />
-          <Property Name="fileID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-        </EntityType>
-        <EntityType Name="MainFile">
-          <Key>
-            <PropertyRef Name="id" />
-          </Key>
-          <Property Name="id" Type="Int32" Nullable="false" />
-          <Property Name="fName" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
-          <Property Name="fNamePath" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
-          <Property Name="fComment" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
-          <Property Name="fType" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
-          <Property Name="fExported" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
-          <Property Name="fThumbs" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
-        </EntityType>
-        <EntityType Name="MainFilesLink">
-          <Key>
-            <PropertyRef Name="Id" />
-          </Key>
-          <Property Name="Idx" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
-          <Property Name="idFiles" Type="Int32" />
-          <Property Name="fSorted" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
-          <Property Name="Id" Type="Int32" Nullable="false" />
+          <Property Name="IsDeleted" Type="Boolean" />
         </EntityType>
       </Schema>
     </edmx:ConceptualModels>
@@ -491,41 +497,12 @@ warning 6002: The table/view 'test.dbo.txtBox' does not have a primary key defin
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
-          <EntitySetMapping Name="SeeMains">
-            <EntityTypeMapping TypeName="testModel.SeeMain">
-              <MappingFragment StoreEntitySet="SeeMain">
-                <ScalarProperty Name="Idx" ColumnName="Idx" />
-                <ScalarProperty Name="Link" ColumnName="Link" />
-                <ScalarProperty Name="Title" ColumnName="Title" />
-                <ScalarProperty Name="categoryN" ColumnName="categoryN" />
-                <ScalarProperty Name="catFlag" ColumnName="catFlag" />
-                <ScalarProperty Name="Id" ColumnName="Id" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
           <EntitySetMapping Name="txtBoxes">
             <EntityTypeMapping TypeName="testModel.txtBox">
               <MappingFragment StoreEntitySet="txtBox">
                 <ScalarProperty Name="ID" ColumnName="ID" />
                 <ScalarProperty Name="Idx" ColumnName="Idx" />
                 <ScalarProperty Name="txtContent" ColumnName="txtContent" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="UserMasters">
-            <EntityTypeMapping TypeName="testModel.UserMaster">
-              <MappingFragment StoreEntitySet="UserMaster">
-                <ScalarProperty Name="UserName" ColumnName="UserName" />
-                <ScalarProperty Name="categoryN" ColumnName="categoryN" />
-                <ScalarProperty Name="ID" ColumnName="ID" />
-                <ScalarProperty Name="Date_added" ColumnName="Date_added" />
-                <ScalarProperty Name="Time_last" ColumnName="Time_last" />
-                <ScalarProperty Name="Date_last" ColumnName="Date_last" />
-                <ScalarProperty Name="nKey" ColumnName="nKey" />
-                <ScalarProperty Name="Password" ColumnName="Password" />
-                <ScalarProperty Name="Email" ColumnName="Email" />
-                <ScalarProperty Name="Surname" ColumnName="Surname" />
-                <ScalarProperty Name="Name" ColumnName="Name" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
@@ -544,9 +521,20 @@ warning 6002: The table/view 'test.dbo.txtBox' does not have a primary key defin
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
+          <EntitySetMapping Name="MainFilesLinks">
+            <EntityTypeMapping TypeName="testModel.MainFilesLink">
+              <MappingFragment StoreEntitySet="MainFilesLink">
+                <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="fSorted" ColumnName="fSorted" />
+                <ScalarProperty Name="idFiles" ColumnName="idFiles" />
+                <ScalarProperty Name="Idx" ColumnName="Idx" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
           <EntitySetMapping Name="MainFiles">
             <EntityTypeMapping TypeName="testModel.MainFile">
               <MappingFragment StoreEntitySet="MainFiles">
+                <ScalarProperty Name="IsDeleted" ColumnName="IsDeleted" />
                 <ScalarProperty Name="fThumbs" ColumnName="fThumbs" />
                 <ScalarProperty Name="fExported" ColumnName="fExported" />
                 <ScalarProperty Name="fType" ColumnName="fType" />
@@ -557,13 +545,34 @@ warning 6002: The table/view 'test.dbo.txtBox' does not have a primary key defin
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
-          <EntitySetMapping Name="MainFilesLinks">
-            <EntityTypeMapping TypeName="testModel.MainFilesLink">
-              <MappingFragment StoreEntitySet="MainFilesLink">
+          <EntitySetMapping Name="SeeMains">
+            <EntityTypeMapping TypeName="testModel.SeeMain">
+              <MappingFragment StoreEntitySet="SeeMain">
+                <ScalarProperty Name="IsDeleted" ColumnName="IsDeleted" />
                 <ScalarProperty Name="Id" ColumnName="Id" />
-                <ScalarProperty Name="fSorted" ColumnName="fSorted" />
-                <ScalarProperty Name="idFiles" ColumnName="idFiles" />
+                <ScalarProperty Name="catFlag" ColumnName="catFlag" />
+                <ScalarProperty Name="categoryN" ColumnName="categoryN" />
+                <ScalarProperty Name="Title" ColumnName="Title" />
+                <ScalarProperty Name="Link" ColumnName="Link" />
                 <ScalarProperty Name="Idx" ColumnName="Idx" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="UserMasters">
+            <EntityTypeMapping TypeName="testModel.UserMaster">
+              <MappingFragment StoreEntitySet="UserMaster">
+                <ScalarProperty Name="IsDeleted" ColumnName="IsDeleted" />
+                <ScalarProperty Name="UserName" ColumnName="UserName" />
+                <ScalarProperty Name="categoryN" ColumnName="categoryN" />
+                <ScalarProperty Name="ID" ColumnName="ID" />
+                <ScalarProperty Name="Date_added" ColumnName="Date_added" />
+                <ScalarProperty Name="Time_last" ColumnName="Time_last" />
+                <ScalarProperty Name="Date_last" ColumnName="Date_last" />
+                <ScalarProperty Name="nKey" ColumnName="nKey" />
+                <ScalarProperty Name="Password" ColumnName="Password" />
+                <ScalarProperty Name="Email" ColumnName="Email" />
+                <ScalarProperty Name="Surname" ColumnName="Surname" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>

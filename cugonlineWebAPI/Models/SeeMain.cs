@@ -20,5 +20,6 @@ namespace cugonlineWebAPI.Models
         public string categoryN { get; set; }
         public string catFlag { get; set; }
         public int Id { get; set; }
+        public Nullable<bool> IsDeleted { get; set; }
     }
 }

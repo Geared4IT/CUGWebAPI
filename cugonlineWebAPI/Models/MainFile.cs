@@ -21,5 +21,6 @@ namespace cugonlineWebAPI.Models
         public string fType { get; set; }
         public string fExported { get; set; }
         public string fThumbs { get; set; }
+        public Nullable<bool> IsDeleted { get; set; }
     }
 }

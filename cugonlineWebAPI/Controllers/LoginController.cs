@@ -95,27 +95,38 @@ namespace cugonlineWebAPI.Controllers
                 return null;
         }
 
+        [Route("FigureLinksList")]
+        [HttpGet]
+        public List<FiguresLinkDTO> FigureLinksList()
+        {
+            var results = cugDB.Mains.Select(m => new FiguresLinkDTO
+            {                
+                value = m.Idx,
+                label = m.Title.ToUpper(),
+            }).OrderBy(m => m.value).ToList();
+
+            if (results != null)
+            {
+                return results;
+            }
+            else
+                return null;
+        }
+
+
 
         [Route("GetFigureLinksByIdx")]
         [HttpGet]
         public List<FigureLinksDTO> GetFigureLinksById(string idx)
-        {
-            //var mainIdx = "SOUTH_AFRICA";// idx;// cugDB.Mains.Where(m => m.Id.Equals(id)).Select(sm => sm.Idx).FirstOrDefault();
-
-            //var results = cugDB.SeeMains.Where(m => m.Idx.Equals(idx)).Select(m => new FigureLinksDTO
-            //{
-            //    LinkId = m.Id,
-            //    LinkTitle = m.Title
-            //}).ToList();
-
+        {           
             var results = (from sm in cugDB.SeeMains
-                          join m in cugDB.Mains on sm.Idx equals m.Idx
-                          where m.Idx == idx
+                          join m in cugDB.Mains on sm.Link equals m.Idx
+                          where m.Idx == idx                          
                            select new FigureLinksDTO
                           {
                                LinkId = sm.Id,
-                              LinkIdx = sm.Link,// sm.Idx,
-                              LinkTitle = sm.Link
+                              LinkIdx = sm.Idx,// sm.Idx,
+                              LinkTitle = sm.Idx
                           }).ToList();
 
             if (results != null) return results;
@@ -142,6 +153,65 @@ namespace cugonlineWebAPI.Controllers
             }
             else
                 return new FiguresDTO();
+        }
+
+        [Route("DeleteReference")]
+        [HttpPost]
+        public object DeleteReference(FigureLinksDTO reference)
+        {
+            var updateReferece = cugDB.SeeMains.Where(sm => sm.Idx.Equals(reference.LinkIdx) && sm.Link.Equals(reference.LinkTitle)).FirstOrDefault();
+            //updateReferece.re
+            cugDB.SeeMains.Remove(updateReferece);
+            cugDB.SaveChanges();
+            return new Response
+            { Status = "Success", Message = "Reference Deleted Saved." };
+        }
+
+        [Route("DeleteImage")]
+        [HttpPost]
+        public object DeleteImage(FilesInfo item)
+        {
+            var updateImage = cugDB.MainFiles.Where(mf => mf.id.Equals(item.FileId)).FirstOrDefault();
+
+            if (updateImage == null)
+            {
+                return new Response
+                { Status = "Success", Message = "Image Deleted Saved." };
+            }
+            updateImage.IsDeleted = false;
+            
+            cugDB.Entry(updateImage).State = System.Data.Entity.EntityState.Modified;
+            cugDB.SaveChanges();
+
+            return new Response
+            { Status = "Success", Message = "Reference Deleted Saved." };
+        }
+
+        [Route("AddReference")]
+        [HttpPost]
+        public object AddReference(FigureLinksDTO reference)
+        {
+            var updateReferece = cugDB.SeeMains.Where(sm => sm.Idx.Equals(reference.LinkIdx) && sm.Link.Equals(reference.LinkTitle)).FirstOrDefault();
+            
+            if(updateReferece == null)
+            {
+                //add to seemain
+                SeeMain m = new SeeMain();
+
+                m.Idx = reference.LinkIdx;
+                m.Link = reference.LinkTitle;
+                m.Title = reference.LinkTitle.Replace("_"," ");
+                m.categoryN = "ALL";
+                m.catFlag = "O";
+                cugDB.SeeMains.Add(m);
+                cugDB.SaveChanges();
+                return new Response
+                { Status = "Success", Message = "Record SuccessFully Saved." };
+
+            }
+            
+            return new Response
+            { Status = "Success", Message = "Reference Already Exists." };
         }
 
         [Route("EditFigure")]
@@ -198,24 +268,9 @@ namespace cugonlineWebAPI.Controllers
         public List<FilesInfo> GetFilesById(string idx)
         {
             List<FilesInfo> files = new List<FilesInfo>();
-            var id = 908;// int.Parse(idx);
-            //var filePath = "";
+            
             //filePath = "https://cugonlinestorage.blob.core.windows.net/images/!cid_00ba01ca6c31%245f9e07f0%240f01a8c0%40desktoptammy_t.jpg";//
-
-            //using (testEntities db = new testEntities())
-            //{
-            //    var images = (from f in db.Files                              
-            //                  where f.fMainId.Equals(id)
-            //                  select new FilesInfo()
-            //                  {
-            //                      FileName = f.fName,
-            //                      FilePath = f.filePath,
-            //                      FileComment = f.fComment
-            //                  }).ToList();
-
-            //    return images;
-            //}
-
+            
             using (testEntities db = new testEntities())
             {
                 var images = (from mfl in cugDB.MainFilesLinks
@@ -223,6 +278,7 @@ namespace cugonlineWebAPI.Controllers
                               where mfl.Idx == idx
                               select new FilesInfo()
                               {
+                                  FileId = mf.id,
                                   FileName = mf.fName,
                                   FilePath = "http://cugonline.co.za/images/" + mf.fName,
                                   FileComment = mf.fComment
@@ -360,6 +416,12 @@ namespace cugonlineWebAPI.Controllers
         public string FileComment { get; set; }
         public string FileType { get; set; }
     }
+
+    public class FiguresLinkDTO
+    {
+        public string label { get; set; }
+        public string value { get; set; }
+    }
     public class FiguresDTO
     {
         public int Id { get; set; }
@@ -374,10 +436,12 @@ namespace cugonlineWebAPI.Controllers
         public int LinkId { get; set; }
         public string LinkTitle { get; set; }
         public string LinkIdx { get;  set; }
+        public string Link { get; set; }
     }
 
     public class FilesInfo
     {
+        public int FileId { get; set; }
         public string FilePath { get; set; }
         public string FileName { get; set; }
         public string FileComment { get; set; }

@@ -33,11 +33,11 @@ namespace cugonlineWebAPI.Models
         public virtual DbSet<Main> Mains { get; set; }
         public virtual DbSet<Request_detail> Request_detail { get; set; }
         public virtual DbSet<Request_master> Request_master { get; set; }
-        public virtual DbSet<SeeMain> SeeMains { get; set; }
         public virtual DbSet<txtBox> txtBoxes { get; set; }
-        public virtual DbSet<UserMaster> UserMasters { get; set; }
         public virtual DbSet<File> Files { get; set; }
-        public virtual DbSet<MainFile> MainFiles { get; set; }
         public virtual DbSet<MainFilesLink> MainFilesLinks { get; set; }
+        public virtual DbSet<MainFile> MainFiles { get; set; }
+        public virtual DbSet<SeeMain> SeeMains { get; set; }
+        public virtual DbSet<UserMaster> UserMasters { get; set; }
     }
 }
