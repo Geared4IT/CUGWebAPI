@@ -78,9 +78,9 @@ namespace cugonlineWebAPI.Controllers
         /// <returns>list of figures</returns>
         [Route("Figures")]
         [HttpGet]
-        public List<FiguresDTO> getFigures()
+        public List<FiguresDTO> getFigures(string filter)
         {
-            var results = cugDB.Mains.Select(m => new FiguresDTO
+            var results = cugDB.Mains.Where(m => m.Title.Contains(filter)).Select(m => new FiguresDTO
             {
                 Id = m.Id,                
                 Idx = m.Idx,
@@ -97,9 +97,10 @@ namespace cugonlineWebAPI.Controllers
 
         [Route("FigureLinksList")]
         [HttpGet]
-        public List<FiguresLinkDTO> FigureLinksList()
+        public List<FiguresLinkDTO> FigureLinksList(string filter)
         {
-            var results = cugDB.Mains.Select(m => new FiguresLinkDTO
+            //var results = cugDB.Mains.Select(m => new FiguresLinkDTO
+            var results = cugDB.Mains.Where(m => m.Title.Contains(filter)).Select(m => new FiguresLinkDTO
             {                
                 value = m.Idx,
                 label = m.Title.ToUpper(),
