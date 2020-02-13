@@ -60,16 +60,27 @@ namespace cugonlineWebAPI.Controllers
 
         [Route("Login")]
         [HttpPost]
-        public Response employeeLogin(Login login)
+        public SystemUsersDTO employeeLogin(Login login)
         {
-            var log = cugDB.UserMasters.Where(x => x.UserName.Equals(login.UserName) && x.Password.Equals(login.Password)).FirstOrDefault();
+            var u = cugDB.UserMasters.Where(x => x.UserName.Equals(login.UserName) && x.Password.Equals(login.Password)).FirstOrDefault();
 
-            if (log == null)
+            if (u == null)
             {
-                return new Response { Status = "Invalid", Message = "Invalid User." };
+                return new SystemUsersDTO { Name = "Invalid"};
             }
             else
-                return new Response { Status = "Success", Message = "Login Successfully" };
+                return new SystemUsersDTO {
+                    Id = u.ID,
+                    Name = u.Name.ToUpper(),
+                    Surname = u.Surname.ToUpper(),
+                    CategoryName = u.categoryN.Trim(),
+                    DateCreated = u.Date_added,
+                    DateLast = u.Date_last,
+                    UserName = u.UserName,
+                    Password = u.Password,
+                    Email = u.Email,
+                    IsAdmin = u.nKey
+                };
         }
 
         /// <summary>
@@ -86,6 +97,37 @@ namespace cugonlineWebAPI.Controllers
                 Idx = m.Idx,
                 Title = m.Title.ToUpper(),               
             }).OrderBy(m => m.Title).ToList();
+
+            if (results != null)
+            {
+                return results;
+            }
+            else
+                return null;
+        }
+
+        /// <summary>
+        /// get list of users
+        /// </summary>
+        /// <returns>list of figures</returns>
+        [Route("SystemUsers")]
+        [HttpGet]
+        public List<SystemUsersDTO> getSystemUsers()
+        {
+            var results = cugDB.UserMasters.Select(u => new SystemUsersDTO
+            {
+                Id = u.ID,
+                Name = u.Name.ToUpper(),
+                Surname = u.Surname.ToUpper(),
+                CategoryName =  u.categoryN.Trim(),
+                DateCreated = u.Date_added,
+                DateLast = u.Date_last,
+                UserName = u.UserName,
+                Password = u.Password,
+                Email = u.Email,
+                IsAdmin = u.nKey,
+                IsDeleted = (u.IsDeleted.HasValue) ? u.IsDeleted.Value : false                
+            }).OrderBy(u => u.UserName).ToList();
 
             if (results != null)
             {
@@ -155,6 +197,32 @@ namespace cugonlineWebAPI.Controllers
             else
                 return new FiguresDTO();
         }
+
+        [Route("GetSystemUserById")]
+        [HttpGet]
+        public SystemUsersDTO GetSystemUserById(int id)
+        {
+            var result = cugDB.UserMasters.Where(u => u.ID.Equals(id)).Select(u => new SystemUsersDTO
+            {
+                Id = u.ID,
+                Name = u.Name,
+                Surname = u.Surname,
+                CategoryName = u.categoryN.Trim(),
+                UserName = u.UserName,
+                Email = u.Email,
+                Password = u.Password,
+                IsAdmin = u.nKey
+
+            }).FirstOrDefault();
+
+            if (result != null)
+            {
+                return result;
+            }
+            else
+                return new SystemUsersDTO();
+        }
+
 
         [Route("DeleteReference")]
         [HttpPost]
@@ -245,6 +313,57 @@ namespace cugonlineWebAPI.Controllers
                     m.Meaning = fig.Meaning;
 
                     cugDB.Mains.Add(m);
+                    cugDB.SaveChanges();
+                    return new Response
+                    { Status = "Success", Message = "Record SuccessFully Saved." };
+                }
+            }
+            catch (Exception ex)
+            {
+                return new Response
+                { Status = "Error" + ex.Message, Message = "Invalid Data." };
+            }
+
+        }
+
+        //edit User
+        [Route("EditSystemUser")]
+        [HttpPost]
+        public object EditSystemUser(UserMaster user)
+        {
+            try
+            {
+                if (user.ID != -1)
+                {
+
+                    var Update = cugDB.UserMasters.Find(user.ID);
+
+                    Update.Name = user.Name;
+                    Update.Surname = user.Surname;
+                    Update.UserName = user.UserName;
+                    Update.Password = user.Password;
+                    Update.Email = user.Email;
+                    Update.categoryN = user.categoryN;
+                    Update.Date_last = DateTime.Now.ToString();
+                    cugDB.Entry(Update).State = System.Data.Entity.EntityState.Modified;
+                    cugDB.SaveChanges();
+                    return new Response
+                    { Status = "Success", Message = "Record SuccessFully Saved." };
+                }
+                else
+                {
+                    var nextUserId = cugDB.UserMasters.OrderByDescending(u => u.ID).FirstOrDefault().ID + 1;
+                    UserMaster um = new UserMaster();
+                    um.ID = nextUserId;
+                    um.Name = user.Name;
+                    um.Surname = user.Surname;
+                    um.UserName = user.UserName;
+                    um.Password = user.Password;
+                    um.Email = user.Email;
+                    um.categoryN = user.categoryN;
+                    um.Date_added = DateTime.Now.Date.ToLongDateString();
+
+                    cugDB.UserMasters.Add(um);
                     cugDB.SaveChanges();
                     return new Response
                     { Status = "Success", Message = "Record SuccessFully Saved." };
@@ -430,6 +549,22 @@ namespace cugonlineWebAPI.Controllers
         public string Title { get; set; }
         public string Meaning { get; set; }
         public string Body { get; set; }
+    }
+
+    public class SystemUsersDTO
+    {
+        public int Id { get; set; }
+        public string Surname { get; set; }
+        public string Name { get; set; }
+        public string Email { get; set; }
+        public string Password { get; set; }
+        public string DateLast { get; set; }
+        public string DateCreated { get; set; }
+        public string CategoryName { get; set; }
+        public int CategoryId { get; set;  }
+        public string UserName { get; set; }
+        public bool IsDeleted { get; set; }
+        public string IsAdmin { get; set; }
     }
 
     public class FigureLinksDTO
