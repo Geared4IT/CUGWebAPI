@@ -54,7 +54,7 @@ namespace cugonlineWebAPI.Controllers
                                                    Idx = m.Idx,
                                                    Title = m.Title,
                                                    Meaning = m.Meaning
-                                               }).Take(30).ToList();                   
+                                               }).Take(20).ToList();                   
 
                     break;
 
