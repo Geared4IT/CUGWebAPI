@@ -95,7 +95,10 @@ namespace cugonlineWebAPI.Controllers
             {
                 Id = m.Id,                
                 Idx = m.Idx,
-                Title = m.Title.ToUpper(),               
+                Title = m.Title.ToUpper(),
+                LastUpdated = m.LastUpdated.ToString(),
+                LastUpdatedBy = (m.LastUpdatedBy.HasValue == true) ? cugDB.UserMasters.Where(u => u.ID.Equals(m.LastUpdatedBy.Value)).FirstOrDefault().Name : ""
+
             }).OrderBy(m => m.Title).ToList();
 
             if (results != null)
@@ -186,7 +189,9 @@ namespace cugonlineWebAPI.Controllers
                 Idx = m.Idx,
                 Title = m.Title,
                 Meaning = m.Meaning,
-                Body = m.Body
+                Body = m.Body,
+                LastUpdated = m.LastUpdated.ToString(),
+                LastUpdatedBy = (m.LastUpdatedBy.HasValue == true) ? cugDB.UserMasters.Where(u => u.ID.Equals(m.LastUpdatedBy.Value)).FirstOrDefault().Name : ""
 
             }).FirstOrDefault();
 
@@ -299,6 +304,7 @@ namespace cugonlineWebAPI.Controllers
                     Update.Body = fig.Body;
                     Update.Idx = fig.Idx;
                     Update.LastUpdated = DateTime.Now.Date;
+                    Update.LastUpdatedBy = fig.LastUpdatedBy;
                     cugDB.Entry(Update).State = System.Data.Entity.EntityState.Modified;
                     cugDB.SaveChanges();
                     return new Response
@@ -389,8 +395,8 @@ namespace cugonlineWebAPI.Controllers
         {
             List<FilesInfo> files = new List<FilesInfo>();
             
-            //filePath = "https://cugonlinestorage.blob.core.windows.net/images/!cid_00ba01ca6c31%245f9e07f0%240f01a8c0%40desktoptammy_t.jpg";//
-            
+            var filePath = "https://cugonlinestorage.blob.core.windows.net/img/";//!cid_00ba01ca6c31%245f9e07f0%240f01a8c0%40desktoptammy_t.jpg";//
+            //var filePath ="http://cugonline.co.za/images/";
             using (testEntities db = new testEntities())
             {
                 var images = (from mfl in cugDB.MainFilesLinks
@@ -400,7 +406,7 @@ namespace cugonlineWebAPI.Controllers
                               {
                                   FileId = mf.id,
                                   FileName = mf.fName,
-                                  FilePath = "http://cugonline.co.za/images/" + mf.fName,
+                                  FilePath = filePath + mf.fName,
                                   FileComment = mf.fComment
                               }).ToList();
 
@@ -549,6 +555,8 @@ namespace cugonlineWebAPI.Controllers
         public string Title { get; set; }
         public string Meaning { get; set; }
         public string Body { get; set; }
+        public string LastUpdated { get; set; }
+        public string LastUpdatedBy { get; set; }
     }
 
     public class SystemUsersDTO

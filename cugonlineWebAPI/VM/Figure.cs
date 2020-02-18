@@ -7,6 +7,8 @@ namespace cugonlineWebAPI.VM
 {
     public class Figure
     {
+        public int? LastUpdatedBy { get; set; }
+
         public int Id { get; set; }
         public string Idx { get; set; }
         public string Title { get; set; }

@@ -23,5 +23,11 @@ namespace cugonlineWebAPI.Models
         public string CategoryN { get; set; }
         public int Id { get; set; }
         public System.DateTime LastUpdated { get; set; }
+        public Nullable<System.DateTime> DateCreated { get; set; }
+        public Nullable<int> CreatedBy { get; set; }
+        public Nullable<int> LastUpdatedBy { get; set; }
+        public Nullable<int> StatusFlag { get; set; }
+        public Nullable<int> CategoryId { get; set; }
+        public string currentStatus { get; set; }
     }
 }

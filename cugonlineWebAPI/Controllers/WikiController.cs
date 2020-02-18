@@ -43,7 +43,8 @@ namespace cugonlineWebAPI.Controllers
                                                        Idx = m.Idx,
                                                        Title = m.Title,
                                                        Meaning = m.Meaning
-                                                   }).ToList();
+                                                   }).OrderBy(m => m.Title).ToList();
+
                     else if((isFullSearch == "true") && (searchCount == "2")) //get body search
                         results = cugDB.Mains.Where(m =>   m.Body.Contains(filter)
                                                 && !m.Title.Contains(filter)
@@ -54,12 +55,13 @@ namespace cugonlineWebAPI.Controllers
                                                    Idx = m.Idx,
                                                    Title = m.Title,
                                                    Meaning = m.Meaning
-                                               }).Take(20).ToList();                   
+                                               }).Take(20).OrderBy(m => m.Title).ToList();                   
 
                     break;
 
                 case "Radiation":
-                    results = cugDB.Mains.Where(m => m.Title.Contains(filter) ||
+                    if (isFullSearch == "false" && (searchCount == "1"))
+                        results = cugDB.Mains.Where(m => m.Title.Contains(filter) ||
                                                 m.Meaning.Contains(filter) &&
                                                 m.CategoryN.Equals(searchRole)
                                                 ).Select(m => new FiguresDTO
@@ -68,7 +70,20 @@ namespace cugonlineWebAPI.Controllers
                                                     Idx = m.Idx,
                                                     Title = m.Title,
                                                     Meaning = m.Meaning
-                                                }).ToList();
+                                                }).OrderBy(m => m.Title).ToList();
+
+                    else if ((isFullSearch == "true") && (searchCount == "2")) //get body search
+                        results = cugDB.Mains.Where(m => m.Body.Contains(filter)
+                                               && !m.Title.Contains(filter)
+                                               && !m.Meaning.Contains(filter)
+                                               &&  m.CategoryN.Equals(searchRole)
+                                              ).Select(m => new FiguresDTO
+                                              {
+                                                  Id = m.Id,
+                                                  Idx = m.Idx,
+                                                  Title = m.Title,
+                                                  Meaning = m.Meaning
+                                              }).Take(20).OrderBy(m => m.Title).ToList();
                     break;
                 case "Aqua":
                     results = cugDB.Mains.Where(m => m.Title.Contains(filter) ||
@@ -80,7 +95,7 @@ namespace cugonlineWebAPI.Controllers
                                                     Idx = m.Idx,
                                                     Title = m.Title,
                                                     Meaning = m.Meaning
-                                                }).ToList();
+                                                }).OrderBy(m => m.Title).ToList();
                     break;
                 case "Biblopedia":
                     results = cugDB.Mains.Where(m => m.Title.Contains(filter) ||
@@ -92,9 +107,19 @@ namespace cugonlineWebAPI.Controllers
                                                     Idx = m.Idx,
                                                     Title = m.Title,
                                                     Meaning = m.Meaning
-                                                }).ToList();
+                                                }).OrderBy(m => m.Title).ToList();
                     break;
-                default:
+                default: //return ALL case show no authentication...
+                    results = cugDB.Mains.Where(m => m.Title.Contains(filter) ||
+                                                  m.Meaning.Contains(filter)  //||
+                                                                              //  m.Body.Contains(filter)
+                                                  ).Select(m => new FiguresDTO
+                                                  {
+                                                      Id = m.Id,
+                                                      Idx = m.Idx,
+                                                      Title = m.Title,
+                                                      Meaning = m.Meaning
+                                                  }).OrderBy(m => m.Title).ToList();
                     break;
             }
 

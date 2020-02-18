@@ -71,6 +71,12 @@ warning 6002: The table/view 'test.dbo.IdxMain' does not have a primary key defi
           <Property Name="CategoryN" Type="nchar" MaxLength="10" />
           <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="LastUpdated" Type="datetime" Nullable="false" />
+          <Property Name="DateCreated" Type="datetime" />
+          <Property Name="CreatedBy" Type="int" />
+          <Property Name="LastUpdatedBy" Type="int" />
+          <Property Name="StatusFlag" Type="int" />
+          <Property Name="CategoryId" Type="int" />
+          <Property Name="currentStatus" Type="nvarchar" MaxLength="10" />
         </EntityType>
         <EntityType Name="MainFiles">
           <Key>
@@ -280,20 +286,6 @@ warning 6002: The table/view 'test.dbo.txtBox' does not have a primary key defin
           <Property Name="ID" Type="Int32" Nullable="false" />
           <Property Name="Idx" Type="String" MaxLength="250" FixedLength="false" Unicode="true" />
         </EntityType>
-        <EntityType Name="Main">
-          <Key>
-            <PropertyRef Name="Id" />
-          </Key>
-          <Property Name="Idx" Type="String" MaxLength="250" FixedLength="false" Unicode="true" />
-          <Property Name="Body" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
-          <Property Name="Meaning" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
-          <Property Name="Title" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
-          <Property Name="AFirst" Type="String" MaxLength="1" FixedLength="false" Unicode="true" />
-          <Property Name="Busy" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
-          <Property Name="CategoryN" Type="String" MaxLength="10" FixedLength="true" Unicode="true" />
-          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="LastUpdated" Type="DateTime" Nullable="false" Precision="3" />
-        </EntityType>
         <EntityType Name="Request_detail">
           <Key>
             <PropertyRef Name="Idx" />
@@ -332,7 +324,6 @@ warning 6002: The table/view 'test.dbo.txtBox' does not have a primary key defin
           <EntitySet Name="FilesLinks" EntityType="Self.FilesLink" />
           <EntitySet Name="FileTypes" EntityType="Self.FileType" />
           <EntitySet Name="IdxMains" EntityType="Self.IdxMain" />
-          <EntitySet Name="Mains" EntityType="Self.Main" />
           <EntitySet Name="Request_detail" EntityType="Self.Request_detail" />
           <EntitySet Name="Request_master" EntityType="Self.Request_master" />
           <EntitySet Name="txtBoxes" EntityType="Self.txtBox" />
@@ -341,6 +332,7 @@ warning 6002: The table/view 'test.dbo.txtBox' does not have a primary key defin
           <EntitySet Name="MainFiles" EntityType="testModel.MainFile" />
           <EntitySet Name="SeeMains" EntityType="testModel.SeeMain" />
           <EntitySet Name="UserMasters" EntityType="testModel.UserMaster" />
+          <EntitySet Name="Mains" EntityType="testModel.Main" />
         </EntityContainer>
         <EntityType Name="File">
           <Key>
@@ -407,6 +399,26 @@ warning 6002: The table/view 'test.dbo.txtBox' does not have a primary key defin
           <Property Name="UserName" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
           <Property Name="IsDeleted" Type="Boolean" />
         </EntityType>
+        <EntityType Name="Main">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Idx" Type="String" MaxLength="250" FixedLength="false" Unicode="true" />
+          <Property Name="Body" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="Meaning" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="Title" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="AFirst" Type="String" MaxLength="1" FixedLength="false" Unicode="true" />
+          <Property Name="Busy" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
+          <Property Name="CategoryN" Type="String" MaxLength="10" FixedLength="true" Unicode="true" />
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="LastUpdated" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="DateCreated" Type="DateTime" Precision="3" />
+          <Property Name="CreatedBy" Type="Int32" />
+          <Property Name="LastUpdatedBy" Type="Int32" />
+          <Property Name="StatusFlag" Type="Int32" />
+          <Property Name="CategoryId" Type="Int32" />
+          <Property Name="currentStatus" Type="String" MaxLength="10" FixedLength="false" Unicode="true" />
+        </EntityType>
       </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -458,21 +470,6 @@ warning 6002: The table/view 'test.dbo.txtBox' does not have a primary key defin
               <MappingFragment StoreEntitySet="IdxMain">
                 <ScalarProperty Name="ID" ColumnName="ID" />
                 <ScalarProperty Name="Idx" ColumnName="Idx" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="Mains">
-            <EntityTypeMapping TypeName="testModel.Main">
-              <MappingFragment StoreEntitySet="Main">
-                <ScalarProperty Name="LastUpdated" ColumnName="LastUpdated" />
-                <ScalarProperty Name="Idx" ColumnName="Idx" />
-                <ScalarProperty Name="Body" ColumnName="Body" />
-                <ScalarProperty Name="Meaning" ColumnName="Meaning" />
-                <ScalarProperty Name="Title" ColumnName="Title" />
-                <ScalarProperty Name="AFirst" ColumnName="AFirst" />
-                <ScalarProperty Name="Busy" ColumnName="Busy" />
-                <ScalarProperty Name="CategoryN" ColumnName="CategoryN" />
-                <ScalarProperty Name="Id" ColumnName="Id" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
@@ -573,6 +570,27 @@ warning 6002: The table/view 'test.dbo.txtBox' does not have a primary key defin
                 <ScalarProperty Name="Email" ColumnName="Email" />
                 <ScalarProperty Name="Surname" ColumnName="Surname" />
                 <ScalarProperty Name="Name" ColumnName="Name" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Mains">
+            <EntityTypeMapping TypeName="testModel.Main">
+              <MappingFragment StoreEntitySet="Main">
+                <ScalarProperty Name="currentStatus" ColumnName="currentStatus" />
+                <ScalarProperty Name="CategoryId" ColumnName="CategoryId" />
+                <ScalarProperty Name="StatusFlag" ColumnName="StatusFlag" />
+                <ScalarProperty Name="LastUpdatedBy" ColumnName="LastUpdatedBy" />
+                <ScalarProperty Name="CreatedBy" ColumnName="CreatedBy" />
+                <ScalarProperty Name="DateCreated" ColumnName="DateCreated" />
+                <ScalarProperty Name="LastUpdated" ColumnName="LastUpdated" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="CategoryN" ColumnName="CategoryN" />
+                <ScalarProperty Name="Busy" ColumnName="Busy" />
+                <ScalarProperty Name="AFirst" ColumnName="AFirst" />
+                <ScalarProperty Name="Title" ColumnName="Title" />
+                <ScalarProperty Name="Meaning" ColumnName="Meaning" />
+                <ScalarProperty Name="Body" ColumnName="Body" />
+                <ScalarProperty Name="Idx" ColumnName="Idx" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
