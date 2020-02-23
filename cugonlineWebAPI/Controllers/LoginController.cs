@@ -395,8 +395,8 @@ namespace cugonlineWebAPI.Controllers
         {
             List<FilesInfo> files = new List<FilesInfo>();
             
-            var filePath = "https://cugonlinestorage.blob.core.windows.net/img/";//!cid_00ba01ca6c31%245f9e07f0%240f01a8c0%40desktoptammy_t.jpg";//
-            //var filePath ="http://cugonline.co.za/images/";
+            //var filePath = "https://cugonlinestorage.blob.core.windows.net/img/";//!cid_00ba01ca6c31%245f9e07f0%240f01a8c0%40desktoptammy_t.jpg";//
+            var filePath ="http://cugonline.co.za/images/";
             using (testEntities db = new testEntities())
             {
                 var images = (from mfl in cugDB.MainFilesLinks

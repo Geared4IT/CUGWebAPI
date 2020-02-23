@@ -28,7 +28,7 @@ namespace cugonlineWebAPI.Controllers
         {
 
             var results = new List<FiguresDTO>();
-
+            if (searchRole == "null") searchRole = "ALL";
             switch (searchRole)
             {
                 case "ALL":
