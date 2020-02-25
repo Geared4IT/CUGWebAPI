@@ -21,16 +21,13 @@ namespace cugonlineWebAPI.Controllers
     [RoutePrefix("Api/login")]
     public class LoginController : ApiController
     {
-        string rootPath = "https://cugonlinestorage.blob.core.windows.net/images/";
+        //string rootPath = "https://cugonlinestorage.blob.core.windows.net/images/";
+        string rootPath = "https://cugonlinestorage.blob.core.windows.net/img/";
         testEntities cugDB = new testEntities();
-        // private readonly CloudBlobContainer _blobContainer;
-        private const string Container = "images_t";
-
+       
         public LoginController()//CloudBlobContainer blobContainer)
         {
-            //The Path of the Image store on the server side
-            var _test_rootPath = HostingEnvironment.MapPath("~/images/");
-            /// _blobContainer = blobContainer;
+            //constructor
         }
 
         [Route("InsertUser")]
@@ -308,20 +305,23 @@ namespace cugonlineWebAPI.Controllers
                     cugDB.Entry(Update).State = System.Data.Entity.EntityState.Modified;
                     cugDB.SaveChanges();
                     return new Response
-                    { Status = "Success", Message = "Record SuccessFully Saved." };
+                    { Status = fig.Idx, Message = "Record SuccessFully Saved." };
                 }
                 else
                 {
+                    var nextId = cugDB.Mains.OrderByDescending(main => main.Id).FirstOrDefault().Id + 1;
                     Main m = new Main();
 
+                    m.Id = nextId;
+                    m.Idx = nextId.ToString();
                     m.Title = fig.Title;
                     m.Body = fig.Body;
                     m.Meaning = fig.Meaning;
-
+                    m.LastUpdated = DateTime.Now;
                     cugDB.Mains.Add(m);
                     cugDB.SaveChanges();
                     return new Response
-                    { Status = "Success", Message = "Record SuccessFully Saved." };
+                    { Status = nextId.ToString(), Message = "Record SuccessFully Saved." };
                 }
             }
             catch (Exception ex)
@@ -395,8 +395,8 @@ namespace cugonlineWebAPI.Controllers
         {
             List<FilesInfo> files = new List<FilesInfo>();
             
-            //var filePath = "https://cugonlinestorage.blob.core.windows.net/img/";//!cid_00ba01ca6c31%245f9e07f0%240f01a8c0%40desktoptammy_t.jpg";//
-            var filePath ="http://cugonline.co.za/images/";
+            var filePath = "https://cugonlinestorage.blob.core.windows.net/img/";//!cid_00ba01ca6c31%245f9e07f0%240f01a8c0%40desktoptammy_t.jpg";//
+            //var filePath ="http://cugonline.co.za/images/";
             using (testEntities db = new testEntities())
             {
                 var images = (from mfl in cugDB.MainFilesLinks
@@ -416,10 +416,11 @@ namespace cugonlineWebAPI.Controllers
 
         [Route("Upload")]
         [HttpPost]
-        public async Task<IHttpActionResult> Upload(string id)
+        // public async Task<IHttpActionResult> Upload(string id)
+        public object Upload(string id,string comment)
         {
 
-            int figureId = int.Parse(id);
+          
             var file = HttpContext.Current.Request.Files[0];//we have the file...
 
             if (HttpContext.Current.Request.Files.Count > 0)
@@ -434,7 +435,7 @@ namespace cugonlineWebAPI.Controllers
                 for (int fileNum = 0; fileNum < HttpContext.Current.Request.Files.Count; fileNum++)
                 {
 
-                    var uniquefileName = figureId + "_" + Guid.NewGuid().ToString() + Path.GetExtension(file.FileName);
+                    var uniquefileName = id + "_" + Guid.NewGuid().ToString() + Path.GetExtension(file.FileName);
 
                     if (HttpContext.Current.Request.Files[fileNum] != null && HttpContext.Current.Request.Files[fileNum].ContentLength > 0)
                     {
@@ -444,27 +445,38 @@ namespace cugonlineWebAPI.Controllers
                         
                         try//saving to database...
                         {
-                            if (figureId == 0)//edit
+                            if (1 == 0)//edit
                             {
-                                var Update = cugDB.Files.Find(figureId);
-                                Update.fComment = "GetComment";
-                                cugDB.Entry(Update).State = System.Data.Entity.EntityState.Modified;
-                                cugDB.SaveChanges();
+                                //var Update = cugDB.Files.Find(figureId);
+                                //Update.fComment = "GetComment";
+                                //cugDB.Entry(Update).State = System.Data.Entity.EntityState.Modified;
+                                //cugDB.SaveChanges();
                             }
                             else
                             {
-                                Models.File f = new Models.File();
-
-                                f.fName = file.FileName;
-                                f.filePath = rootPath + uniquefileName;
-                                f.fComment = file.FileName + "GetComment";
+                                var nextFileId = cugDB.MainFiles.OrderByDescending(mf => mf.id).FirstOrDefault().id + 1;
+                                MainFile f = new MainFile();
+                                f.id = nextFileId;
+                                f.fName = uniquefileName;// file.FileName;
+                                f.fNamePath = rootPath + uniquefileName;
+                                f.fComment = comment;
                                 f.fType = Path.GetExtension(file.FileName);
                                 f.fExported = "N";
-                                f.fMainId = figureId;
-
-                                cugDB.Files.Add(f);
+                                
+                                cugDB.MainFiles.Add(f);
                                 cugDB.SaveChanges();
 
+                                //link to MainFilesLink
+                                var nextFileLinkId = cugDB.MainFilesLinks.OrderByDescending(mfl => mfl.Id).FirstOrDefault().Id + 1;
+                                MainFilesLink fl = new MainFilesLink {
+                                    Id  =nextFileLinkId,
+                                    Idx = id,
+                                    fSorted = null,
+                                    idFiles = nextFileId
+                                };
+
+                                cugDB.MainFilesLinks.Add(fl);
+                                cugDB.SaveChanges();
                             }
                         }
                         catch (Exception ex)
