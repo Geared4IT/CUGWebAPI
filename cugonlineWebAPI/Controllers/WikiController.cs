@@ -42,7 +42,8 @@ namespace cugonlineWebAPI.Controllers
                                                        Id = m.Id,
                                                        Idx = m.Idx,
                                                        Title = m.Title,
-                                                       Meaning = m.Meaning
+                                                       Meaning = m.Meaning,
+                                                       CategoryName = m.CategoryN.Trim()
                                                    }).OrderBy(m => m.Title).ToList();
 
                     else if((isFullSearch == "true") && (searchCount == "2")) //get body search
@@ -54,7 +55,8 @@ namespace cugonlineWebAPI.Controllers
                                                    Id = m.Id,
                                                    Idx = m.Idx,
                                                    Title = m.Title,
-                                                   Meaning = m.Meaning
+                                                   Meaning = m.Meaning,
+                                                   CategoryName = m.CategoryN.Trim()
                                                }).Take(20).OrderBy(m => m.Title).ToList();                   
 
                     break;
@@ -69,7 +71,8 @@ namespace cugonlineWebAPI.Controllers
                                                     Id = m.Id,
                                                     Idx = m.Idx,
                                                     Title = m.Title,
-                                                    Meaning = m.Meaning
+                                                    Meaning = m.Meaning,
+                                                    CategoryName = m.CategoryN.Trim()
                                                 }).OrderBy(m => m.Title).ToList();
 
                     else if ((isFullSearch == "true") && (searchCount == "2")) //get body search
@@ -82,7 +85,8 @@ namespace cugonlineWebAPI.Controllers
                                                   Id = m.Id,
                                                   Idx = m.Idx,
                                                   Title = m.Title,
-                                                  Meaning = m.Meaning
+                                                  Meaning = m.Meaning,
+                                                  CategoryName = m.CategoryN.Trim()
                                               }).Take(20).OrderBy(m => m.Title).ToList();
                     break;
                 case "Aqua":
@@ -94,7 +98,8 @@ namespace cugonlineWebAPI.Controllers
                                                     Id = m.Id,
                                                     Idx = m.Idx,
                                                     Title = m.Title,
-                                                    Meaning = m.Meaning
+                                                    Meaning = m.Meaning,
+                                                    CategoryName = m.CategoryN.Trim()
                                                 }).OrderBy(m => m.Title).ToList();
                     break;
                 case "Biblopedia":
@@ -106,7 +111,8 @@ namespace cugonlineWebAPI.Controllers
                                                     Id = m.Id,
                                                     Idx = m.Idx,
                                                     Title = m.Title,
-                                                    Meaning = m.Meaning
+                                                    Meaning = m.Meaning,
+                                                    CategoryName = m.CategoryN.Trim()
                                                 }).OrderBy(m => m.Title).ToList();
                     break;
                 default: //return ALL case show no authentication...
@@ -118,7 +124,8 @@ namespace cugonlineWebAPI.Controllers
                                                       Id = m.Id,
                                                       Idx = m.Idx,
                                                       Title = m.Title,
-                                                      Meaning = m.Meaning
+                                                      Meaning = m.Meaning,
+                                                      CategoryName = m.CategoryN.Trim()
                                                   }).OrderBy(m => m.Title).ToList();
                     break;
             }

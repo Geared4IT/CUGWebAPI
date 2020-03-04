@@ -24,7 +24,7 @@ namespace cugonlineWebAPI.Controllers
         //string rootPath = "https://cugonlinestorage.blob.core.windows.net/images/";
         string rootPath = "https://cugonlinestorage.blob.core.windows.net/img/";
         testEntities cugDB = new testEntities();
-       
+
         public LoginController()//CloudBlobContainer blobContainer)
         {
             //constructor
@@ -63,10 +63,11 @@ namespace cugonlineWebAPI.Controllers
 
             if (u == null)
             {
-                return new SystemUsersDTO { Name = "Invalid"};
+                return new SystemUsersDTO { Name = "Invalid" };
             }
             else
-                return new SystemUsersDTO {
+                return new SystemUsersDTO
+                {
                     Id = u.ID,
                     Name = u.Name.ToUpper(),
                     Surname = u.Surname.ToUpper(),
@@ -90,7 +91,7 @@ namespace cugonlineWebAPI.Controllers
         {
             var results = cugDB.Mains.Where(m => m.Title.Contains(filter)).Select(m => new FiguresDTO
             {
-                Id = m.Id,                
+                Id = m.Id,
                 Idx = m.Idx,
                 Title = m.Title.ToUpper(),
                 LastUpdated = m.LastUpdated.ToString(),
@@ -119,14 +120,14 @@ namespace cugonlineWebAPI.Controllers
                 Id = u.ID,
                 Name = u.Name.ToUpper(),
                 Surname = u.Surname.ToUpper(),
-                CategoryName =  u.categoryN.Trim(),
+                CategoryName = u.categoryN.Trim(),
                 DateCreated = u.Date_added,
                 DateLast = u.Date_last,
                 UserName = u.UserName,
                 Password = u.Password,
                 Email = u.Email,
                 IsAdmin = u.nKey,
-                IsDeleted = (u.IsDeleted.HasValue) ? u.IsDeleted.Value : false                
+                IsDeleted = (u.IsDeleted.HasValue) ? u.IsDeleted.Value : false
             }).OrderBy(u => u.UserName).ToList();
 
             if (results != null)
@@ -143,7 +144,7 @@ namespace cugonlineWebAPI.Controllers
         {
             //var results = cugDB.Mains.Select(m => new FiguresLinkDTO
             var results = cugDB.Mains.Where(m => m.Title.Contains(filter)).Select(m => new FiguresLinkDTO
-            {                
+            {
                 value = m.Idx,
                 label = m.Title.ToUpper(),
             }).OrderBy(m => m.value).ToList();
@@ -156,24 +157,58 @@ namespace cugonlineWebAPI.Controllers
                 return null;
         }
 
+        //
+        [Route("GetFigureCurrentStatus")]
+        [HttpGet]
+        public List<FigureStasticsDTO> GetFigureCurrentStatus()
+        {
+            var results = (from m in cugDB.Mains
+                           group m by m.currentStatus into newGroup
+                           orderby newGroup.Key
+                           select new FigureStasticsDTO
+                           {
+                               CurrentStatus = newGroup.Key.Trim(),
+                               TotalCount = newGroup.Count()
+                           }).ToList();
 
+
+            if (results != null) return results;
+            return null;
+        }
+        [Route("GetFigureStatistics")]
+        [HttpGet]
+        public List<FigureStasticsDTO> GetFigureStatistics()
+        {
+            var results = (from m in cugDB.Mains
+                           group m by m.CategoryN into newGroup
+                           orderby newGroup.Key
+                           select new FigureStasticsDTO
+                           {
+                               Category = newGroup.Key.Trim(),
+                               TotalCount = newGroup.Count()
+                           }).ToList();
+            
+
+            if (results != null) return results;
+            return null;
+        }
 
         [Route("GetFigureLinksByIdx")]
         [HttpGet]
         public List<FigureLinksDTO> GetFigureLinksById(string idx)
-        {           
+        {
             var results = (from sm in cugDB.SeeMains
-                          join m in cugDB.Mains on sm.Link equals m.Idx
-                          where m.Idx == idx                          
+                           join m in cugDB.Mains on sm.Link equals m.Idx
+                           where m.Idx == idx
                            select new FigureLinksDTO
-                          {
+                           {
                                LinkId = sm.Id,
-                              LinkIdx = sm.Idx,// sm.Idx,
-                              LinkTitle = sm.Idx
-                          }).ToList();
+                               LinkIdx = sm.Idx,// sm.Idx,
+                               LinkTitle = sm.Idx
+                           }).ToList();
 
             if (results != null) return results;
-                                 return null;
+            return null;
         }
 
         [Route("GetFigureByIdx")]
@@ -188,7 +223,8 @@ namespace cugonlineWebAPI.Controllers
                 Meaning = m.Meaning,
                 Body = m.Body,
                 LastUpdated = m.LastUpdated.ToString(),
-                LastUpdatedBy = (m.LastUpdatedBy.HasValue == true) ? cugDB.UserMasters.Where(u => u.ID.Equals(m.LastUpdatedBy.Value)).FirstOrDefault().Name : ""
+                LastUpdatedBy = (m.LastUpdatedBy.HasValue == true) ? cugDB.UserMasters.Where(u => u.ID.Equals(m.LastUpdatedBy.Value)).FirstOrDefault().Name : "",
+                CategoryName = m.CategoryN.Trim()
 
             }).FirstOrDefault();
 
@@ -250,7 +286,7 @@ namespace cugonlineWebAPI.Controllers
                 { Status = "Success", Message = "Image Deleted Saved." };
             }
             updateImage.IsDeleted = false;
-            
+
             cugDB.Entry(updateImage).State = System.Data.Entity.EntityState.Modified;
             cugDB.SaveChanges();
 
@@ -263,15 +299,15 @@ namespace cugonlineWebAPI.Controllers
         public object AddReference(FigureLinksDTO reference)
         {
             var updateReferece = cugDB.SeeMains.Where(sm => sm.Idx.Equals(reference.LinkIdx) && sm.Link.Equals(reference.LinkTitle)).FirstOrDefault();
-            
-            if(updateReferece == null)
+
+            if (updateReferece == null)
             {
                 //add to seemain
                 SeeMain m = new SeeMain();
 
                 m.Idx = reference.LinkIdx;
                 m.Link = reference.LinkTitle;
-                m.Title = reference.LinkTitle.Replace("_"," ");
+                m.Title = reference.LinkTitle.Replace("_", " ");
                 m.categoryN = "ALL";
                 m.catFlag = "O";
                 cugDB.SeeMains.Add(m);
@@ -280,7 +316,7 @@ namespace cugonlineWebAPI.Controllers
                 { Status = "Success", Message = "Record SuccessFully Saved." };
 
             }
-            
+
             return new Response
             { Status = "Success", Message = "Reference Already Exists." };
         }
@@ -300,9 +336,12 @@ namespace cugonlineWebAPI.Controllers
                     Update.Meaning = fig.Meaning;
                     Update.Body = fig.Body;
                     Update.Idx = fig.Idx;
-                    Update.LastUpdated = DateTime.Now.Date;
+                    Update.LastUpdated = DateTime.Now;
                     Update.LastUpdatedBy = fig.LastUpdatedBy;
+                    Update.CategoryN = fig.CategoryN.Trim();
+                    Update.currentStatus = (fig.LastUpdatedBy == 6) ? "live" : "review";
                     cugDB.Entry(Update).State = System.Data.Entity.EntityState.Modified;
+
                     cugDB.SaveChanges();
                     return new Response
                     { Status = fig.Idx, Message = "Record SuccessFully Saved." };
@@ -318,6 +357,7 @@ namespace cugonlineWebAPI.Controllers
                     m.Body = fig.Body;
                     m.Meaning = fig.Meaning;
                     m.LastUpdated = DateTime.Now;
+                    m.currentStatus = (fig.LastUpdatedBy == 6) ? "live" : "review";
                     cugDB.Mains.Add(m);
                     cugDB.SaveChanges();
                     return new Response
@@ -394,7 +434,7 @@ namespace cugonlineWebAPI.Controllers
         public List<FilesInfo> GetFilesById(string idx)
         {
             List<FilesInfo> files = new List<FilesInfo>();
-            
+
             var filePath = "https://cugonlinestorage.blob.core.windows.net/img/";//!cid_00ba01ca6c31%245f9e07f0%240f01a8c0%40desktoptammy_t.jpg";//
             //var filePath ="http://cugonline.co.za/images/";
             using (testEntities db = new testEntities())
@@ -417,10 +457,10 @@ namespace cugonlineWebAPI.Controllers
         [Route("Upload")]
         [HttpPost]
         // public async Task<IHttpActionResult> Upload(string id)
-        public object Upload(string id,string comment)
+        public object Upload(string id, string comment)
         {
 
-          
+
             var file = HttpContext.Current.Request.Files[0];//we have the file...
 
             if (HttpContext.Current.Request.Files.Count > 0)
@@ -442,7 +482,7 @@ namespace cugonlineWebAPI.Controllers
                         CloudBlockBlob azureBlockBlob = storageContainer.GetBlockBlobReference(uniquefileName);
                         azureBlockBlob.UploadFromStream(HttpContext.Current.Request.Files[fileNum].InputStream);
 
-                        
+
                         try//saving to database...
                         {
                             if (1 == 0)//edit
@@ -462,14 +502,15 @@ namespace cugonlineWebAPI.Controllers
                                 f.fComment = comment;
                                 f.fType = Path.GetExtension(file.FileName);
                                 f.fExported = "N";
-                                
+
                                 cugDB.MainFiles.Add(f);
                                 cugDB.SaveChanges();
 
                                 //link to MainFilesLink
                                 var nextFileLinkId = cugDB.MainFilesLinks.OrderByDescending(mfl => mfl.Id).FirstOrDefault().Id + 1;
-                                MainFilesLink fl = new MainFilesLink {
-                                    Id  =nextFileLinkId,
+                                MainFilesLink fl = new MainFilesLink
+                                {
+                                    Id = nextFileLinkId,
                                     Idx = id,
                                     fSorted = null,
                                     idFiles = nextFileId
@@ -569,6 +610,7 @@ namespace cugonlineWebAPI.Controllers
         public string Body { get; set; }
         public string LastUpdated { get; set; }
         public string LastUpdatedBy { get; set; }
+        public string CategoryName { get; set; }
     }
 
     public class SystemUsersDTO
@@ -581,17 +623,23 @@ namespace cugonlineWebAPI.Controllers
         public string DateLast { get; set; }
         public string DateCreated { get; set; }
         public string CategoryName { get; set; }
-        public int CategoryId { get; set;  }
+        public int CategoryId { get; set; }
         public string UserName { get; set; }
         public bool IsDeleted { get; set; }
         public string IsAdmin { get; set; }
     }
 
+    public class FigureStasticsDTO
+    {
+        public string Category { get; set; }
+        public string CurrentStatus { get; set; }
+        public int TotalCount { get; set; }
+    }
     public class FigureLinksDTO
     {
         public int LinkId { get; set; }
         public string LinkTitle { get; set; }
-        public string LinkIdx { get;  set; }
+        public string LinkIdx { get; set; }
         public string Link { get; set; }
     }
 
