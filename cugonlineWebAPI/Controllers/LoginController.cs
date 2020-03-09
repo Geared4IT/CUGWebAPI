@@ -108,6 +108,68 @@ namespace cugonlineWebAPI.Controllers
         }
 
         /// <summary>
+        /// get Report Details
+        /// </summary>
+        /// <returns>list of figures</returns>
+        [Route("GetReportDetails")]
+        [HttpGet]
+        public List<FiguresDTO> GetReportDetails(string filter, string field)
+        {
+           
+            switch (filter)
+            {
+                case "null":
+                    filter = null;
+                    break;
+                case null:
+                    filter = "";
+                    break;
+                default:
+                    break;
+            }
+
+            List<FiguresDTO> result = new List<FiguresDTO>();
+
+
+            if (field == "CurrentStatus") // live / review / new
+            {
+                result = cugDB.Mains.Where(m => m.currentStatus.Equals(filter)).Select(m => new FiguresDTO
+                {
+                    Id = m.Id,
+                    Idx = m.Idx,
+                    Title = m.Title.ToUpper(),
+                    LastUpdated = m.LastUpdated.ToString(),
+                    CategoryName = m.CategoryN.Trim(),
+                    CurrentStatus = m.currentStatus.Trim(),
+                    LastUpdatedBy = (m.LastUpdatedBy.HasValue == true) ? cugDB.UserMasters.Where(u => u.ID.Equals(m.LastUpdatedBy.Value)).FirstOrDefault().Name : "",
+                    
+
+                }).OrderBy(m => m.Title).ToList();
+            }
+            else if (field == "Category")
+            {
+                result = cugDB.Mains.Where(m => m.CategoryN.Equals(filter)).Select(m => new FiguresDTO
+                {
+                    Id = m.Id,
+                    Idx = m.Idx,
+                    Title = m.Title.ToUpper(),
+                    LastUpdated = m.LastUpdated.ToString(),
+                    CategoryName = m.CategoryN.Trim(),
+                    CurrentStatus = m.currentStatus.Trim(),
+                    LastUpdatedBy = (m.LastUpdatedBy.HasValue == true) ? cugDB.UserMasters.Where(u => u.ID.Equals(m.LastUpdatedBy.Value)).FirstOrDefault().Name : ""
+
+                }).OrderBy(m => m.Title).ToList();
+            }
+
+            if (result != null)
+            {
+                return result;
+            }
+            else
+                return null;
+        }
+
+        /// <summary>
         /// get list of users
         /// </summary>
         /// <returns>list of figures</returns>
@@ -187,7 +249,7 @@ namespace cugonlineWebAPI.Controllers
                                Category = newGroup.Key.Trim(),
                                TotalCount = newGroup.Count()
                            }).ToList();
-            
+
 
             if (results != null) return results;
             return null;
@@ -204,7 +266,7 @@ namespace cugonlineWebAPI.Controllers
                            {
                                LinkId = sm.Id,
                                LinkIdx = sm.Idx,// sm.Idx,
-                               LinkTitle = sm.Idx
+                               LinkTitle = sm.Title
                            }).ToList();
 
             if (results != null) return results;
@@ -267,9 +329,17 @@ namespace cugonlineWebAPI.Controllers
         public object DeleteReference(FigureLinksDTO reference)
         {
             var updateReferece = cugDB.SeeMains.Where(sm => sm.Idx.Equals(reference.LinkIdx) && sm.Link.Equals(reference.LinkTitle)).FirstOrDefault();
-            //updateReferece.re
+            
             cugDB.SeeMains.Remove(updateReferece);
             cugDB.SaveChanges();
+
+            //remove  reciprocal
+            var updateReciprocal = cugDB.SeeMains.Where(sm => sm.Idx.Equals(reference.LinkTitle) 
+                                                     && sm.Link.Equals(reference.LinkIdx)).FirstOrDefault();
+
+            cugDB.SeeMains.Remove(updateReciprocal);
+            cugDB.SaveChanges();
+
             return new Response
             { Status = "Success", Message = "Reference Deleted Saved." };
         }
@@ -298,20 +368,45 @@ namespace cugonlineWebAPI.Controllers
         [HttpPost]
         public object AddReference(FigureLinksDTO reference)
         {
-            var updateReferece = cugDB.SeeMains.Where(sm => sm.Idx.Equals(reference.LinkIdx) && sm.Link.Equals(reference.LinkTitle)).FirstOrDefault();
-
+            
+            var linkInfo = cugDB.Mains.Where(m => m.Idx.Equals(reference.LinkIdx)).FirstOrDefault();//get link information
+            
+            var updateReferece = cugDB.SeeMains.Where(sm => sm.Idx.Equals(reference.LinkIdx)  //check if link exists in Reference...
+                                                         && sm.Link.Equals(reference.Link)).FirstOrDefault();
+            
             if (updateReferece == null)
             {
                 //add to seemain
                 SeeMain m = new SeeMain();
 
                 m.Idx = reference.LinkIdx;
-                m.Link = reference.LinkTitle;
-                m.Title = reference.LinkTitle.Replace("_", " ");
-                m.categoryN = "ALL";
+                m.Link = reference.Link;
+                m.Title = linkInfo.Title;//.LinkTitle.Replace("_", " ");
+                m.categoryN = linkInfo.CategoryN.Trim();//.Link;
                 m.catFlag = "O";
                 cugDB.SeeMains.Add(m);
                 cugDB.SaveChanges();
+
+                //do reciprocal
+                var recipricolInfo = cugDB.Mains.Where(m_recip => m_recip.Idx.Equals(reference.Link)).FirstOrDefault();//get inverse link information
+
+                var reciprocalReferece = cugDB.SeeMains.Where(sm_recip => sm_recip.Idx.Equals(reference.Link)  //check inverse...
+                                                             && sm_recip.Link.Equals(reference.LinkIdx)).FirstOrDefault();
+
+                if(reciprocalReferece == null)
+                {
+                    //add to reciprocal seemain
+                    SeeMain m_recip = new SeeMain();
+                    m_recip.Idx = reference.Link;
+                    m_recip.Link = reference.LinkIdx;
+                    m_recip.Title = recipricolInfo.Title;
+                    m_recip.categoryN = !string.IsNullOrEmpty(recipricolInfo.CategoryN) ? recipricolInfo.CategoryN.Trim() : "ALL";//.Link;
+                    m_recip.catFlag = "O";
+                    cugDB.SeeMains.Add(m_recip);
+                    cugDB.SaveChanges();
+
+                }
+
                 return new Response
                 { Status = "Success", Message = "Record SuccessFully Saved." };
 
@@ -346,7 +441,7 @@ namespace cugonlineWebAPI.Controllers
                     return new Response
                     { Status = fig.Idx, Message = "Record SuccessFully Saved." };
                 }
-                else
+                else//add
                 {
                     var nextId = cugDB.Mains.OrderByDescending(main => main.Id).FirstOrDefault().Id + 1;
                     Main m = new Main();
@@ -356,8 +451,11 @@ namespace cugonlineWebAPI.Controllers
                     m.Title = fig.Title;
                     m.Body = fig.Body;
                     m.Meaning = fig.Meaning;
-                    m.LastUpdated = DateTime.Now;
-                    m.currentStatus = (fig.LastUpdatedBy == 6) ? "live" : "review";
+                    m.DateCreated = DateTime.Now;
+                    m.CreatedBy = fig.LastUpdatedBy;
+                    m.LastUpdatedBy = fig.LastUpdatedBy;
+                    m.CategoryN = (fig.CategoryN == null) ? "ALL" : fig.CategoryN.Trim();
+                    m.currentStatus = (fig.LastUpdatedBy == 6) ? "live" : "new";
                     cugDB.Mains.Add(m);
                     cugDB.SaveChanges();
                     return new Response
@@ -611,6 +709,7 @@ namespace cugonlineWebAPI.Controllers
         public string LastUpdated { get; set; }
         public string LastUpdatedBy { get; set; }
         public string CategoryName { get; set; }
+        public string CurrentStatus { get; set; }
     }
 
     public class SystemUsersDTO
