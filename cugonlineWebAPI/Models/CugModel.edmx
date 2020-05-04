@@ -5,6 +5,32 @@
     <!-- SSDL content -->
     <edmx:StorageModels>
     <Schema Namespace="testModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012.Azure" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="BibloMain">
+          <Key>
+            <PropertyRef Name="MainId" />
+          </Key>
+          <Property Name="ID" Type="nvarchar" MaxLength="255" />
+          <Property Name="Body" Type="nvarchar(max)" />
+          <Property Name="MainId" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="BibloUploads">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="fName" Type="nvarchar" MaxLength="255" />
+          <Property Name="fType" Type="nvarchar" MaxLength="255" />
+          <Property Name="fTitle" Type="nvarchar" MaxLength="255" />
+          <Property Name="fDescription" Type="nvarchar" MaxLength="255" />
+          <Property Name="Id" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Categories">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" Nullable="false" />
+          <Property Name="Name" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="Description" Type="varchar" MaxLength="100" />
+        </EntityType>
         <!--Errors Found During Generation:
 warning 6002: The table/view 'test.dbo.FileExtensions' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
         <EntityType Name="FileExtensions">
@@ -162,6 +188,22 @@ warning 6002: The table/view 'test.dbo.txtBox' does not have a primary key defin
           <Property Name="Idx" Type="nvarchar" MaxLength="255" />
           <Property Name="txtContent" Type="nvarchar(max)" />
         </EntityType>
+        <EntityType Name="UserActivities">
+          <Key>
+            <PropertyRef Name="UserActivitiesID" />
+          </Key>
+          <Property Name="ID" Type="int" Nullable="false" />
+          <Property Name="Editor" Type="nvarchar" MaxLength="255" />
+          <Property Name="DateIn" Type="smalldatetime" />
+          <Property Name="TimeIn" Type="nvarchar" MaxLength="255" />
+          <Property Name="Reference" Type="nvarchar" MaxLength="255" />
+          <Property Name="Edited" Type="nvarchar" MaxLength="255" />
+          <Property Name="Uploaded" Type="nvarchar" MaxLength="255" />
+          <Property Name="Attachment" Type="nvarchar" MaxLength="255" />
+          <Property Name="Deleted" Type="nvarchar" MaxLength="255" />
+          <Property Name="UserActivitiesID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="AttachmentId" Type="int" />
+        </EntityType>
         <EntityType Name="UserMaster">
           <Key>
             <PropertyRef Name="ID" />
@@ -180,12 +222,16 @@ warning 6002: The table/view 'test.dbo.txtBox' does not have a primary key defin
           <Property Name="IsDeleted" Type="bit" />
         </EntityType>
         <EntityContainer Name="testModelStoreContainer">
+          <EntitySet Name="BibloMain" EntityType="Self.BibloMain" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="BibloUploads" EntityType="Self.BibloUploads" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Categories" EntityType="Self.Categories" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Files" EntityType="Self.Files" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Main" EntityType="Self.Main" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="MainFiles" EntityType="Self.MainFiles" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="MainFilesLink" EntityType="Self.MainFilesLink" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="ReciprocalSeeMainRef" EntityType="Self.ReciprocalSeeMainRef" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="SeeMain" EntityType="Self.SeeMain" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="UserActivities" EntityType="Self.UserActivities" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="UserMaster" EntityType="Self.UserMaster" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="FileExtensions" EntityType="Self.FileExtensions" store:Type="Tables" store:Schema="dbo">
             <DefiningQuery>SELECT 
@@ -333,6 +379,10 @@ warning 6002: The table/view 'test.dbo.txtBox' does not have a primary key defin
           <EntitySet Name="SeeMains" EntityType="testModel.SeeMain" />
           <EntitySet Name="UserMasters" EntityType="testModel.UserMaster" />
           <EntitySet Name="Mains" EntityType="testModel.Main" />
+          <EntitySet Name="Categories" EntityType="testModel.Category" />
+          <EntitySet Name="BibloMains" EntityType="testModel.BibloMain" />
+          <EntitySet Name="BibloUploads" EntityType="testModel.BibloUpload" />
+          <EntitySet Name="UserActivities" EntityType="testModel.UserActivity" />
         </EntityContainer>
         <EntityType Name="File">
           <Key>
@@ -418,6 +468,48 @@ warning 6002: The table/view 'test.dbo.txtBox' does not have a primary key defin
           <Property Name="StatusFlag" Type="Int32" />
           <Property Name="CategoryId" Type="Int32" />
           <Property Name="currentStatus" Type="String" MaxLength="10" FixedLength="false" Unicode="true" />
+        </EntityType>
+        <EntityType Name="Category">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" />
+          <Property Name="Name" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="Description" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+        </EntityType>
+        <EntityType Name="BibloMain">
+          <Key>
+            <PropertyRef Name="MainId" />
+          </Key>
+          <Property Name="ID" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
+          <Property Name="Body" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="MainId" Type="Int32" Nullable="false" />
+        </EntityType>
+        <EntityType Name="BibloUpload">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="fName" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
+          <Property Name="fType" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
+          <Property Name="fTitle" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
+          <Property Name="fDescription" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
+          <Property Name="Id" Type="Int32" Nullable="false" />
+        </EntityType>
+        <EntityType Name="UserActivity">
+          <Key>
+            <PropertyRef Name="UserActivitiesID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" />
+          <Property Name="Editor" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
+          <Property Name="DateIn" Type="DateTime" Precision="0" />
+          <Property Name="TimeIn" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
+          <Property Name="Reference" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
+          <Property Name="Edited" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
+          <Property Name="Uploaded" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
+          <Property Name="Attachment" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
+          <Property Name="Deleted" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
+          <Property Name="UserActivitiesID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="AttachmentId" Type="Int32" />
         </EntityType>
       </Schema>
     </edmx:ConceptualModels>
@@ -591,6 +683,52 @@ warning 6002: The table/view 'test.dbo.txtBox' does not have a primary key defin
                 <ScalarProperty Name="Meaning" ColumnName="Meaning" />
                 <ScalarProperty Name="Body" ColumnName="Body" />
                 <ScalarProperty Name="Idx" ColumnName="Idx" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Categories">
+            <EntityTypeMapping TypeName="testModel.Category">
+              <MappingFragment StoreEntitySet="Categories">
+                <ScalarProperty Name="Description" ColumnName="Description" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="BibloMains">
+            <EntityTypeMapping TypeName="testModel.BibloMain">
+              <MappingFragment StoreEntitySet="BibloMain">
+                <ScalarProperty Name="MainId" ColumnName="MainId" />
+                <ScalarProperty Name="Body" ColumnName="Body" />
+                <ScalarProperty Name="ID" ColumnName="ID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="BibloUploads">
+            <EntityTypeMapping TypeName="testModel.BibloUpload">
+              <MappingFragment StoreEntitySet="BibloUploads">
+                <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="fDescription" ColumnName="fDescription" />
+                <ScalarProperty Name="fTitle" ColumnName="fTitle" />
+                <ScalarProperty Name="fType" ColumnName="fType" />
+                <ScalarProperty Name="fName" ColumnName="fName" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="UserActivities">
+            <EntityTypeMapping TypeName="testModel.UserActivity">
+              <MappingFragment StoreEntitySet="UserActivities">
+                <ScalarProperty Name="AttachmentId" ColumnName="AttachmentId" />
+                <ScalarProperty Name="UserActivitiesID" ColumnName="UserActivitiesID" />
+                <ScalarProperty Name="Deleted" ColumnName="Deleted" />
+                <ScalarProperty Name="Attachment" ColumnName="Attachment" />
+                <ScalarProperty Name="Uploaded" ColumnName="Uploaded" />
+                <ScalarProperty Name="Edited" ColumnName="Edited" />
+                <ScalarProperty Name="Reference" ColumnName="Reference" />
+                <ScalarProperty Name="TimeIn" ColumnName="TimeIn" />
+                <ScalarProperty Name="DateIn" ColumnName="DateIn" />
+                <ScalarProperty Name="Editor" ColumnName="Editor" />
+                <ScalarProperty Name="ID" ColumnName="ID" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>

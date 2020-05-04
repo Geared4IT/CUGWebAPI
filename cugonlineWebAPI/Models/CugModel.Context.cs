@@ -39,5 +39,9 @@ namespace cugonlineWebAPI.Models
         public virtual DbSet<SeeMain> SeeMains { get; set; }
         public virtual DbSet<UserMaster> UserMasters { get; set; }
         public virtual DbSet<Main> Mains { get; set; }
+        public virtual DbSet<Category> Categories { get; set; }
+        public virtual DbSet<BibloMain> BibloMains { get; set; }
+        public virtual DbSet<BibloUpload> BibloUploads { get; set; }
+        public virtual DbSet<UserActivity> UserActivities { get; set; }
     }
 }

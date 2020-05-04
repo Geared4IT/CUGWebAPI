@@ -182,12 +182,26 @@
     <Compile Include="Areas\HelpPage\SampleGeneration\SampleDirection.cs" />
     <Compile Include="Areas\HelpPage\SampleGeneration\TextSample.cs" />
     <Compile Include="Areas\HelpPage\XmlDocumentationProvider.cs" />
+    <Compile Include="Controllers\BibloController.cs" />
+    <Compile Include="Controllers\EmailController.cs" />
+    <Compile Include="DTO\BibloInfoDTO.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\LoginController.cs" />
     <Compile Include="Controllers\ValuesController.cs" />
     <Compile Include="Controllers\WikiController.cs" />
+    <Compile Include="DTO\EmailModelDTO.cs" />
+    <Compile Include="DTO\UserActivitiesDTO.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
+    </Compile>
+    <Compile Include="Models\BibloMain.cs">
+      <DependentUpon>CugModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\BibloUpload.cs">
+      <DependentUpon>CugModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\Category.cs">
+      <DependentUpon>CugModel.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\CugModel.Context.cs">
       <AutoGen>True</AutoGen>
@@ -241,6 +255,9 @@
       <DependentUpon>CugModel.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\txtBox.cs">
+      <DependentUpon>CugModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\UserActivity.cs">
       <DependentUpon>CugModel.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\UserMaster.cs">
