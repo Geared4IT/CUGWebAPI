@@ -16,6 +16,7 @@ using Microsoft.WindowsAzure.Storage;
 using Microsoft.WindowsAzure.Storage.Auth;
 using System.Net.Mail;
 using cugonlineWebAPI.DTO;
+using System.Text;
 
 namespace cugonlineWebAPI.Controllers
 {
@@ -24,7 +25,7 @@ namespace cugonlineWebAPI.Controllers
     public class LoginController : ApiController
     {
         //string rootPath = "https://cugonlinestorage.blob.core.windows.net/images/";
-        readonly string rootPath = "https://cugonlinestorage.blob.core.windows.net/img/";
+        //readonly string rootPath = "https://cugonlinestorage.blob.core.windows.net/img/";
         testEntities cugDB = new testEntities();
 
         public LoginController()//CloudBlobContainer blobContainer)
@@ -64,28 +65,38 @@ namespace cugonlineWebAPI.Controllers
         {
             var u = cugDB.UserMasters.Where(x => x.UserName.Equals(login.UserName) && x.Password.Equals(login.Password)).FirstOrDefault();
 
-            if (u == null)
-            {
-                return new SystemUsersDTO { Name = "Invalid" };
-            }
-            else
-            {
-                LogUserActivity(u);
 
-                return new SystemUsersDTO
+            try
+            {
+                if (u == null)
                 {
-                    Id = u.ID,
-                    Name = u.Name.ToUpper(),
-                    Surname = u.Surname.ToUpper(),
-                    CategoryName = u.categoryN.Trim(),
-                    DateCreated = u.Date_added,
-                    DateLast = u.Date_last,
-                    UserName = u.UserName,
-                    Password = u.Password,
-                    Email = u.Email,
-                    IsAdmin = u.nKey
-                };
+                    return new SystemUsersDTO { Name = "Invalid" };
+                }
+                else
+                {
+                   // LogUserActivity(u);//todo fix...
+
+                    return new SystemUsersDTO
+                    {
+                        Id = u.ID,
+                        Name = u.Name.ToUpper(),
+                        Surname = u.Surname.ToUpper(),
+                        CategoryName = u.categoryN.Trim(),
+                        DateCreated = u.Date_added,
+                        DateLast = u.Date_last,
+                        UserName = u.UserName,
+                        Password = u.Password,
+                        Email = u.Email,
+                        IsAdmin = u.nKey
+                    };
+                }
             }
+            catch (Exception ex)
+            {
+
+                return null;
+            }
+
 
 
         }
@@ -424,30 +435,32 @@ namespace cugonlineWebAPI.Controllers
             try
             {
                 var refIdx = "";
-                if (fig.Id != 0)//edit
+                var referenceItem = cugDB.Mains.Where(m => m.Idx.Equals(fig.Idx)).FirstOrDefault();
+                if (referenceItem != null)//edit
                 {
-                    var Update = cugDB.Mains.Find(fig.Id);
-                    Update.Title = fig.Title;
-                    Update.Meaning = fig.Meaning;
-                    Update.Body = fig.Body;
-                    Update.Idx = fig.Idx;
-                    Update.LastUpdated = DateTime.Now;
-                    Update.LastUpdatedBy = fig.LastUpdatedBy;
-                    Update.CategoryN = fig.CategoryN.Trim();
-                    Update.currentStatus = (fig.LastUpdatedBy == 6) ? "live" : "review";
 
-                    cugDB.Entry(Update).State = System.Data.Entity.EntityState.Modified;
+                    referenceItem.Title = fig.Title;
+                    referenceItem.Meaning = fig.Meaning;
+                    referenceItem.Body = fig.Body;
+                    referenceItem.Idx = fig.Idx;
+                    referenceItem.LastUpdated = DateTime.Now;
+                    referenceItem.LastUpdatedBy = fig.LastUpdatedBy;
+                    referenceItem.CategoryN = fig.CategoryN.Trim();
+                    referenceItem.currentStatus = (fig.LastUpdatedBy == 6) ? "live" : "review";
 
-                    refIdx = Update.Idx;
-                    LogUserActivityEditReference(Update, fig.LastUpdatedBy.Value);
+                    cugDB.Entry(referenceItem).State = System.Data.Entity.EntityState.Modified;
+
+                    refIdx = referenceItem.Idx;
+                    cugDB.SaveChanges();
+                    LogUserActivityEditReference(referenceItem, fig.LastUpdatedBy.Value);
                 }
                 else//add
                 {
-                    var nextId = cugDB.Mains.OrderByDescending(main => main.Id).FirstOrDefault().Id + 1;
+                    var maxId = cugDB.Mains.Max(main => main.Id);
                     Main m = new Main();
 
-                    m.Id = nextId;
-                    m.Idx = nextId.ToString();
+                    //m.Id = nextId;
+                    m.Idx = fig.Title.Replace(" ", "_") + "_" + maxId;
                     m.Title = fig.Title;
                     m.Body = fig.Body;
                     m.Meaning = fig.Meaning;
@@ -456,22 +469,19 @@ namespace cugonlineWebAPI.Controllers
                     m.LastUpdatedBy = fig.LastUpdatedBy.Value;
                     m.CategoryN = (fig.CategoryN == null) ? "All" : fig.CategoryN.Trim();
                     m.currentStatus = (fig.LastUpdatedBy == 6) ? "live" : "new";
-                    cugDB.Mains.Add(m);
+                    m.LastUpdated = DateTime.Now;
                     refIdx = m.Idx;
-
+                    cugDB.Mains.Add(m);
+                    cugDB.SaveChanges();
                     //log to User Activities
                     LogUserActivityEditReference(m, fig.LastUpdatedBy.Value);
-
                 }
 
                 //email hotlink to David for Review
                 //EmailHotLink(refIdx);
 
-
-
-                cugDB.SaveChanges();
                 return new Response
-                { Status = refIdx, Message = "Record SuccessFully Saved." };
+                { Status = refIdx.ToString(), Message = "Record SuccessFully Saved." };
             }
             catch (Exception ex)
             {
@@ -488,18 +498,29 @@ namespace cugonlineWebAPI.Controllers
         /// <param name="userId"></param>
         private void LogUserActivityEditReference(Main m, int userId)
         {
-            var u = cugDB.UserMasters.Where(x => x.ID.Equals(userId)).FirstOrDefault();
 
-            UserActivity ua = new UserActivity
+            try
             {
-                Editor = u.UserName,
-                Reference = m.Idx,
-                DateIn = DateTime.Now,
-                Edited = DateTime.Now.ToString()
-            };
+                var u = cugDB.UserMasters.Where(x => x.ID.Equals(userId)).FirstOrDefault();
 
-            cugDB.UserActivities.Add(ua);
-            cugDB.SaveChanges();
+                var dt = DateTime.Now;
+                UserActivity ua = new UserActivity
+                {
+                    Editor = u.UserName,
+                    Reference = m.Idx,
+                    DateIn = Convert.ToDateTime(dt),
+                    Edited = DateTime.Now.ToString()
+                };
+
+                cugDB.UserActivities.Add(ua);
+                cugDB.SaveChanges();
+            }
+            catch (Exception ex)
+            {
+
+                throw;
+            }
+
         }
 
         /// <summary>
@@ -508,20 +529,34 @@ namespace cugonlineWebAPI.Controllers
         /// <param name="idx"></param>
         private void LogUserActivityEditReferenceUpload(MainFilesLink m, int userId)
         {
-            var u = cugDB.UserMasters.Where(x => x.ID.Equals(userId)).FirstOrDefault();
 
-            UserActivity ua = new UserActivity
+
+            try
             {
-                Editor = u.Name,
-                Reference = m.Idx,
-                DateIn = DateTime.Now,
-                Edited = DateTime.Now.ToString(),
-                Attachment = m.idFiles.Value.ToString(),
-                AttachmentId = m.idFiles
-            };
+                var u = cugDB.UserMasters.Where(x => x.ID.Equals(userId)).FirstOrDefault();
 
-            cugDB.UserActivities.Add(ua);
-            cugDB.SaveChanges();
+                UserActivity ua = new UserActivity
+                {
+                    Editor = u.Name,
+                    Reference = m.Idx,
+                    DateIn = DateTime.Now,
+                    Edited = DateTime.Now.ToString(),
+                    Attachment = m.idFiles.Value.ToString(),
+                    AttachmentId = m.idFiles,
+                    UserActivitiesID = cugDB.UserActivities.Max(maxID => maxID.UserActivitiesID) + 1,
+                    ID = cugDB.UserActivities.Max(maxID => maxID.UserActivitiesID) + 1
+                };
+
+                cugDB.UserActivities.Add(ua);
+                cugDB.SaveChanges();
+
+            }
+            catch (Exception ex)
+            {
+
+                //throw;todo tomorrow...
+            }
+
         }
 
 
@@ -734,8 +769,8 @@ namespace cugonlineWebAPI.Controllers
         {
             List<FilesInfo> files = new List<FilesInfo>();
 
-            var filePath = "https://cugonlinestorage.blob.core.windows.net/img/";//!cid_00ba01ca6c31%245f9e07f0%240f01a8c0%40desktoptammy_t.jpg";//
-            //var filePath ="http://cugonline.co.za/images/";
+            //var filePath = "https://cugonlinestorage.blob.core.windows.net/img/";//!cid_00ba01ca6c31%245f9e07f0%240f01a8c0%40desktoptammy_t.jpg";//
+            var filePath = "https://cugonline.co.za/images/";
             using (testEntities db = new testEntities())
             {
                 var images = (from mfl in cugDB.MainFilesLinks
@@ -755,8 +790,100 @@ namespace cugonlineWebAPI.Controllers
 
         [Route("Upload")]
         [HttpPost]
-        // public async Task<IHttpActionResult> Upload(string id)
         public object Upload(string id, string comment, int userId)
+        {
+
+            var file = HttpContext.Current.Request.Files[0];//we have the file...
+
+            var uniquefileName = id + "_" + Guid.NewGuid().ToString() + Path.GetExtension(file.FileName);
+            //var uniquefileName = Path.GetFileName(file.FileName);
+
+            string sourcepath = @"";
+            string ftpAddress = @"197.242.150.135"; // ConfigurationManager.AppSettings.Get("CloudStorageContainerReference")
+            string username = "cugftp"; // ConfigurationManager.AppSettings.Get("CloudStorageContainerReference")
+            string password = "Kjgv5FtNX!2$7qBtP3"; // ConfigurationManager.AppSettings.Get("CloudStorageContainerReference")
+
+
+
+            try
+            {
+
+
+                var postedFile = HttpContext.Current.Request.Files[0];
+                var filePath = HttpContext.Current.Server.MapPath("~/images/" + postedFile.FileName);
+                postedFile.SaveAs(filePath);
+
+
+                using (StreamReader stream = new StreamReader(filePath))
+                {
+                    FtpWebRequest request = (FtpWebRequest)WebRequest.Create("ftp://" + ftpAddress + "/" + uniquefileName);
+                    request.Method = WebRequestMethods.Ftp.UploadFile;
+                    request.Credentials = new NetworkCredential(username, password);
+                    Stream reqStream = request.GetRequestStream();
+
+                    byte[] buffer = new byte[1024];
+
+                    int byteRead = 0;
+                    FileStream fs = System.IO.File.OpenRead(filePath);
+
+                    do
+                    {
+                        byteRead = fs.Read(buffer, 0, buffer.Length);
+                        reqStream.Write(buffer, 0, byteRead);
+                    } while (byteRead != 0);
+
+                    fs.Close();
+                    reqStream.Close();
+                }
+
+
+
+                var rootPath = "https://cugonline.co.za/images/";
+
+                var nextFileId = cugDB.MainFiles.OrderByDescending(mf => mf.id).FirstOrDefault().id + 1;
+                MainFile f = new MainFile();
+                f.id = nextFileId;
+                f.fName = uniquefileName;// file.FileName;
+                f.fNamePath = rootPath + uniquefileName;
+                f.fComment = comment;
+                f.fType = Path.GetExtension(file.FileName);
+                f.fExported = "N";
+
+                cugDB.MainFiles.Add(f);
+                cugDB.SaveChanges();
+
+                //link to MainFilesLink
+                var nextFileLinkId = cugDB.MainFilesLinks.OrderByDescending(mfl => mfl.Id).FirstOrDefault().Id + 1;
+                MainFilesLink fl = new MainFilesLink
+                {
+                    Id = nextFileLinkId,
+                    Idx = id,
+                    fSorted = null,
+                    idFiles = nextFileId
+                };
+
+                cugDB.MainFilesLinks.Add(fl);
+                cugDB.SaveChanges();
+
+                //save to User Activies
+                //LogUserActivityEditReferenceUpload(fl, userId);
+
+            }
+
+            catch (Exception ex)
+            {
+                throw ex;
+
+            }
+
+
+            return Ok();
+        }
+
+        [Route("UploadOld")]
+        [HttpPost]
+        // public async Task<IHttpActionResult> Upload(string id)
+        public object UploadOld(string id, string comment, int userId)
         {
 
 
@@ -764,6 +891,7 @@ namespace cugonlineWebAPI.Controllers
 
             if (HttpContext.Current.Request.Files.Count > 0)
             {
+
                 var accountName = "cugonlinestorage";// ConfigurationManager.AppSettings["cugonlinestorage"];
                 var accountKey = "V9xb1fQUAt/90BtzG5+1o1rlcKMP1cY83PGONzzNu5bxXW4DZ09c+/yLW4ixbdnLaNcRpkrJX7OqFALKet0FcQ==";// ConfigurationManager.AppSettings["V9xb1fQUAt/90BtzG5+1o1rlcKMP1cY83PGONzzNu5bxXW4DZ09c+/yLW4ixbdnLaNcRpkrJX7OqFALKet0FcQ=="];
                 CloudStorageAccount storageAccount = new CloudStorageAccount(new StorageCredentials(accountName, accountKey), true);
@@ -778,12 +906,16 @@ namespace cugonlineWebAPI.Controllers
 
                     if (HttpContext.Current.Request.Files[fileNum] != null && HttpContext.Current.Request.Files[fileNum].ContentLength > 0)
                     {
+
+
                         CloudBlockBlob azureBlockBlob = storageContainer.GetBlockBlobReference(uniquefileName);
                         azureBlockBlob.UploadFromStream(HttpContext.Current.Request.Files[fileNum].InputStream);
 
 
                         try//saving to database...
                         {
+
+                            var rootPath = "http://gearup4it.net/images/";
 
                             var nextFileId = cugDB.MainFiles.OrderByDescending(mf => mf.id).FirstOrDefault().id + 1;
                             MainFile f = new MainFile();

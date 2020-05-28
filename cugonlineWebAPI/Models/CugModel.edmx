@@ -194,7 +194,7 @@ warning 6002: The table/view 'test.dbo.txtBox' does not have a primary key defin
           </Key>
           <Property Name="ID" Type="int" Nullable="false" />
           <Property Name="Editor" Type="nvarchar" MaxLength="255" />
-          <Property Name="DateIn" Type="smalldatetime" />
+          <Property Name="DateIn" Type="datetime" />
           <Property Name="TimeIn" Type="nvarchar" MaxLength="255" />
           <Property Name="Reference" Type="nvarchar" MaxLength="255" />
           <Property Name="Edited" Type="nvarchar" MaxLength="255" />
@@ -501,7 +501,7 @@ warning 6002: The table/view 'test.dbo.txtBox' does not have a primary key defin
           </Key>
           <Property Name="ID" Type="Int32" Nullable="false" />
           <Property Name="Editor" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
-          <Property Name="DateIn" Type="DateTime" Precision="0" />
+          <Property Name="DateIn" Type="DateTime" Precision="3" />
           <Property Name="TimeIn" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
           <Property Name="Reference" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
           <Property Name="Edited" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />

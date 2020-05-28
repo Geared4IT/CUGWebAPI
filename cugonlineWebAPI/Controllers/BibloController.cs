@@ -94,7 +94,8 @@ namespace cugonlineWebAPI.Controllers
         {
             List<FilesInfo> files = new List<FilesInfo>();
 
-            var filePath = "https://cugonlinestorage.blob.core.windows.net/bibloimg/";
+            //var filePath = "https://cugonlinestorage.blob.core.windows.net/bibloimg/";
+            var filePath = "https://cugonline.co.za/images/";
 
             using (testEntities db = new testEntities())
             {
@@ -119,6 +120,77 @@ namespace cugonlineWebAPI.Controllers
         {
             var file = HttpContext.Current.Request.Files[0];//we have the file...
 
+
+            var uniquefileName = Guid.NewGuid().ToString() + Path.GetExtension(file.FileName);
+
+            string sourcepath = @"";
+            string ftpAddress = @"197.242.150.135"; // ConfigurationManager.AppSettings.Get("CloudStorageContainerReference")
+            string username = "cugftp"; // ConfigurationManager.AppSettings.Get("CloudStorageContainerReference")
+            string password = "Kjgv5FtNX!2$7qBtP3"; // ConfigurationManager.AppSettings.Get("CloudStorageContainerReference")
+
+
+            try
+            {
+
+                var postedFile = HttpContext.Current.Request.Files[0];
+                var filePath = HttpContext.Current.Server.MapPath("~/images/" + postedFile.FileName);
+                postedFile.SaveAs(filePath);
+
+                using (StreamReader stream = new StreamReader(filePath))
+                {
+                    FtpWebRequest request = (FtpWebRequest)WebRequest.Create("ftp://" + ftpAddress + "/" + uniquefileName);
+                    request.Method = WebRequestMethods.Ftp.UploadFile;
+                    request.Credentials = new NetworkCredential(username, password);
+                    Stream reqStream = request.GetRequestStream();
+
+                    byte[] buffer = new byte[1024];
+
+                    int byteRead = 0;
+                    FileStream fs = System.IO.File.OpenRead(filePath);
+
+                    do
+                    {
+                        byteRead = fs.Read(buffer, 0, buffer.Length);
+                        reqStream.Write(buffer, 0, byteRead);
+                    } while (byteRead != 0);
+
+                    fs.Close();
+                    reqStream.Close();
+
+                }
+
+                var nextFileId = cugDB.BibloUploads.OrderByDescending(mf => mf.Id).FirstOrDefault().Id + 1;
+                BibloUpload f = new BibloUpload
+                {
+                    Id = nextFileId,
+                    fName = uniquefileName,// file.FileName;
+                                           // f.fNamePath = rootPath + uniquefileName;
+                    fDescription = comment,
+                    fType = Path.GetExtension(file.FileName)
+                };
+
+                cugDB.BibloUploads.Add(f);
+                cugDB.SaveChanges();
+
+
+            }
+            catch (Exception ex)
+            {
+
+                throw ex;
+            }
+
+
+            return Ok();
+        }
+
+        [Route("UploadBibloAzure")]
+        [HttpPost]
+        // public async Task<IHttpActionResult> Upload(string id)
+        public object UploadBibloAzure(string comment)
+        {
+            var file = HttpContext.Current.Request.Files[0];//we have the file...
+
             if (HttpContext.Current.Request.Files.Count > 0)
             {
                 var accountName = "cugonlinestorage";// ConfigurationManager.AppSettings["cugonlinestorage"];
@@ -135,6 +207,11 @@ namespace cugonlineWebAPI.Controllers
 
                     if (HttpContext.Current.Request.Files[fileNum] != null && HttpContext.Current.Request.Files[fileNum].ContentLength > 0)
                     {
+                        //do upload r
+
+
+
+
                         CloudBlockBlob azureBlockBlob = storageContainer.GetBlockBlobReference(uniquefileName);
                         azureBlockBlob.UploadFromStream(HttpContext.Current.Request.Files[fileNum].InputStream);
 
