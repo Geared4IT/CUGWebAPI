@@ -1,0 +1,758 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+    <Schema Namespace="testModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012.Azure" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="BibloMain">
+          <Key>
+            <PropertyRef Name="MainId" />
+          </Key>
+          <Property Name="ID" Type="nvarchar" MaxLength="255" />
+          <Property Name="Body" Type="nvarchar(max)" />
+          <Property Name="MainId" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="BibloUploads">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="fName" Type="nvarchar" MaxLength="255" />
+          <Property Name="fType" Type="nvarchar" MaxLength="255" />
+          <Property Name="fTitle" Type="nvarchar" MaxLength="255" />
+          <Property Name="fDescription" Type="nvarchar" MaxLength="255" />
+          <Property Name="Id" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Categories">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" Nullable="false" />
+          <Property Name="Name" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="Description" Type="varchar" MaxLength="100" />
+        </EntityType>
+        <!--Errors Found During Generation:
+warning 6002: The table/view 'test.dbo.FileExtensions' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+        <EntityType Name="FileExtensions">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="int" Nullable="false" />
+          <Property Name="fileExtension" Type="nvarchar" MaxLength="255" />
+          <Property Name="fileTypeID" Type="int" />
+        </EntityType>
+        <EntityType Name="Files">
+          <Key>
+            <PropertyRef Name="fileID" />
+          </Key>
+          <Property Name="fName" Type="nvarchar" MaxLength="255" />
+          <Property Name="fNamePath" Type="nvarchar" MaxLength="255" />
+          <Property Name="fComment" Type="nvarchar(max)" />
+          <Property Name="fType" Type="nvarchar" MaxLength="255" />
+          <Property Name="fExported" Type="nvarchar" MaxLength="1" />
+          <Property Name="fThumbs" Type="nvarchar" MaxLength="16" />
+          <Property Name="filePath" Type="varchar" MaxLength="255" />
+          <Property Name="fMainId" Type="int" Nullable="false" />
+          <Property Name="fileID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+        </EntityType>
+        <!--Errors Found During Generation:
+warning 6002: The table/view 'test.dbo.FilesLink' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+        <EntityType Name="FilesLink">
+          <Key>
+            <PropertyRef Name="idFiles" />
+          </Key>
+          <Property Name="Idx" Type="nvarchar" MaxLength="255" />
+          <Property Name="idFiles" Type="int" Nullable="false" />
+          <Property Name="fSorted" Type="int" />
+        </EntityType>
+        <!--Errors Found During Generation:
+warning 6002: The table/view 'test.dbo.FileTypes' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+        <EntityType Name="FileTypes">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="int" Nullable="false" />
+          <Property Name="tName" Type="nvarchar" MaxLength="255" />
+          <Property Name="tDesc" Type="nvarchar" MaxLength="255" />
+        </EntityType>
+        <!--Errors Found During Generation:
+warning 6002: The table/view 'test.dbo.IdxMain' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+        <EntityType Name="IdxMain">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="int" Nullable="false" />
+          <Property Name="Idx" Type="nvarchar" MaxLength="250" />
+        </EntityType>
+        <EntityType Name="Main">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Idx" Type="nvarchar" MaxLength="250" />
+          <Property Name="Body" Type="ntext" />
+          <Property Name="Meaning" Type="nvarchar" MaxLength="200" />
+          <Property Name="Title" Type="nvarchar" MaxLength="200" />
+          <Property Name="AFirst" Type="nvarchar" MaxLength="1" />
+          <Property Name="Busy" Type="nvarchar" MaxLength="255" />
+          <Property Name="CategoryN" Type="nchar" MaxLength="10" />
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="LastUpdated" Type="datetime" Nullable="false" />
+          <Property Name="DateCreated" Type="datetime" />
+          <Property Name="CreatedBy" Type="int" />
+          <Property Name="LastUpdatedBy" Type="int" />
+          <Property Name="StatusFlag" Type="int" />
+          <Property Name="CategoryId" Type="int" />
+          <Property Name="currentStatus" Type="nvarchar" MaxLength="10" />
+        </EntityType>
+        <EntityType Name="MainFiles">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="int" Nullable="false" />
+          <Property Name="fName" Type="nvarchar" MaxLength="255" />
+          <Property Name="fNamePath" Type="nvarchar" MaxLength="255" />
+          <Property Name="fComment" Type="nvarchar" MaxLength="255" />
+          <Property Name="fType" Type="nvarchar" MaxLength="255" />
+          <Property Name="fExported" Type="nvarchar" MaxLength="255" />
+          <Property Name="fThumbs" Type="nvarchar" MaxLength="255" />
+          <Property Name="IsDeleted" Type="bit" />
+        </EntityType>
+        <EntityType Name="MainFilesLink">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Idx" Type="nvarchar" MaxLength="255" />
+          <Property Name="idFiles" Type="int" />
+          <Property Name="fSorted" Type="nvarchar" MaxLength="255" />
+          <Property Name="Id" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="ReciprocalSeeMainRef">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Idx" Type="varchar" MaxLength="200" Nullable="false" />
+          <Property Name="Link" Type="varchar" MaxLength="200" Nullable="false" />
+          <Property Name="Title" Type="varchar" MaxLength="200" Nullable="false" />
+          <Property Name="CategoryN" Type="varchar" MaxLength="200" Nullable="false" />
+          <Property Name="CatFlag" Type="varchar" MaxLength="200" Nullable="false" />
+          <Property Name="DateCreated" Type="datetime" Nullable="false" />
+        </EntityType>
+        <!--Errors Found During Generation:
+warning 6002: The table/view 'test.dbo.Request_detail' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+        <EntityType Name="Request_detail">
+          <Key>
+            <PropertyRef Name="Idx" />
+            <PropertyRef Name="Update_date" />
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Idx" Type="int" Nullable="false" />
+          <Property Name="Update_date" Type="datetime" Nullable="false" />
+          <Property Name="Update_detail" Type="nvarchar(max)" />
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+        </EntityType>
+        <!--Errors Found During Generation:
+warning 6002: The table/view 'test.dbo.Request_master' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+        <EntityType Name="Request_master">
+          <Key>
+            <PropertyRef Name="Idx" />
+            <PropertyRef Name="Request_name" />
+            <PropertyRef Name="Date_req" />
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Idx" Type="real" Nullable="false" />
+          <Property Name="Request_name" Type="nvarchar(max)" Nullable="false" />
+          <Property Name="Date_req" Type="datetime" Nullable="false" />
+          <Property Name="Date_fin" Type="datetime" />
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+        </EntityType>
+        <EntityType Name="SeeMain">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Idx" Type="nvarchar" MaxLength="250" />
+          <Property Name="Link" Type="nvarchar" MaxLength="250" />
+          <Property Name="Title" Type="nvarchar" MaxLength="50" />
+          <Property Name="categoryN" Type="nchar" MaxLength="10" />
+          <Property Name="catFlag" Type="nvarchar(max)" />
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="IsDeleted" Type="bit" />
+        </EntityType>
+        <!--Errors Found During Generation:
+warning 6002: The table/view 'test.dbo.txtBox' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+        <EntityType Name="txtBox">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="int" Nullable="false" />
+          <Property Name="Idx" Type="nvarchar" MaxLength="255" />
+          <Property Name="txtContent" Type="nvarchar(max)" />
+        </EntityType>
+        <EntityType Name="UserActivities">
+          <Key>
+            <PropertyRef Name="UserActivitiesID" />
+          </Key>
+          <Property Name="ID" Type="int" Nullable="false" />
+          <Property Name="Editor" Type="nvarchar" MaxLength="255" />
+          <Property Name="DateIn" Type="datetime" />
+          <Property Name="TimeIn" Type="nvarchar" MaxLength="255" />
+          <Property Name="Reference" Type="nvarchar" MaxLength="255" />
+          <Property Name="Edited" Type="nvarchar" MaxLength="255" />
+          <Property Name="Uploaded" Type="nvarchar" MaxLength="255" />
+          <Property Name="Attachment" Type="nvarchar" MaxLength="255" />
+          <Property Name="Deleted" Type="nvarchar" MaxLength="255" />
+          <Property Name="UserActivitiesID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="AttachmentId" Type="int" />
+        </EntityType>
+        <EntityType Name="UserMaster">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="Name" Type="nvarchar" MaxLength="50" />
+          <Property Name="Surname" Type="nvarchar" MaxLength="50" />
+          <Property Name="Email" Type="nvarchar" MaxLength="60" />
+          <Property Name="Password" Type="nvarchar" MaxLength="16" Nullable="false" />
+          <Property Name="nKey" Type="nvarchar" MaxLength="1" />
+          <Property Name="Date_last" Type="nvarchar" MaxLength="50" />
+          <Property Name="Time_last" Type="nvarchar" MaxLength="50" />
+          <Property Name="Date_added" Type="nvarchar" MaxLength="50" />
+          <Property Name="ID" Type="int" Nullable="false" />
+          <Property Name="categoryN" Type="nchar" MaxLength="10" />
+          <Property Name="UserName" Type="varchar" MaxLength="20" />
+          <Property Name="IsDeleted" Type="bit" />
+        </EntityType>
+        <EntityContainer Name="testModelStoreContainer">
+          <EntitySet Name="BibloMain" EntityType="Self.BibloMain" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="BibloUploads" EntityType="Self.BibloUploads" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Categories" EntityType="Self.Categories" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Files" EntityType="Self.Files" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Main" EntityType="Self.Main" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="MainFiles" EntityType="Self.MainFiles" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="MainFilesLink" EntityType="Self.MainFilesLink" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="ReciprocalSeeMainRef" EntityType="Self.ReciprocalSeeMainRef" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="SeeMain" EntityType="Self.SeeMain" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="UserActivities" EntityType="Self.UserActivities" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="UserMaster" EntityType="Self.UserMaster" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="FileExtensions" EntityType="Self.FileExtensions" store:Type="Tables" store:Schema="dbo">
+            <DefiningQuery>SELECT 
+    [FileExtensions].[id] AS [id], 
+    [FileExtensions].[fileExtension] AS [fileExtension], 
+    [FileExtensions].[fileTypeID] AS [fileTypeID]
+    FROM [dbo].[FileExtensions] AS [FileExtensions]</DefiningQuery>
+          </EntitySet>
+          <EntitySet Name="FilesLink" EntityType="Self.FilesLink" store:Type="Tables" store:Schema="dbo">
+            <DefiningQuery>SELECT 
+    [FilesLink].[Idx] AS [Idx], 
+    [FilesLink].[idFiles] AS [idFiles], 
+    [FilesLink].[fSorted] AS [fSorted]
+    FROM [dbo].[FilesLink] AS [FilesLink]</DefiningQuery>
+          </EntitySet>
+          <EntitySet Name="FileTypes" EntityType="Self.FileTypes" store:Type="Tables" store:Schema="dbo">
+            <DefiningQuery>SELECT 
+    [FileTypes].[id] AS [id], 
+    [FileTypes].[tName] AS [tName], 
+    [FileTypes].[tDesc] AS [tDesc]
+    FROM [dbo].[FileTypes] AS [FileTypes]</DefiningQuery>
+          </EntitySet>
+          <EntitySet Name="IdxMain" EntityType="Self.IdxMain" store:Type="Tables" store:Schema="dbo">
+            <DefiningQuery>SELECT 
+    [IdxMain].[ID] AS [ID], 
+    [IdxMain].[Idx] AS [Idx]
+    FROM [dbo].[IdxMain] AS [IdxMain]</DefiningQuery>
+          </EntitySet>
+          <EntitySet Name="Request_detail" EntityType="Self.Request_detail" store:Type="Tables" store:Schema="dbo">
+            <DefiningQuery>SELECT 
+    [Request_detail].[Idx] AS [Idx], 
+    [Request_detail].[Update_date] AS [Update_date], 
+    [Request_detail].[Update_detail] AS [Update_detail], 
+    [Request_detail].[Id] AS [Id]
+    FROM [dbo].[Request_detail] AS [Request_detail]</DefiningQuery>
+          </EntitySet>
+          <EntitySet Name="Request_master" EntityType="Self.Request_master" store:Type="Tables" store:Schema="dbo">
+            <DefiningQuery>SELECT 
+    [Request_master].[Idx] AS [Idx], 
+    [Request_master].[Request_name] AS [Request_name], 
+    [Request_master].[Date_req] AS [Date_req], 
+    [Request_master].[Date_fin] AS [Date_fin], 
+    [Request_master].[Id] AS [Id]
+    FROM [dbo].[Request_master] AS [Request_master]</DefiningQuery>
+          </EntitySet>
+          <EntitySet Name="txtBox" EntityType="Self.txtBox" store:Type="Tables" store:Schema="dbo">
+            <DefiningQuery>SELECT 
+    [txtBox].[ID] AS [ID], 
+    [txtBox].[Idx] AS [Idx], 
+    [txtBox].[txtContent] AS [txtContent]
+    FROM [dbo].[txtBox] AS [txtBox]</DefiningQuery>
+          </EntitySet>
+        </EntityContainer>
+      </Schema></edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="testModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityType Name="ReciprocalSeeMainRef">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Idx" Type="String" MaxLength="200" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="Link" Type="String" MaxLength="200" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="Title" Type="String" MaxLength="200" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="CategoryN" Type="String" MaxLength="200" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="CatFlag" Type="String" MaxLength="200" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="DateCreated" Type="DateTime" Nullable="false" Precision="3" />
+        </EntityType>
+        <EntityType Name="FileExtension">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Int32" Nullable="false" />
+          <Property Name="fileExtension1" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
+          <Property Name="fileTypeID" Type="Int32" />
+        </EntityType>
+        <EntityType Name="FilesLink">
+          <Key>
+            <PropertyRef Name="idFiles" />
+          </Key>
+          <Property Name="Idx" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
+          <Property Name="idFiles" Type="Int32" Nullable="false" />
+          <Property Name="fSorted" Type="Int32" />
+        </EntityType>
+        <EntityType Name="FileType">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Int32" Nullable="false" />
+          <Property Name="tName" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
+          <Property Name="tDesc" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
+        </EntityType>
+        <EntityType Name="IdxMain">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" />
+          <Property Name="Idx" Type="String" MaxLength="250" FixedLength="false" Unicode="true" />
+        </EntityType>
+        <EntityType Name="Request_detail">
+          <Key>
+            <PropertyRef Name="Idx" />
+            <PropertyRef Name="Update_date" />
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Idx" Type="Int32" Nullable="false" />
+          <Property Name="Update_date" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="Update_detail" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+        </EntityType>
+        <EntityType Name="Request_master">
+          <Key>
+            <PropertyRef Name="Idx" />
+            <PropertyRef Name="Request_name" />
+            <PropertyRef Name="Date_req" />
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Idx" Type="Single" Nullable="false" />
+          <Property Name="Request_name" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="Date_req" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="Date_fin" Type="DateTime" Precision="3" />
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+        </EntityType>
+        <EntityType Name="txtBox">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" />
+          <Property Name="Idx" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
+          <Property Name="txtContent" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+        </EntityType>
+        <EntityContainer Name="testEntities" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="ReciprocalSeeMainRefs" EntityType="Self.ReciprocalSeeMainRef" />
+          <EntitySet Name="FileExtensions" EntityType="Self.FileExtension" />
+          <EntitySet Name="FilesLinks" EntityType="Self.FilesLink" />
+          <EntitySet Name="FileTypes" EntityType="Self.FileType" />
+          <EntitySet Name="IdxMains" EntityType="Self.IdxMain" />
+          <EntitySet Name="Request_detail" EntityType="Self.Request_detail" />
+          <EntitySet Name="Request_master" EntityType="Self.Request_master" />
+          <EntitySet Name="txtBoxes" EntityType="Self.txtBox" />
+          <EntitySet Name="Files" EntityType="testModel.File" />
+          <EntitySet Name="MainFilesLinks" EntityType="testModel.MainFilesLink" />
+          <EntitySet Name="MainFiles" EntityType="testModel.MainFile" />
+          <EntitySet Name="SeeMains" EntityType="testModel.SeeMain" />
+          <EntitySet Name="UserMasters" EntityType="testModel.UserMaster" />
+          <EntitySet Name="Mains" EntityType="testModel.Main" />
+          <EntitySet Name="Categories" EntityType="testModel.Category" />
+          <EntitySet Name="BibloMains" EntityType="testModel.BibloMain" />
+          <EntitySet Name="BibloUploads" EntityType="testModel.BibloUpload" />
+          <EntitySet Name="UserActivities" EntityType="testModel.UserActivity" />
+        </EntityContainer>
+        <EntityType Name="File">
+          <Key>
+            <PropertyRef Name="fileID" />
+          </Key>
+          <Property Name="fName" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
+          <Property Name="fNamePath" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
+          <Property Name="fComment" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="fType" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
+          <Property Name="fExported" Type="String" MaxLength="1" FixedLength="false" Unicode="true" />
+          <Property Name="fThumbs" Type="String" MaxLength="16" FixedLength="false" Unicode="true" />
+          <Property Name="filePath" Type="String" MaxLength="255" FixedLength="false" Unicode="false" />
+          <Property Name="fMainId" Type="Int32" Nullable="false" />
+          <Property Name="fileID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+        </EntityType>
+        <EntityType Name="MainFilesLink">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Idx" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
+          <Property Name="idFiles" Type="Int32" />
+          <Property Name="fSorted" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
+          <Property Name="Id" Type="Int32" Nullable="false" />
+        </EntityType>
+        <EntityType Name="MainFile">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Int32" Nullable="false" />
+          <Property Name="fName" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
+          <Property Name="fNamePath" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
+          <Property Name="fComment" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
+          <Property Name="fType" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
+          <Property Name="fExported" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
+          <Property Name="fThumbs" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
+          <Property Name="IsDeleted" Type="Boolean" />
+        </EntityType>
+        <EntityType Name="SeeMain">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Idx" Type="String" MaxLength="250" FixedLength="false" Unicode="true" />
+          <Property Name="Link" Type="String" MaxLength="250" FixedLength="false" Unicode="true" />
+          <Property Name="Title" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="categoryN" Type="String" MaxLength="10" FixedLength="true" Unicode="true" />
+          <Property Name="catFlag" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="IsDeleted" Type="Boolean" />
+        </EntityType>
+        <EntityType Name="UserMaster">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="Name" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="Surname" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="Email" Type="String" MaxLength="60" FixedLength="false" Unicode="true" />
+          <Property Name="Password" Type="String" Nullable="false" MaxLength="16" FixedLength="false" Unicode="true" />
+          <Property Name="nKey" Type="String" MaxLength="1" FixedLength="false" Unicode="true" />
+          <Property Name="Date_last" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="Time_last" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="Date_added" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="ID" Type="Int32" Nullable="false" />
+          <Property Name="categoryN" Type="String" MaxLength="10" FixedLength="true" Unicode="true" />
+          <Property Name="UserName" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
+          <Property Name="IsDeleted" Type="Boolean" />
+        </EntityType>
+        <EntityType Name="Main">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Idx" Type="String" MaxLength="250" FixedLength="false" Unicode="true" />
+          <Property Name="Body" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="Meaning" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="Title" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="AFirst" Type="String" MaxLength="1" FixedLength="false" Unicode="true" />
+          <Property Name="Busy" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
+          <Property Name="CategoryN" Type="String" MaxLength="10" FixedLength="true" Unicode="true" />
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="LastUpdated" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="DateCreated" Type="DateTime" Precision="3" />
+          <Property Name="CreatedBy" Type="Int32" />
+          <Property Name="LastUpdatedBy" Type="Int32" />
+          <Property Name="StatusFlag" Type="Int32" />
+          <Property Name="CategoryId" Type="Int32" />
+          <Property Name="currentStatus" Type="String" MaxLength="10" FixedLength="false" Unicode="true" />
+        </EntityType>
+        <EntityType Name="Category">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" />
+          <Property Name="Name" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="Description" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+        </EntityType>
+        <EntityType Name="BibloMain">
+          <Key>
+            <PropertyRef Name="MainId" />
+          </Key>
+          <Property Name="ID" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
+          <Property Name="Body" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="MainId" Type="Int32" Nullable="false" />
+        </EntityType>
+        <EntityType Name="BibloUpload">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="fName" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
+          <Property Name="fType" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
+          <Property Name="fTitle" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
+          <Property Name="fDescription" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
+          <Property Name="Id" Type="Int32" Nullable="false" />
+        </EntityType>
+        <EntityType Name="UserActivity">
+          <Key>
+            <PropertyRef Name="UserActivitiesID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" />
+          <Property Name="Editor" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
+          <Property Name="DateIn" Type="DateTime" Precision="3" />
+          <Property Name="TimeIn" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
+          <Property Name="Reference" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
+          <Property Name="Edited" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
+          <Property Name="Uploaded" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
+          <Property Name="Attachment" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
+          <Property Name="Deleted" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
+          <Property Name="UserActivitiesID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="AttachmentId" Type="Int32" />
+        </EntityType>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="testModelStoreContainer" CdmEntityContainer="testEntities">
+          <EntitySetMapping Name="ReciprocalSeeMainRefs">
+            <EntityTypeMapping TypeName="testModel.ReciprocalSeeMainRef">
+              <MappingFragment StoreEntitySet="ReciprocalSeeMainRef">
+                <ScalarProperty Name="id" ColumnName="id" />
+                <ScalarProperty Name="Idx" ColumnName="Idx" />
+                <ScalarProperty Name="Link" ColumnName="Link" />
+                <ScalarProperty Name="Title" ColumnName="Title" />
+                <ScalarProperty Name="CategoryN" ColumnName="CategoryN" />
+                <ScalarProperty Name="CatFlag" ColumnName="CatFlag" />
+                <ScalarProperty Name="DateCreated" ColumnName="DateCreated" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="FileExtensions">
+            <EntityTypeMapping TypeName="testModel.FileExtension">
+              <MappingFragment StoreEntitySet="FileExtensions">
+                <ScalarProperty Name="id" ColumnName="id" />
+                <ScalarProperty Name="fileExtension1" ColumnName="fileExtension" />
+                <ScalarProperty Name="fileTypeID" ColumnName="fileTypeID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="FilesLinks">
+            <EntityTypeMapping TypeName="testModel.FilesLink">
+              <MappingFragment StoreEntitySet="FilesLink">
+                <ScalarProperty Name="Idx" ColumnName="Idx" />
+                <ScalarProperty Name="idFiles" ColumnName="idFiles" />
+                <ScalarProperty Name="fSorted" ColumnName="fSorted" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="FileTypes">
+            <EntityTypeMapping TypeName="testModel.FileType">
+              <MappingFragment StoreEntitySet="FileTypes">
+                <ScalarProperty Name="id" ColumnName="id" />
+                <ScalarProperty Name="tName" ColumnName="tName" />
+                <ScalarProperty Name="tDesc" ColumnName="tDesc" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="IdxMains">
+            <EntityTypeMapping TypeName="testModel.IdxMain">
+              <MappingFragment StoreEntitySet="IdxMain">
+                <ScalarProperty Name="ID" ColumnName="ID" />
+                <ScalarProperty Name="Idx" ColumnName="Idx" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Request_detail">
+            <EntityTypeMapping TypeName="testModel.Request_detail">
+              <MappingFragment StoreEntitySet="Request_detail">
+                <ScalarProperty Name="Idx" ColumnName="Idx" />
+                <ScalarProperty Name="Update_date" ColumnName="Update_date" />
+                <ScalarProperty Name="Update_detail" ColumnName="Update_detail" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Request_master">
+            <EntityTypeMapping TypeName="testModel.Request_master">
+              <MappingFragment StoreEntitySet="Request_master">
+                <ScalarProperty Name="Idx" ColumnName="Idx" />
+                <ScalarProperty Name="Request_name" ColumnName="Request_name" />
+                <ScalarProperty Name="Date_req" ColumnName="Date_req" />
+                <ScalarProperty Name="Date_fin" ColumnName="Date_fin" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="txtBoxes">
+            <EntityTypeMapping TypeName="testModel.txtBox">
+              <MappingFragment StoreEntitySet="txtBox">
+                <ScalarProperty Name="ID" ColumnName="ID" />
+                <ScalarProperty Name="Idx" ColumnName="Idx" />
+                <ScalarProperty Name="txtContent" ColumnName="txtContent" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Files">
+            <EntityTypeMapping TypeName="testModel.File">
+              <MappingFragment StoreEntitySet="Files">
+                <ScalarProperty Name="fileID" ColumnName="fileID" />
+                <ScalarProperty Name="fMainId" ColumnName="fMainId" />
+                <ScalarProperty Name="filePath" ColumnName="filePath" />
+                <ScalarProperty Name="fThumbs" ColumnName="fThumbs" />
+                <ScalarProperty Name="fExported" ColumnName="fExported" />
+                <ScalarProperty Name="fType" ColumnName="fType" />
+                <ScalarProperty Name="fComment" ColumnName="fComment" />
+                <ScalarProperty Name="fNamePath" ColumnName="fNamePath" />
+                <ScalarProperty Name="fName" ColumnName="fName" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="MainFilesLinks">
+            <EntityTypeMapping TypeName="testModel.MainFilesLink">
+              <MappingFragment StoreEntitySet="MainFilesLink">
+                <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="fSorted" ColumnName="fSorted" />
+                <ScalarProperty Name="idFiles" ColumnName="idFiles" />
+                <ScalarProperty Name="Idx" ColumnName="Idx" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="MainFiles">
+            <EntityTypeMapping TypeName="testModel.MainFile">
+              <MappingFragment StoreEntitySet="MainFiles">
+                <ScalarProperty Name="IsDeleted" ColumnName="IsDeleted" />
+                <ScalarProperty Name="fThumbs" ColumnName="fThumbs" />
+                <ScalarProperty Name="fExported" ColumnName="fExported" />
+                <ScalarProperty Name="fType" ColumnName="fType" />
+                <ScalarProperty Name="fComment" ColumnName="fComment" />
+                <ScalarProperty Name="fNamePath" ColumnName="fNamePath" />
+                <ScalarProperty Name="fName" ColumnName="fName" />
+                <ScalarProperty Name="id" ColumnName="id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="SeeMains">
+            <EntityTypeMapping TypeName="testModel.SeeMain">
+              <MappingFragment StoreEntitySet="SeeMain">
+                <ScalarProperty Name="IsDeleted" ColumnName="IsDeleted" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="catFlag" ColumnName="catFlag" />
+                <ScalarProperty Name="categoryN" ColumnName="categoryN" />
+                <ScalarProperty Name="Title" ColumnName="Title" />
+                <ScalarProperty Name="Link" ColumnName="Link" />
+                <ScalarProperty Name="Idx" ColumnName="Idx" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="UserMasters">
+            <EntityTypeMapping TypeName="testModel.UserMaster">
+              <MappingFragment StoreEntitySet="UserMaster">
+                <ScalarProperty Name="IsDeleted" ColumnName="IsDeleted" />
+                <ScalarProperty Name="UserName" ColumnName="UserName" />
+                <ScalarProperty Name="categoryN" ColumnName="categoryN" />
+                <ScalarProperty Name="ID" ColumnName="ID" />
+                <ScalarProperty Name="Date_added" ColumnName="Date_added" />
+                <ScalarProperty Name="Time_last" ColumnName="Time_last" />
+                <ScalarProperty Name="Date_last" ColumnName="Date_last" />
+                <ScalarProperty Name="nKey" ColumnName="nKey" />
+                <ScalarProperty Name="Password" ColumnName="Password" />
+                <ScalarProperty Name="Email" ColumnName="Email" />
+                <ScalarProperty Name="Surname" ColumnName="Surname" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Mains">
+            <EntityTypeMapping TypeName="testModel.Main">
+              <MappingFragment StoreEntitySet="Main">
+                <ScalarProperty Name="currentStatus" ColumnName="currentStatus" />
+                <ScalarProperty Name="CategoryId" ColumnName="CategoryId" />
+                <ScalarProperty Name="StatusFlag" ColumnName="StatusFlag" />
+                <ScalarProperty Name="LastUpdatedBy" ColumnName="LastUpdatedBy" />
+                <ScalarProperty Name="CreatedBy" ColumnName="CreatedBy" />
+                <ScalarProperty Name="DateCreated" ColumnName="DateCreated" />
+                <ScalarProperty Name="LastUpdated" ColumnName="LastUpdated" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="CategoryN" ColumnName="CategoryN" />
+                <ScalarProperty Name="Busy" ColumnName="Busy" />
+                <ScalarProperty Name="AFirst" ColumnName="AFirst" />
+                <ScalarProperty Name="Title" ColumnName="Title" />
+                <ScalarProperty Name="Meaning" ColumnName="Meaning" />
+                <ScalarProperty Name="Body" ColumnName="Body" />
+                <ScalarProperty Name="Idx" ColumnName="Idx" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Categories">
+            <EntityTypeMapping TypeName="testModel.Category">
+              <MappingFragment StoreEntitySet="Categories">
+                <ScalarProperty Name="Description" ColumnName="Description" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="BibloMains">
+            <EntityTypeMapping TypeName="testModel.BibloMain">
+              <MappingFragment StoreEntitySet="BibloMain">
+                <ScalarProperty Name="MainId" ColumnName="MainId" />
+                <ScalarProperty Name="Body" ColumnName="Body" />
+                <ScalarProperty Name="ID" ColumnName="ID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="BibloUploads">
+            <EntityTypeMapping TypeName="testModel.BibloUpload">
+              <MappingFragment StoreEntitySet="BibloUploads">
+                <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="fDescription" ColumnName="fDescription" />
+                <ScalarProperty Name="fTitle" ColumnName="fTitle" />
+                <ScalarProperty Name="fType" ColumnName="fType" />
+                <ScalarProperty Name="fName" ColumnName="fName" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="UserActivities">
+            <EntityTypeMapping TypeName="testModel.UserActivity">
+              <MappingFragment StoreEntitySet="UserActivities">
+                <ScalarProperty Name="AttachmentId" ColumnName="AttachmentId" />
+                <ScalarProperty Name="UserActivitiesID" ColumnName="UserActivitiesID" />
+                <ScalarProperty Name="Deleted" ColumnName="Deleted" />
+                <ScalarProperty Name="Attachment" ColumnName="Attachment" />
+                <ScalarProperty Name="Uploaded" ColumnName="Uploaded" />
+                <ScalarProperty Name="Edited" ColumnName="Edited" />
+                <ScalarProperty Name="Reference" ColumnName="Reference" />
+                <ScalarProperty Name="TimeIn" ColumnName="TimeIn" />
+                <ScalarProperty Name="DateIn" ColumnName="DateIn" />
+                <ScalarProperty Name="Editor" ColumnName="Editor" />
+                <ScalarProperty Name="ID" ColumnName="ID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="true" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
+        <DesignerProperty Name="UseLegacyProvider" Value="false" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="None" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>

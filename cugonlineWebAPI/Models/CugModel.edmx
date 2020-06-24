@@ -221,6 +221,10 @@ warning 6002: The table/view 'test.dbo.txtBox' does not have a primary key defin
           <Property Name="UserName" Type="varchar" MaxLength="20" />
           <Property Name="IsDeleted" Type="bit" />
         </EntityType>
+        <Function Name="sp_EmptyReferencesDetails" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="strLength" Type="int" Mode="In" />
+          <Parameter Name="type" Type="nvarchar" Mode="In" />
+        </Function>
         <EntityContainer Name="testModelStoreContainer">
           <EntitySet Name="BibloMain" EntityType="Self.BibloMain" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="BibloUploads" EntityType="Self.BibloUploads" Schema="dbo" store:Type="Tables" />
@@ -383,6 +387,21 @@ warning 6002: The table/view 'test.dbo.txtBox' does not have a primary key defin
           <EntitySet Name="BibloMains" EntityType="testModel.BibloMain" />
           <EntitySet Name="BibloUploads" EntityType="testModel.BibloUpload" />
           <EntitySet Name="UserActivities" EntityType="testModel.UserActivity" />
+          <FunctionImport Name="sp_EmptyReferences" ReturnType="Collection(testModel.sp_EmptyReferences_Result)">
+            <Parameter Name="strLength" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="sp_EmptyReferencesDetails" ReturnType="Collection(testModel.sp_EmptyReferencesDetails_Result)">
+            <Parameter Name="strLength" Mode="In" Type="Int32" />
+            <Parameter Name="type" Mode="In" Type="String" />
+          </FunctionImport>
+          <FunctionImport Name="sp_EmptyReferencesDetails1" ReturnType="Collection(testModel.sp_EmptyReferencesDetails1_Result)">
+            <Parameter Name="strLength" Mode="In" Type="Int32" />
+            <Parameter Name="type" Mode="In" Type="String" />
+          </FunctionImport>
+          <FunctionImport Name="sp_EmptyReferencesDetails2" ReturnType="Collection(testModel.sp_EmptyReferencesDetails2_Result)">
+            <Parameter Name="strLength" Mode="In" Type="Int32" />
+            <Parameter Name="type" Mode="In" Type="String" />
+          </FunctionImport>
         </EntityContainer>
         <EntityType Name="File">
           <Key>
@@ -511,6 +530,40 @@ warning 6002: The table/view 'test.dbo.txtBox' does not have a primary key defin
           <Property Name="UserActivitiesID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="AttachmentId" Type="Int32" />
         </EntityType>
+        <ComplexType Name="sp_EmptyReferences_Result">
+          <Property Type="Int32" Name="ID" Nullable="false" />
+          <Property Type="String" Name="Title" Nullable="false" MaxLength="16" />
+          <Property Type="Int32" Name="numRecords" Nullable="true" />
+        </ComplexType>
+        <ComplexType Name="sp_EmptyReferencesDetails_Result">
+          <Property Type="Int32" Name="id" Nullable="false" />
+          <Property Type="String" Name="Idx" Nullable="true" MaxLength="250" />
+          <Property Type="String" Name="body" Nullable="true" MaxLength="Max" />
+          <Property Type="String" Name="Title" Nullable="true" MaxLength="200" />
+          <Property Type="String" Name="CategoryN" Nullable="true" MaxLength="10" />
+          <Property Type="String" Name="currentStatus" Nullable="true" MaxLength="10" />
+          <Property Type="Int32" Name="LastUpdatedBy" Nullable="true" />
+        </ComplexType>
+        <ComplexType Name="sp_EmptyReferencesDetails1_Result">
+          <Property Type="Int32" Name="id" Nullable="false" />
+          <Property Type="String" Name="Idx" Nullable="true" MaxLength="250" />
+          <Property Type="String" Name="body" Nullable="true" MaxLength="Max" />
+          <Property Type="String" Name="Title" Nullable="true" MaxLength="200" />
+          <Property Type="String" Name="CategoryN" Nullable="true" MaxLength="10" />
+          <Property Type="String" Name="currentStatus" Nullable="true" MaxLength="10" />
+          <Property Type="Int32" Name="LastUpdatedBy" Nullable="true" />
+          <Property Type="DateTime" Name="LastUpdated" Nullable="false" Precision="23" />
+        </ComplexType>
+        <ComplexType Name="sp_EmptyReferencesDetails2_Result">
+          <Property Type="Int32" Name="id" Nullable="false" />
+          <Property Type="String" Name="Idx" Nullable="true" MaxLength="250" />
+          <Property Type="String" Name="body" Nullable="true" MaxLength="Max" />
+          <Property Type="String" Name="Title" Nullable="true" MaxLength="200" />
+          <Property Type="String" Name="CategoryN" Nullable="true" MaxLength="10" />
+          <Property Type="String" Name="currentStatus" Nullable="true" MaxLength="10" />
+          <Property Type="Int32" Name="LastUpdatedBy" Nullable="true" />
+          <Property Type="DateTime" Name="LastUpdated" Nullable="false" Precision="23" />
+        </ComplexType>
       </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -732,6 +785,20 @@ warning 6002: The table/view 'test.dbo.txtBox' does not have a primary key defin
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
+          <FunctionImportMapping FunctionImportName="sp_EmptyReferencesDetails2" FunctionName="testModel.Store.sp_EmptyReferencesDetails">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="testModel.sp_EmptyReferencesDetails2_Result">
+                <ScalarProperty Name="id" ColumnName="id" />
+                <ScalarProperty Name="Idx" ColumnName="Idx" />
+                <ScalarProperty Name="body" ColumnName="body" />
+                <ScalarProperty Name="Title" ColumnName="Title" />
+                <ScalarProperty Name="CategoryN" ColumnName="CategoryN" />
+                <ScalarProperty Name="currentStatus" ColumnName="currentStatus" />
+                <ScalarProperty Name="LastUpdatedBy" ColumnName="LastUpdatedBy" />
+                <ScalarProperty Name="LastUpdated" ColumnName="LastUpdated" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
         </EntityContainerMapping>
       </Mapping>
     </edmx:Mappings>

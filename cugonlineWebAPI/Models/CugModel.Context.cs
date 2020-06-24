@@ -12,6 +12,8 @@ namespace cugonlineWebAPI.Models
     using System;
     using System.Data.Entity;
     using System.Data.Entity.Infrastructure;
+    using System.Data.Entity.Core.Objects;
+    using System.Linq;
     
     public partial class testEntities : DbContext
     {
@@ -43,5 +45,53 @@ namespace cugonlineWebAPI.Models
         public virtual DbSet<BibloMain> BibloMains { get; set; }
         public virtual DbSet<BibloUpload> BibloUploads { get; set; }
         public virtual DbSet<UserActivity> UserActivities { get; set; }
+    
+        public virtual ObjectResult<sp_EmptyReferences_Result> sp_EmptyReferences(Nullable<int> strLength)
+        {
+            var strLengthParameter = strLength.HasValue ?
+                new ObjectParameter("strLength", strLength) :
+                new ObjectParameter("strLength", typeof(int));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<sp_EmptyReferences_Result>("sp_EmptyReferences", strLengthParameter);
+        }
+    
+        public virtual ObjectResult<sp_EmptyReferencesDetails_Result> sp_EmptyReferencesDetails(Nullable<int> strLength, string type)
+        {
+            var strLengthParameter = strLength.HasValue ?
+                new ObjectParameter("strLength", strLength) :
+                new ObjectParameter("strLength", typeof(int));
+    
+            var typeParameter = type != null ?
+                new ObjectParameter("type", type) :
+                new ObjectParameter("type", typeof(string));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<sp_EmptyReferencesDetails_Result>("sp_EmptyReferencesDetails", strLengthParameter, typeParameter);
+        }
+    
+        public virtual ObjectResult<sp_EmptyReferencesDetails1_Result> sp_EmptyReferencesDetails1(Nullable<int> strLength, string type)
+        {
+            var strLengthParameter = strLength.HasValue ?
+                new ObjectParameter("strLength", strLength) :
+                new ObjectParameter("strLength", typeof(int));
+    
+            var typeParameter = type != null ?
+                new ObjectParameter("type", type) :
+                new ObjectParameter("type", typeof(string));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<sp_EmptyReferencesDetails1_Result>("sp_EmptyReferencesDetails1", strLengthParameter, typeParameter);
+        }
+    
+        public virtual ObjectResult<sp_EmptyReferencesDetails2_Result> sp_EmptyReferencesDetails2(Nullable<int> strLength, string type)
+        {
+            var strLengthParameter = strLength.HasValue ?
+                new ObjectParameter("strLength", strLength) :
+                new ObjectParameter("strLength", typeof(int));
+    
+            var typeParameter = type != null ?
+                new ObjectParameter("type", type) :
+                new ObjectParameter("type", typeof(string));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<sp_EmptyReferencesDetails2_Result>("sp_EmptyReferencesDetails2", strLengthParameter, typeParameter);
+        }
     }
 }

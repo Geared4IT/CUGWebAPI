@@ -18,10 +18,11 @@
     <MvcBuildViews>false</MvcBuildViews>
     <UseIISExpress>true</UseIISExpress>
     <Use64BitIISExpress />
-    <IISExpressSSLPort />
-    <IISExpressAnonymousAuthentication />
-    <IISExpressWindowsAuthentication />
-    <IISExpressUseClassicPipelineMode />
+    <IISExpressSSLPort>
+    </IISExpressSSLPort>
+    <IISExpressAnonymousAuthentication>enabled</IISExpressAnonymousAuthentication>
+    <IISExpressWindowsAuthentication>disabled</IISExpressWindowsAuthentication>
+    <IISExpressUseClassicPipelineMode>false</IISExpressUseClassicPipelineMode>
     <UseGlobalApplicationHostFile />
     <NuGetPackageImportStamp>
     </NuGetPackageImportStamp>
@@ -187,6 +188,7 @@
     <Compile Include="Areas\HelpPage\SampleGeneration\TextSample.cs" />
     <Compile Include="Areas\HelpPage\XmlDocumentationProvider.cs" />
     <Compile Include="Controllers\BibloController.cs" />
+    <Compile Include="DTO\DataBaseInfoDTO.cs" />
     <Compile Include="Controllers\EmailController.cs" />
     <Compile Include="DTO\BibloInfoDTO.cs" />
     <Compile Include="Controllers\HomeController.cs" />
@@ -256,6 +258,18 @@
       <DependentUpon>CugModel.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\SeeMain.cs">
+      <DependentUpon>CugModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\sp_EmptyReferencesDetails1_Result.cs">
+      <DependentUpon>CugModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\sp_EmptyReferencesDetails2_Result.cs">
+      <DependentUpon>CugModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\sp_EmptyReferencesDetails_Result.cs">
+      <DependentUpon>CugModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\sp_EmptyReferences_Result.cs">
       <DependentUpon>CugModel.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\txtBox.cs">
@@ -399,7 +413,7 @@
           <AutoAssignPort>True</AutoAssignPort>
           <DevelopmentServerPort>54444</DevelopmentServerPort>
           <DevelopmentServerVPath>/</DevelopmentServerVPath>
-          <IISUrl>http://localhost:54444/</IISUrl>
+          <IISUrl>https://localhost:44344/</IISUrl>
           <NTLMAuthentication>False</NTLMAuthentication>
           <UseCustomServer>False</UseCustomServer>
           <CustomServerUrl>

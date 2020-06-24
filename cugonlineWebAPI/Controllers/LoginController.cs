@@ -63,18 +63,19 @@ namespace cugonlineWebAPI.Controllers
         [HttpPost]
         public SystemUsersDTO employeeLogin(Login login)
         {
-            var u = cugDB.UserMasters.Where(x => x.UserName.Equals(login.UserName) && x.Password.Equals(login.Password)).FirstOrDefault();
+
 
 
             try
             {
+                var u = cugDB.UserMasters.Where(x => x.UserName.Equals(login.UserName) && x.Password.Equals(login.Password)).FirstOrDefault();
                 if (u == null)
                 {
                     return new SystemUsersDTO { Name = "Invalid" };
                 }
                 else
                 {
-                   // LogUserActivity(u);//todo fix...
+                     LogUserActivity(u);//todo fix...
 
                     return new SystemUsersDTO
                     {
@@ -94,7 +95,7 @@ namespace cugonlineWebAPI.Controllers
             catch (Exception ex)
             {
 
-                return null;
+                return new SystemUsersDTO { Name = "Invalid" };
             }
 
 
@@ -106,15 +107,25 @@ namespace cugonlineWebAPI.Controllers
         /// <param name="u"></param>
         private void LogUserActivity(UserMaster u)
         {
-            UserActivity ua = new UserActivity
+            try
             {
-                Editor = u.Name,
-                DateIn = DateTime.Now,
-                TimeIn = DateTime.Now.ToString()
-            };
+                UserActivity ua = new UserActivity
+                {
+                    Editor = u.Name,
+                    DateIn = DateTime.Now,
+                    TimeIn = DateTime.Now.ToString(),
+                    UserActivitiesID = cugDB.UserActivities.Max(maxID => maxID.UserActivitiesID) + 1,
+                    ID = cugDB.UserActivities.Max(maxID => maxID.UserActivitiesID) + 1
+                };
 
-            cugDB.UserActivities.Add(ua);
-            cugDB.SaveChanges();
+                cugDB.UserActivities.Add(ua);
+                cugDB.SaveChanges();
+            }
+            catch (Exception ex)
+            {
+                throw;
+            }
+      
         }
 
         /// <summary>
@@ -206,6 +217,49 @@ namespace cugonlineWebAPI.Controllers
         }
 
         /// <summary>
+        /// get Empty Reference Report Details
+        /// </summary>
+        /// <returns>list of figures</returns>
+        [Route("GetEmptyReferenceReportDetails")]
+        [HttpGet]
+        public List<FiguresDTO> GetEmptyReferenceReportDetails(int filter, string type)
+        {
+            type = type.Contains("Empty References") ? "Body" : "Meaning";
+
+            List<FiguresDTO> result = new List<FiguresDTO>();
+
+            try
+            {
+                result = cugDB.sp_EmptyReferencesDetails(filter, type).Select(m => new FiguresDTO
+                {
+                    Id = m.id,
+                    Idx = m.Idx,
+                    Title = m.Title.ToUpper(),
+                    LastUpdated = m.LastUpdated.ToString(),
+                    CategoryName =  m.CategoryN.Trim(),
+                    CurrentStatus =  m.currentStatus.Trim(),
+                    LastUpdatedBy =  (m.LastUpdatedBy.HasValue == true) ? cugDB.UserMasters.Where(u => u.ID.Equals(m.LastUpdatedBy.Value)).FirstOrDefault().Name : "",
+
+
+                }).OrderBy(m => m.Title).ToList();
+            }
+            catch (Exception ex)
+            {
+
+                throw;
+            }
+
+
+
+            if (result != null)
+            {
+                return result;
+            }
+            else
+                return null;
+        }
+
+        /// <summary>
         /// get list of users
         /// </summary>
         /// <returns>list of figures</returns>
@@ -277,13 +331,62 @@ namespace cugonlineWebAPI.Controllers
         [HttpGet]
         public List<FigureStasticsDTO> GetFigureStatistics()
         {
-            var results = (from m in cugDB.Mains
-                           group m by m.CategoryN into newGroup
-                           orderby newGroup.Key
-                           select new FigureStasticsDTO
+            try
+            {
+                var results = (from m in cugDB.Mains
+                               group m by m.CategoryN into newGroup
+                               orderby newGroup.Key
+                               select new FigureStasticsDTO
+                               {
+                                   Category = newGroup.Key.Trim(),
+                                   TotalCount = newGroup.Count()
+                               }).ToList();
+
+
+                if (results != null) return results;
+                return null;
+            }
+            catch (Exception ex)
+            {
+                throw;
+            }
+
+        }
+
+        [Route("GetDatabaseStatistics")]
+        [HttpGet]
+        public List<DataBaseInfoDTO> GetDataBaseStatistics()
+        {
+            int strLength = 50;
+            var emptyReference = cugDB.sp_EmptyReferences(strLength);
+
+            var dbInfoList = new List<DataBaseInfoDTO>();
+
+
+            foreach (var item in emptyReference)
+            {
+                var emptyReferenceData = new DataBaseInfoDTO
+                {
+                    Title = item.Title,
+                    TotalRecords = item.numRecords.Value
+                };
+
+                dbInfoList.Add(emptyReferenceData);
+            }
+
+            if (dbInfoList != null) return dbInfoList;
+            return null;
+        }
+
+        [Route("GetBibloStatistics")]
+        [HttpGet]
+        public List<DataBaseInfoDTO> GetBibloStatistics()
+        {
+            var results = (from m in cugDB.BibloMains
+                           select new DataBaseInfoDTO
                            {
-                               Category = newGroup.Key.Trim(),
-                               TotalCount = newGroup.Count()
+                               Title = "Title",
+                               TotalRecords = cugDB.BibloMains.Count()
                            }).ToList();
 
 
@@ -445,7 +548,7 @@ namespace cugonlineWebAPI.Controllers
                     referenceItem.Idx = fig.Idx;
                     referenceItem.LastUpdated = DateTime.Now;
                     referenceItem.LastUpdatedBy = fig.LastUpdatedBy;
-                    referenceItem.CategoryN = fig.CategoryN.Trim();
+                    referenceItem.CategoryN = (fig.CategoryN == null) ? "All" : fig.CategoryN.Trim();// fig.CategoryN.Trim();
                     referenceItem.currentStatus = (fig.LastUpdatedBy == 6) ? "live" : "review";
 
                     cugDB.Entry(referenceItem).State = System.Data.Entity.EntityState.Modified;
@@ -683,20 +786,30 @@ namespace cugonlineWebAPI.Controllers
         [HttpGet]
         public List<UserActivitiesDTO> GetUserActivityLoginHistory(DateTime loginFrom, DateTime loginTo)
         {
-            var result = cugDB.UserActivities.Where(ua => (ua.DateIn > loginFrom && ua.DateIn < loginTo)
-                                                         && ua.Reference.Equals(null)
-                                                         && ua.Uploaded.Equals(null)).ToList().Select(ua => new UserActivitiesDTO
-                                                         {
-                                                             Editor = ua.Editor,
-                                                             DateInFormatted = (ua.DateIn.HasValue) ? ua.DateIn.Value.ToString("dd MMM yyyy HH:mm") : ""
-                                                         }).ToList();
 
-            if (result != null)
+            try
             {
-                return result.OrderByDescending(u => u.DateInFormatted).ToList();
+                var result = cugDB.UserActivities.Where(ua => (ua.DateIn > loginFrom && ua.DateIn < loginTo)
+                                                      && ua.Reference.Equals(null)
+                                                      && ua.Uploaded.Equals(null)).ToList().Select(ua => new UserActivitiesDTO
+                                                      {
+                                                          Editor = ua.Editor,
+                                                          DateInFormatted = (ua.DateIn.HasValue) ? ua.DateIn.Value.ToString("dd MMM yyyy HH:mm") : ""
+                                                      }).ToList();
+
+                if (result != null)
+                {
+                    return result.OrderByDescending(u => u.DateInFormatted).ToList();
+                }
+                else
+                    return new List<UserActivitiesDTO>();
             }
-            else
-                return new List<UserActivitiesDTO>();
+            catch (Exception ex)
+            {
+
+                throw;
+            }
+
         }
 
         [Route("GetUserActivityEditHistory")]
@@ -793,24 +906,33 @@ namespace cugonlineWebAPI.Controllers
         public object Upload(string id, string comment, int userId)
         {
 
-            var file = HttpContext.Current.Request.Files[0];//we have the file...
-
-            var uniquefileName = id + "_" + Guid.NewGuid().ToString() + Path.GetExtension(file.FileName);
-            //var uniquefileName = Path.GetFileName(file.FileName);
-
-            string sourcepath = @"";
-            string ftpAddress = @"197.242.150.135"; // ConfigurationManager.AppSettings.Get("CloudStorageContainerReference")
-            string username = "cugftp"; // ConfigurationManager.AppSettings.Get("CloudStorageContainerReference")
-            string password = "Kjgv5FtNX!2$7qBtP3"; // ConfigurationManager.AppSettings.Get("CloudStorageContainerReference")
-
-
-
             try
             {
 
+                var file = HttpContext.Current.Request.Files[0];//we have the file...
+
+                var uniquefileName = id + "_" + Guid.NewGuid().ToString() + Path.GetExtension(file.FileName);
+                //var uniquefileName = Path.GetFileName(file.FileName);
+
+                string sourcepath = @"";
+                string ftpAddress = @"197.242.150.135"; // ConfigurationManager.AppSettings.Get("CloudStorageContainerReference")
+                string username = "cugftp"; // ConfigurationManager.AppSettings.Get("CloudStorageContainerReference")
+                string password = "Kjgv5FtNX!2$7qBtP3"; // ConfigurationManager.AppSettings.Get("CloudStorageContainerReference")
 
                 var postedFile = HttpContext.Current.Request.Files[0];
-                var filePath = HttpContext.Current.Server.MapPath("~/images/" + postedFile.FileName);
+                var filePath = HttpContext.Current.Server.MapPath("~/imagesSleep/" + postedFile.FileName);
+
+                var destinationDirectory = new DirectoryInfo(Path.GetDirectoryName(filePath));
+
+                if (!destinationDirectory.Exists) destinationDirectory.Create();
+
+
+
+                //if (!System.IO.File.Exists(filePath))
+                //{
+                //    System.IO.File.Create(filePath).Close();
+                //}
+
                 postedFile.SaveAs(filePath);
 
 
@@ -872,7 +994,7 @@ namespace cugonlineWebAPI.Controllers
 
             catch (Exception ex)
             {
-                throw ex;
+                return ex.InnerException;
 
             }
 
