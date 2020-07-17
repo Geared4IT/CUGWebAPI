@@ -67,31 +67,5 @@ namespace cugonlineWebAPI.Models
     
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<sp_EmptyReferencesDetails_Result>("sp_EmptyReferencesDetails", strLengthParameter, typeParameter);
         }
-    
-        public virtual ObjectResult<sp_EmptyReferencesDetails1_Result> sp_EmptyReferencesDetails1(Nullable<int> strLength, string type)
-        {
-            var strLengthParameter = strLength.HasValue ?
-                new ObjectParameter("strLength", strLength) :
-                new ObjectParameter("strLength", typeof(int));
-    
-            var typeParameter = type != null ?
-                new ObjectParameter("type", type) :
-                new ObjectParameter("type", typeof(string));
-    
-            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<sp_EmptyReferencesDetails1_Result>("sp_EmptyReferencesDetails1", strLengthParameter, typeParameter);
-        }
-    
-        public virtual ObjectResult<sp_EmptyReferencesDetails2_Result> sp_EmptyReferencesDetails2(Nullable<int> strLength, string type)
-        {
-            var strLengthParameter = strLength.HasValue ?
-                new ObjectParameter("strLength", strLength) :
-                new ObjectParameter("strLength", typeof(int));
-    
-            var typeParameter = type != null ?
-                new ObjectParameter("type", type) :
-                new ObjectParameter("type", typeof(string));
-    
-            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<sp_EmptyReferencesDetails2_Result>("sp_EmptyReferencesDetails2", strLengthParameter, typeParameter);
-        }
     }
 }

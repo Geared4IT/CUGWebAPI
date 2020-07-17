@@ -39,16 +39,21 @@ namespace cugonlineWebAPI.Controllers
         {
             try
             {
+                var userId = cugDB.UserMasters.Max(maxID => maxID.ID);
+
                 UserMaster u = new UserMaster
                 {
                     Email = Reg.Email,
                     Name = Reg.Name,
                     Password = Reg.Password,
                     Surname = Reg.Surname,
-                    UserName = Reg.UserName
+                    UserName = Reg.UserName,
+                    ID = userId + 1
                 };
                 cugDB.UserMasters.Add(u);
                 cugDB.SaveChanges();
+
+                EmailHotLink(Reg);
                 return new Response
                 { Status = "Success", Message = "Record SuccessFully Saved." };
 
@@ -75,7 +80,7 @@ namespace cugonlineWebAPI.Controllers
                 }
                 else
                 {
-                     LogUserActivity(u);//todo fix...
+                    LogUserActivity(u);//todo fix...
 
                     return new SystemUsersDTO
                     {
@@ -109,11 +114,13 @@ namespace cugonlineWebAPI.Controllers
         {
             try
             {
+
+                var myNum = cugDB.UserActivities.Max(maxID => maxID.UserActivitiesID);
                 UserActivity ua = new UserActivity
                 {
                     Editor = u.Name,
-                    DateIn = DateTime.Now,
-                    TimeIn = DateTime.Now.ToString(),
+                    DateIn = DateTime.Now.AddHours(-6),
+                    TimeIn = DateTime.Now.AddHours(-6).ToString(),
                     UserActivitiesID = cugDB.UserActivities.Max(maxID => maxID.UserActivitiesID) + 1,
                     ID = cugDB.UserActivities.Max(maxID => maxID.UserActivitiesID) + 1
                 };
@@ -125,7 +132,7 @@ namespace cugonlineWebAPI.Controllers
             {
                 throw;
             }
-      
+
         }
 
         /// <summary>
@@ -230,18 +237,18 @@ namespace cugonlineWebAPI.Controllers
 
             try
             {
-                result = cugDB.sp_EmptyReferencesDetails(filter, type).Select(m => new FiguresDTO
-                {
-                    Id = m.id,
-                    Idx = m.Idx,
-                    Title = m.Title.ToUpper(),
-                    LastUpdated = m.LastUpdated.ToString(),
-                    CategoryName =  m.CategoryN.Trim(),
-                    CurrentStatus =  m.currentStatus.Trim(),
-                    LastUpdatedBy =  (m.LastUpdatedBy.HasValue == true) ? cugDB.UserMasters.Where(u => u.ID.Equals(m.LastUpdatedBy.Value)).FirstOrDefault().Name : "",
+                //result = cugDB.sp_EmptyReferencesDetails(filter, type).Select(m => new FiguresDTO
+                //{
+                //    Id = m.id,
+                //    Idx = m.Idx,
+                //    Title = m.Title.ToUpper(),
+                //    LastUpdated = m.LastUpdated.ToString(),
+                //    CategoryName = m.CategoryN.Trim(),
+                //    CurrentStatus = m.currentStatus.Trim(),
+                //    LastUpdatedBy = (m.LastUpdatedBy.HasValue == true) ? cugDB.UserMasters.Where(u => u.ID.Equals(m.LastUpdatedBy.Value)).FirstOrDefault().Name : "",
 
 
-                }).OrderBy(m => m.Title).ToList();
+                //}).OrderBy(m => m.Title).ToList();
             }
             catch (Exception ex)
             {
@@ -357,25 +364,34 @@ namespace cugonlineWebAPI.Controllers
         [HttpGet]
         public List<DataBaseInfoDTO> GetDataBaseStatistics()
         {
-            int strLength = 50;
-            var emptyReference = cugDB.sp_EmptyReferences(strLength);
-
-            var dbInfoList = new List<DataBaseInfoDTO>();
-
-
-            foreach (var item in emptyReference)
+            try
             {
-                var emptyReferenceData = new DataBaseInfoDTO
-                {
-                    Title = item.Title,
-                    TotalRecords = item.numRecords.Value
-                };
+                int strLength = 1;
+                var emptyReference = cugDB.sp_EmptyReferences(strLength);
 
-                dbInfoList.Add(emptyReferenceData);
+                var dbInfoList = new List<DataBaseInfoDTO>();
+
+
+                foreach (var item in emptyReference)
+                {
+                    var emptyReferenceData = new DataBaseInfoDTO
+                    {
+                        Title = item.Title,
+                        TotalRecords = item.numRecords.Value
+                    };
+
+                    dbInfoList.Add(emptyReferenceData);
+                }
+
+                if (dbInfoList != null)
+                    return dbInfoList;
+                return null;
+            }
+            catch (Exception ex)
+            {
+                throw;
             }
 
-            if (dbInfoList != null) return dbInfoList;
-            return null;
         }
 
         [Route("GetBibloStatistics")]
@@ -489,46 +505,56 @@ namespace cugonlineWebAPI.Controllers
             var updateReferece = cugDB.SeeMains.Where(sm => sm.Idx.Equals(reference.LinkIdx)  //check if link exists in Reference...
                                                          && sm.Link.Equals(reference.Link)).FirstOrDefault();
 
-            if (updateReferece == null)
+            try
             {
-                //add to seemain
-                SeeMain m = new SeeMain();
-
-                m.Idx = reference.LinkIdx;
-                m.Link = reference.Link;
-                m.Title = linkInfo.Title;//.LinkTitle.Replace("_", " ");
-                m.categoryN = linkInfo.CategoryN.Trim();//.Link;
-                m.catFlag = "O";
-                cugDB.SeeMains.Add(m);
-                cugDB.SaveChanges();
-
-                //do reciprocal
-                var recipricolInfo = cugDB.Mains.Where(m_recip => m_recip.Idx.Equals(reference.Link)).FirstOrDefault();//get inverse link information
-
-                var reciprocalReferece = cugDB.SeeMains.Where(sm_recip => sm_recip.Idx.Equals(reference.Link)  //check inverse...
-                                                             && sm_recip.Link.Equals(reference.LinkIdx)).FirstOrDefault();
-
-                if (reciprocalReferece == null)
+                if (updateReferece == null)
                 {
-                    //add to reciprocal seemain
-                    SeeMain m_recip = new SeeMain();
-                    m_recip.Idx = reference.Link;
-                    m_recip.Link = reference.LinkIdx;
-                    m_recip.Title = recipricolInfo.Title;
-                    m_recip.categoryN = !string.IsNullOrEmpty(recipricolInfo.CategoryN) ? recipricolInfo.CategoryN.Trim() : "All";//.Link;
-                    m_recip.catFlag = "O";
-                    cugDB.SeeMains.Add(m_recip);
+                    //add to seemain
+                    SeeMain m = new SeeMain();
+                    //var maxId = cugDB.SeeMains.Max(sm => sm.Id) + 1;
+                    //m.Id = maxId;
+                    m.Idx = reference.LinkIdx;
+                    m.Link = reference.Link;
+                    m.Title = linkInfo.Title;//.LinkTitle.Replace("_", " ");
+                    m.categoryN = linkInfo.CategoryN.Trim();//.Link;
+                    m.catFlag = "O";
+                    cugDB.SeeMains.Add(m);
                     cugDB.SaveChanges();
+
+                    //do reciprocal
+                    var recipricolInfo = cugDB.Mains.Where(m_recip => m_recip.Idx.Equals(reference.Link)).FirstOrDefault();//get inverse link information
+
+                    var reciprocalReferece = cugDB.SeeMains.Where(sm_recip => sm_recip.Idx.Equals(reference.Link)  //check inverse...
+                                                                 && sm_recip.Link.Equals(reference.LinkIdx)).FirstOrDefault();
+
+                    if (reciprocalReferece == null)
+                    {
+                        //add to reciprocal seemain
+                        SeeMain m_recip = new SeeMain();
+                        m_recip.Idx = reference.Link;
+                        m_recip.Link = reference.LinkIdx;
+                        m_recip.Title = recipricolInfo.Title;
+                        m_recip.categoryN = !string.IsNullOrEmpty(recipricolInfo.CategoryN) ? recipricolInfo.CategoryN.Trim() : "All";//.Link;
+                        m_recip.catFlag = "O";
+                        cugDB.SeeMains.Add(m_recip);
+                        cugDB.SaveChanges();
+
+                    }
+
+                    return new Response
+                    { Status = "Success", Message = "Record SuccessFully Saved." };
 
                 }
 
                 return new Response
-                { Status = "Success", Message = "Record SuccessFully Saved." };
-
+                { Status = "Success", Message = "Reference Already Exists." };
+            }
+            catch (Exception ex)
+            {
+                return "Error " + ex.Message;
             }
 
-            return new Response
-            { Status = "Success", Message = "Reference Already Exists." };
+        
         }
 
         [Route("EditFigure")]
@@ -546,7 +572,7 @@ namespace cugonlineWebAPI.Controllers
                     referenceItem.Meaning = fig.Meaning;
                     referenceItem.Body = fig.Body;
                     referenceItem.Idx = fig.Idx;
-                    referenceItem.LastUpdated = DateTime.Now;
+                    referenceItem.LastUpdated = DateTime.Now.AddHours(-6);
                     referenceItem.LastUpdatedBy = fig.LastUpdatedBy;
                     referenceItem.CategoryN = (fig.CategoryN == null) ? "All" : fig.CategoryN.Trim();// fig.CategoryN.Trim();
                     referenceItem.currentStatus = (fig.LastUpdatedBy == 6) ? "live" : "review";
@@ -559,20 +585,20 @@ namespace cugonlineWebAPI.Controllers
                 }
                 else//add
                 {
-                    var maxId = cugDB.Mains.Max(main => main.Id);
+                    var maxId = cugDB.Mains.Max(main => main.Id) + 1;
                     Main m = new Main();
 
-                    //m.Id = nextId;
+                    m.Id = maxId;
                     m.Idx = fig.Title.Replace(" ", "_") + "_" + maxId;
                     m.Title = fig.Title;
                     m.Body = fig.Body;
                     m.Meaning = fig.Meaning;
-                    m.DateCreated = DateTime.Now;
+                    m.DateCreated = DateTime.Now;//.AddHours(-6);
                     m.CreatedBy = fig.LastUpdatedBy;
                     m.LastUpdatedBy = fig.LastUpdatedBy.Value;
                     m.CategoryN = (fig.CategoryN == null) ? "All" : fig.CategoryN.Trim();
                     m.currentStatus = (fig.LastUpdatedBy == 6) ? "live" : "new";
-                    m.LastUpdated = DateTime.Now;
+                    m.LastUpdated = DateTime.Now.AddHours(-6);
                     refIdx = m.Idx;
                     cugDB.Mains.Add(m);
                     cugDB.SaveChanges();
@@ -606,13 +632,15 @@ namespace cugonlineWebAPI.Controllers
             {
                 var u = cugDB.UserMasters.Where(x => x.ID.Equals(userId)).FirstOrDefault();
 
-                var dt = DateTime.Now;
+                var dt = DateTime.Now;//.AddHours(-6);
                 UserActivity ua = new UserActivity
                 {
                     Editor = u.UserName,
                     Reference = m.Idx,
                     DateIn = Convert.ToDateTime(dt),
-                    Edited = DateTime.Now.ToString()
+                    Edited = DateTime.Now.ToString(),
+                    UserActivitiesID = cugDB.UserActivities.Max(maxID => maxID.UserActivitiesID) + 1,
+                    ID = cugDB.UserActivities.Max(maxID => maxID.UserActivitiesID) + 1
                 };
 
                 cugDB.UserActivities.Add(ua);
@@ -642,8 +670,8 @@ namespace cugonlineWebAPI.Controllers
                 {
                     Editor = u.Name,
                     Reference = m.Idx,
-                    DateIn = DateTime.Now,
-                    Edited = DateTime.Now.ToString(),
+                    DateIn = DateTime.Now.AddHours(-6),
+                    Edited = DateTime.Now.AddHours(-6).ToString(),
                     Attachment = m.idFiles.Value.ToString(),
                     AttachmentId = m.idFiles,
                     UserActivitiesID = cugDB.UserActivities.Max(maxID => maxID.UserActivitiesID) + 1,
@@ -663,20 +691,27 @@ namespace cugonlineWebAPI.Controllers
         }
 
 
-        private void EmailHotLink(string idx)
+        private void EmailHotLink(Register reg)
         {
 
             try
             {
-                var fromAddress = new MailAddress("admin@cugonline.co.za", "CUG Admin");
+                //var fromAddress = new MailAddress("admin@cugonline.co.za", "CUG Admin");
+                //var toAddress = new MailAddress("david@allenassociates.co.za", "David Allen");
+                //const string fromPassword = "1Ti4puraeg3@";
+                //const string subject = "Reference submitted for Review";
+                //string htmlBody;
+
+                var fromAddress = new MailAddress(reg.Email, reg.Name);
                 var toAddress = new MailAddress("david@allenassociates.co.za", "David Allen");
+                //var toAddress = new MailAddress("gearup4it@gmail.com", "Geared4IT");
                 const string fromPassword = "1Ti4puraeg3@";
-                const string subject = "Reference submitted for Review";
+                const string subject = "Online registration request";
                 string htmlBody;
 
-                string hotLink = "https://cugonline.co.za/FigureDetails/" + idx;
+
                 htmlBody = "Good Day David, <br/>" +
-                    "This is to inform you that Reference <a href='" + hotLink + "' >" + idx + "</a> has been submitted for review ";
+                    "This is to inform you that " + reg.Name + " " + reg.Surname + " email : " + reg.Email + "  has requested registration for cugonline. ";
 
                 var smtp = new SmtpClient
                 {
@@ -723,7 +758,7 @@ namespace cugonlineWebAPI.Controllers
                     Update.Password = user.Password;
                     Update.Email = user.Email;
                     Update.categoryN = user.categoryN;
-                    Update.Date_last = DateTime.Now.ToString();
+                    Update.Date_last = DateTime.Now.AddHours(-6).ToString();
                     cugDB.Entry(Update).State = System.Data.Entity.EntityState.Modified;
                     cugDB.SaveChanges();
                     return new Response
@@ -740,7 +775,7 @@ namespace cugonlineWebAPI.Controllers
                     um.Password = user.Password;
                     um.Email = user.Email;
                     um.categoryN = user.categoryN;
-                    um.Date_added = DateTime.Now.Date.ToLongDateString();
+                    um.Date_added = DateTime.Now.AddHours(-6).Date.ToLongDateString();
 
                     cugDB.UserMasters.Add(um);
                     cugDB.SaveChanges();
@@ -806,8 +841,7 @@ namespace cugonlineWebAPI.Controllers
             }
             catch (Exception ex)
             {
-
-                throw;
+                throw ex;
             }
 
         }
@@ -893,7 +927,7 @@ namespace cugonlineWebAPI.Controllers
                               {
                                   FileId = mf.id,
                                   FileName = mf.fName,
-                                  FilePath = filePath + mf.fName,
+                                  FilePath =mf.fNamePath,//  filePath + mf.fName,
                                   FileComment = mf.fComment
                               }).ToList();
 
@@ -905,68 +939,31 @@ namespace cugonlineWebAPI.Controllers
         [HttpPost]
         public object Upload(string id, string comment, int userId)
         {
+            var file = HttpContext.Current.Request.Files[0];//we have the file...
 
+            var uniquefileName = id + "_" + Guid.NewGuid().ToString() + Path.GetExtension(file.FileName);
+
+            string ftpAddress = @"197.242.150.135"; // ConfigurationManager.AppSettings.Get("CloudStorageContainerReference")
+            string username = "cugftp"; // ConfigurationManager.AppSettings.Get("CloudStorageContainerReference")
+            string password = "Kjgv5FtNX!2$7qBtP3"; // ConfigurationManager.AppSettings.Get("CloudStorageContainerReference")
+
+            var postedFile = HttpContext.Current.Request.Files[0];
+            var filePath = HttpContext.Current.Server.MapPath("~/images/" + postedFile.FileName);
+            var dbtesting = filePath;
+
+            var destinationDirectory = new DirectoryInfo(Path.GetDirectoryName(filePath));
+
+            //log tp database
             try
             {
 
-                var file = HttpContext.Current.Request.Files[0];//we have the file...
-
-                var uniquefileName = id + "_" + Guid.NewGuid().ToString() + Path.GetExtension(file.FileName);
-                //var uniquefileName = Path.GetFileName(file.FileName);
-
-                string sourcepath = @"";
-                string ftpAddress = @"197.242.150.135"; // ConfigurationManager.AppSettings.Get("CloudStorageContainerReference")
-                string username = "cugftp"; // ConfigurationManager.AppSettings.Get("CloudStorageContainerReference")
-                string password = "Kjgv5FtNX!2$7qBtP3"; // ConfigurationManager.AppSettings.Get("CloudStorageContainerReference")
-
-                var postedFile = HttpContext.Current.Request.Files[0];
-                var filePath = HttpContext.Current.Server.MapPath("~/imagesSleep/" + postedFile.FileName);
-
-                var destinationDirectory = new DirectoryInfo(Path.GetDirectoryName(filePath));
-
-                if (!destinationDirectory.Exists) destinationDirectory.Create();
-
-
-
-                //if (!System.IO.File.Exists(filePath))
-                //{
-                //    System.IO.File.Create(filePath).Close();
-                //}
-
-                postedFile.SaveAs(filePath);
-
-
-                using (StreamReader stream = new StreamReader(filePath))
-                {
-                    FtpWebRequest request = (FtpWebRequest)WebRequest.Create("ftp://" + ftpAddress + "/" + uniquefileName);
-                    request.Method = WebRequestMethods.Ftp.UploadFile;
-                    request.Credentials = new NetworkCredential(username, password);
-                    Stream reqStream = request.GetRequestStream();
-
-                    byte[] buffer = new byte[1024];
-
-                    int byteRead = 0;
-                    FileStream fs = System.IO.File.OpenRead(filePath);
-
-                    do
-                    {
-                        byteRead = fs.Read(buffer, 0, buffer.Length);
-                        reqStream.Write(buffer, 0, byteRead);
-                    } while (byteRead != 0);
-
-                    fs.Close();
-                    reqStream.Close();
-                }
-
-
-
-                var rootPath = "https://cugonline.co.za/images/";
+                var rootPath = "https://geared4it.net/images/";
 
                 var nextFileId = cugDB.MainFiles.OrderByDescending(mf => mf.id).FirstOrDefault().id + 1;
                 MainFile f = new MainFile();
                 f.id = nextFileId;
-                f.fName = uniquefileName;// file.FileName;
-                f.fNamePath = rootPath + uniquefileName;
+                f.fName = postedFile.FileName;// uniquefileName;// file.FileName;
+                f.fNamePath = rootPath + postedFile.FileName;// uniquefileName;
                 f.fComment = comment;
                 f.fType = Path.GetExtension(file.FileName);
                 f.fExported = "N";
@@ -988,7 +985,46 @@ namespace cugonlineWebAPI.Controllers
                 cugDB.SaveChanges();
 
                 //save to User Activies
-                //LogUserActivityEditReferenceUpload(fl, userId);
+                LogUserActivityEditReferenceUpload(fl, userId);
+            }
+            catch (Exception ex)
+            {
+                return ex.Message;
+            }
+
+            try
+            {
+
+                // return  dbtesting + " < >  " + destinationDirectory;
+                // if (!destinationDirectory.Exists) destinationDirectory.Create();
+               
+                postedFile.SaveAs(filePath);
+               
+
+                using (StreamReader stream = new StreamReader(filePath))
+                {
+                    FtpWebRequest request = (FtpWebRequest)WebRequest.Create("ftp://" + ftpAddress + "/" + uniquefileName);
+                    return filePath;
+                    request.Method = WebRequestMethods.Ftp.UploadFile;
+                    request.Credentials = new NetworkCredential(username, password);
+                    Stream reqStream = request.GetRequestStream();
+                    
+                    byte[] buffer = new byte[1024];
+
+                    int byteRead = 0;
+                    FileStream fs = System.IO.File.OpenRead(filePath);
+
+                    do
+                    {
+                        byteRead = fs.Read(buffer, 0, buffer.Length);
+                        reqStream.Write(buffer, 0, byteRead);
+                    } while (byteRead != 0);
+
+                    fs.Close();
+                    reqStream.Close();
+                }
+
+                
 
             }
 

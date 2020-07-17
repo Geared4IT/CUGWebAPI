@@ -260,12 +260,6 @@
     <Compile Include="Models\SeeMain.cs">
       <DependentUpon>CugModel.tt</DependentUpon>
     </Compile>
-    <Compile Include="Models\sp_EmptyReferencesDetails1_Result.cs">
-      <DependentUpon>CugModel.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Models\sp_EmptyReferencesDetails2_Result.cs">
-      <DependentUpon>CugModel.tt</DependentUpon>
-    </Compile>
     <Compile Include="Models\sp_EmptyReferencesDetails_Result.cs">
       <DependentUpon>CugModel.tt</DependentUpon>
     </Compile>

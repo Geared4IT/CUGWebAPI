@@ -13,8 +13,6 @@ namespace cugonlineWebAPI.Models
     
     public partial class sp_EmptyReferencesDetails_Result
     {
-        public string LastUpdated { get; set; }
-
         public int id { get; set; }
         public string Idx { get; set; }
         public string body { get; set; }
@@ -22,5 +20,6 @@ namespace cugonlineWebAPI.Models
         public string CategoryN { get; set; }
         public string currentStatus { get; set; }
         public Nullable<int> LastUpdatedBy { get; set; }
+        public System.DateTime LastUpdated { get; set; }
     }
 }

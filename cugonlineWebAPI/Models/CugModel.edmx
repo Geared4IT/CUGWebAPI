@@ -221,6 +221,9 @@ warning 6002: The table/view 'test.dbo.txtBox' does not have a primary key defin
           <Property Name="UserName" Type="varchar" MaxLength="20" />
           <Property Name="IsDeleted" Type="bit" />
         </EntityType>
+        <Function Name="sp_EmptyReferences" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="strLength" Type="int" Mode="In" />
+        </Function>
         <Function Name="sp_EmptyReferencesDetails" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="strLength" Type="int" Mode="In" />
           <Parameter Name="type" Type="nvarchar" Mode="In" />
@@ -394,7 +397,7 @@ warning 6002: The table/view 'test.dbo.txtBox' does not have a primary key defin
             <Parameter Name="strLength" Mode="In" Type="Int32" />
             <Parameter Name="type" Mode="In" Type="String" />
           </FunctionImport>
-          <FunctionImport Name="sp_EmptyReferencesDetails1" ReturnType="Collection(testModel.sp_EmptyReferencesDetails1_Result)">
+          <!--<FunctionImport Name="sp_EmptyReferencesDetails1" ReturnType="Collection(testModel.sp_EmptyReferencesDetails1_Result)">
             <Parameter Name="strLength" Mode="In" Type="Int32" />
             <Parameter Name="type" Mode="In" Type="String" />
           </FunctionImport>
@@ -402,6 +405,20 @@ warning 6002: The table/view 'test.dbo.txtBox' does not have a primary key defin
             <Parameter Name="strLength" Mode="In" Type="Int32" />
             <Parameter Name="type" Mode="In" Type="String" />
           </FunctionImport>
+          <FunctionImport Name="sp_EmptyReferences1" ReturnType="Collection(testModel.sp_EmptyReferences1_Result)">
+          <Parameter Name="strLength" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="sp_EmptyReferencesDetails3" ReturnType="Collection(testModel.sp_EmptyReferencesDetails3_Result)">
+            <Parameter Name="strLength" Mode="In" Type="Int32" />
+            <Parameter Name="type" Mode="In" Type="String" />
+          </FunctionImport>
+          <FunctionImport Name="sp_EmptyReferences2" ReturnType="Collection(testModel.sp_EmptyReferences2_Result)">
+          <Parameter Name="strLength" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="sp_EmptyReferencesDetails4" ReturnType="Collection(testModel.sp_EmptyReferencesDetails4_Result)">
+            <Parameter Name="strLength" Mode="In" Type="Int32" />
+            <Parameter Name="type" Mode="In" Type="String" />
+          </FunctionImport>-->
         </EntityContainer>
         <EntityType Name="File">
           <Key>
@@ -536,25 +553,6 @@ warning 6002: The table/view 'test.dbo.txtBox' does not have a primary key defin
           <Property Type="Int32" Name="numRecords" Nullable="true" />
         </ComplexType>
         <ComplexType Name="sp_EmptyReferencesDetails_Result">
-          <Property Type="Int32" Name="id" Nullable="false" />
-          <Property Type="String" Name="Idx" Nullable="true" MaxLength="250" />
-          <Property Type="String" Name="body" Nullable="true" MaxLength="Max" />
-          <Property Type="String" Name="Title" Nullable="true" MaxLength="200" />
-          <Property Type="String" Name="CategoryN" Nullable="true" MaxLength="10" />
-          <Property Type="String" Name="currentStatus" Nullable="true" MaxLength="10" />
-          <Property Type="Int32" Name="LastUpdatedBy" Nullable="true" />
-        </ComplexType>
-        <ComplexType Name="sp_EmptyReferencesDetails1_Result">
-          <Property Type="Int32" Name="id" Nullable="false" />
-          <Property Type="String" Name="Idx" Nullable="true" MaxLength="250" />
-          <Property Type="String" Name="body" Nullable="true" MaxLength="Max" />
-          <Property Type="String" Name="Title" Nullable="true" MaxLength="200" />
-          <Property Type="String" Name="CategoryN" Nullable="true" MaxLength="10" />
-          <Property Type="String" Name="currentStatus" Nullable="true" MaxLength="10" />
-          <Property Type="Int32" Name="LastUpdatedBy" Nullable="true" />
-          <Property Type="DateTime" Name="LastUpdated" Nullable="false" Precision="23" />
-        </ComplexType>
-        <ComplexType Name="sp_EmptyReferencesDetails2_Result">
           <Property Type="Int32" Name="id" Nullable="false" />
           <Property Type="String" Name="Idx" Nullable="true" MaxLength="250" />
           <Property Type="String" Name="body" Nullable="true" MaxLength="Max" />
@@ -785,9 +783,18 @@ warning 6002: The table/view 'test.dbo.txtBox' does not have a primary key defin
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
-          <FunctionImportMapping FunctionImportName="sp_EmptyReferencesDetails2" FunctionName="testModel.Store.sp_EmptyReferencesDetails">
+          <FunctionImportMapping FunctionImportName="sp_EmptyReferences" FunctionName="testModel.Store.sp_EmptyReferences">
             <ResultMapping>
-              <ComplexTypeMapping TypeName="testModel.sp_EmptyReferencesDetails2_Result">
+              <ComplexTypeMapping TypeName="testModel.sp_EmptyReferences_Result">
+                <ScalarProperty Name="ID" ColumnName="ID" />
+                <ScalarProperty Name="Title" ColumnName="Title" />
+                <ScalarProperty Name="numRecords" ColumnName="numRecords" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="sp_EmptyReferencesDetails" FunctionName="testModel.Store.sp_EmptyReferencesDetails">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="testModel.sp_EmptyReferencesDetails_Result">
                 <ScalarProperty Name="id" ColumnName="id" />
                 <ScalarProperty Name="Idx" ColumnName="Idx" />
                 <ScalarProperty Name="body" ColumnName="body" />
