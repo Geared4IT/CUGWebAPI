@@ -31,7 +31,6 @@ namespace cugonlineWebAPI.Models
         public virtual DbSet<FileExtension> FileExtensions { get; set; }
         public virtual DbSet<FilesLink> FilesLinks { get; set; }
         public virtual DbSet<FileType> FileTypes { get; set; }
-        public virtual DbSet<IdxMain> IdxMains { get; set; }
         public virtual DbSet<Request_detail> Request_detail { get; set; }
         public virtual DbSet<Request_master> Request_master { get; set; }
         public virtual DbSet<txtBox> txtBoxes { get; set; }
@@ -39,12 +38,11 @@ namespace cugonlineWebAPI.Models
         public virtual DbSet<MainFilesLink> MainFilesLinks { get; set; }
         public virtual DbSet<MainFile> MainFiles { get; set; }
         public virtual DbSet<SeeMain> SeeMains { get; set; }
-        public virtual DbSet<UserMaster> UserMasters { get; set; }
         public virtual DbSet<Main> Mains { get; set; }
-        public virtual DbSet<Category> Categories { get; set; }
         public virtual DbSet<BibloMain> BibloMains { get; set; }
         public virtual DbSet<BibloUpload> BibloUploads { get; set; }
         public virtual DbSet<UserActivity> UserActivities { get; set; }
+        public virtual DbSet<UserMaster> UserMasters { get; set; }
     
         public virtual ObjectResult<sp_EmptyReferences_Result> sp_EmptyReferences(Nullable<int> strLength)
         {

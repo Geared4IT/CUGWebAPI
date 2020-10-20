@@ -26,5 +26,7 @@ namespace cugonlineWebAPI.Models
         public string categoryN { get; set; }
         public string UserName { get; set; }
         public Nullable<bool> IsDeleted { get; set; }
+        public Nullable<bool> isSuperAdmin { get; set; }
+        public Nullable<bool> isNew { get; set; }
     }
 }

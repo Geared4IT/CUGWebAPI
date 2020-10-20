@@ -206,9 +206,6 @@
     <Compile Include="Models\BibloUpload.cs">
       <DependentUpon>CugModel.tt</DependentUpon>
     </Compile>
-    <Compile Include="Models\Category.cs">
-      <DependentUpon>CugModel.tt</DependentUpon>
-    </Compile>
     <Compile Include="Models\CugModel.Context.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -234,9 +231,6 @@
       <DependentUpon>CugModel.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\FileType.cs">
-      <DependentUpon>CugModel.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Models\IdxMain.cs">
       <DependentUpon>CugModel.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\Main.cs">
@@ -283,6 +277,54 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Areas\HelpPage\HelpPage.css" />
+    <Content Include="assets\contact.php" />
+    <Content Include="assets\css\bootstrap.min.css" />
+    <Content Include="assets\css\default.css" />
+    <Content Include="assets\css\LineIcons.css" />
+    <Content Include="assets\css\magnific-popup.css" />
+    <Content Include="assets\css\slick.css" />
+    <Content Include="assets\css\style.css" />
+    <Content Include="assets\fonts\LineIcons.svg" />
+    <Content Include="assets\images\about.jpg" />
+    <Content Include="assets\images\author-1.jpg" />
+    <Content Include="assets\images\author-2.jpg" />
+    <Content Include="assets\images\author-3.jpg" />
+    <Content Include="assets\images\author-4.jpg" />
+    <Content Include="assets\images\basic.svg" />
+    <Content Include="assets\images\enterprise.svg" />
+    <Content Include="assets\images\f-shape-1.svg" />
+    <Content Include="assets\images\favicon.png" />
+    <Content Include="assets\images\logo-2.svg" />
+    <Content Include="assets\images\logo.svg" />
+    <Content Include="assets\images\portfolio\1.png" />
+    <Content Include="assets\images\portfolio\2.png" />
+    <Content Include="assets\images\portfolio\3.png" />
+    <Content Include="assets\images\portfolio\4.png" />
+    <Content Include="assets\images\portfolio\5.png" />
+    <Content Include="assets\images\portfolio\6.png" />
+    <Content Include="assets\images\portfolio\7.png" />
+    <Content Include="assets\images\portfolio\8.png" />
+    <Content Include="assets\images\portfolio\9.png" />
+    <Content Include="assets\images\portfolio\shape.svg" />
+    <Content Include="assets\images\pro.svg" />
+    <Content Include="assets\images\slider\1.png" />
+    <Content Include="assets\images\slider\2.png" />
+    <Content Include="assets\images\slider\3.png" />
+    <Content Include="assets\images\team-1.jpg" />
+    <Content Include="assets\images\team-2.jpg" />
+    <Content Include="assets\images\team-3.jpg" />
+    <Content Include="assets\js\ajax-contact.js" />
+    <Content Include="assets\js\bootstrap.min.js" />
+    <Content Include="assets\js\imagesloaded.pkgd.min.js" />
+    <Content Include="assets\js\isotope.pkgd.min.js" />
+    <Content Include="assets\js\jquery.easing.min.js" />
+    <Content Include="assets\js\jquery.magnific-popup.min.js" />
+    <Content Include="assets\js\main.js" />
+    <Content Include="assets\js\popper.min.js" />
+    <Content Include="assets\js\scrolling-nav.js" />
+    <Content Include="assets\js\slick.min.js" />
+    <Content Include="assets\js\vendor\jquery-1.12.4.min.js" />
+    <Content Include="assets\js\vendor\modernizr-3.7.1.min.js" />
     <Content Include="Content\bootstrap-theme.css" />
     <Content Include="Content\bootstrap-theme.min.css" />
     <Content Include="Content\bootstrap.css" />
@@ -290,6 +332,7 @@
     <Content Include="favicon.ico" />
     <Content Include="fonts\glyphicons-halflings-regular.svg" />
     <Content Include="Global.asax" />
+    <Content Include="index.html" />
     <Content Include="Models\CugModel.Context.tt">
       <Generator>TextTemplatingFileGenerator</Generator>
       <LastGenOutput>CugModel.Context.cs</LastGenOutput>
@@ -328,6 +371,15 @@
     <Content Include="Models\CugModel.edmx.diagram">
       <DependentUpon>CugModel.edmx</DependentUpon>
     </Content>
+    <Content Include="assets\.DS_Store" />
+    <Content Include="assets\css\style.css.map" />
+    <Content Include="assets\fonts\.DS_Store" />
+    <Content Include="assets\fonts\LineIcons.eot" />
+    <Content Include="assets\fonts\LineIcons.ttf" />
+    <Content Include="assets\fonts\LineIcons.woff" />
+    <Content Include="assets\fonts\LineIcons.woff2" />
+    <Content Include="assets\images\.DS_Store" />
+    <Content Include="assets\images\portfolio\.DS_Store" />
     <None Include="Properties\PublishProfiles\cugonlineWebAPI - Web Deploy.pubxml" />
     <None Include="Properties\PublishProfiles\FolderProfile.pubxml" />
     <None Include="Properties\PublishProfiles\Geared4GoDaddy.pubxml" />
