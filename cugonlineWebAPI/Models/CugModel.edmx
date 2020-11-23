@@ -5,6 +5,78 @@
     <!-- SSDL content -->
     <edmx:StorageModels>
     <Schema Namespace="testModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012.Azure" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <!--Errors Found During Generation:
+warning 6002: The table/view 'test.dbo.BibleAbbreviations' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+        <EntityType Name="BibleAbbreviations">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="int" Nullable="false" />
+          <Property Name="Abbreviation" Type="nvarchar" MaxLength="255" />
+          <Property Name="BibleBook" Type="nvarchar" MaxLength="255" />
+          <Property Name="BibleSeq" Type="int" />
+        </EntityType>
+        <!--Errors Found During Generation:
+warning 6002: The table/view 'test.dbo.BibleBooks' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+        <EntityType Name="BibleBooks">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="int" Nullable="false" />
+          <Property Name="BookId" Type="nvarchar" MaxLength="255" />
+          <Property Name="ChapterId" Type="int" />
+          <Property Name="VerseId" Type="int" />
+          <Property Name="BodyText" Type="ntext" />
+          <Property Name="CompoKey" Type="nvarchar" MaxLength="255" />
+        </EntityType>
+        <!--Errors Found During Generation:
+warning 6002: The table/view 'test.dbo.BibleBooksKJV' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+        <EntityType Name="BibleBooksKJV">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="int" Nullable="false" />
+          <Property Name="BookId" Type="nvarchar" MaxLength="255" />
+          <Property Name="ChapterId" Type="int" />
+          <Property Name="VerseId" Type="int" />
+          <Property Name="BodyText" Type="ntext" />
+        </EntityType>
+        <!--Errors Found During Generation:
+warning 6002: The table/view 'test.dbo.BibleFootNoteContent' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+        <EntityType Name="BibleFootNoteContent">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="int" Nullable="false" />
+          <Property Name="Idx" Type="nvarchar" MaxLength="255" />
+          <Property Name="Content" Type="ntext" />
+          <Property Name="BibleSeq" Type="nvarchar" MaxLength="255" />
+          <Property Name="LinkTxt" Type="nvarchar" MaxLength="255" />
+        </EntityType>
+        <!--Errors Found During Generation:
+warning 6002: The table/view 'test.dbo.BibleFootNotes' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+        <EntityType Name="BibleFootNotes">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="int" Nullable="false" />
+          <Property Name="Idx" Type="nvarchar" MaxLength="255" />
+          <Property Name="Content" Type="ntext" />
+          <Property Name="BookIdx" Type="nvarchar" MaxLength="255" />
+          <Property Name="ChapterIdx" Type="int" />
+          <Property Name="VerseIdx" Type="int" />
+          <Property Name="CompoKey" Type="nvarchar" MaxLength="255" />
+          <Property Name="BibleSeq" Type="int" />
+        </EntityType>
+        <!--Errors Found During Generation:
+warning 6002: The table/view 'test.dbo.BibleItalics' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+        <EntityType Name="BibleItalics">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="int" Nullable="false" />
+          <Property Name="Word" Type="nvarchar" MaxLength="255" />
+        </EntityType>
         <EntityType Name="BibloMain">
           <Key>
             <PropertyRef Name="MainId" />
@@ -45,7 +117,7 @@ warning 6002: The table/view 'test.dbo.FileExtensions' does not have a primary k
           <Property Name="fThumbs" Type="nvarchar" MaxLength="16" />
           <Property Name="filePath" Type="varchar" MaxLength="255" />
           <Property Name="fMainId" Type="int" Nullable="false" />
-          <Property Name="fileID" Type="int" Nullable="false" StoreGeneratedPattern="Identity" />
+          <Property Name="fileID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
         </EntityType>
         <!--Errors Found During Generation:
 warning 6002: The table/view 'test.dbo.FilesLink' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
@@ -113,13 +185,13 @@ warning 6002: The table/view 'test.dbo.FileTypes' does not have a primary key de
           <Key>
             <PropertyRef Name="id" />
           </Key>
-          <Property Name="id" Type="int" Nullable="false" StoreGeneratedPattern="Identity" />
+          <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="Idx" Type="varchar" MaxLength="200" Nullable="false" />
           <Property Name="Link" Type="varchar" MaxLength="200" Nullable="false" />
           <Property Name="Title" Type="varchar" MaxLength="200" Nullable="false" />
           <Property Name="CategoryN" Type="varchar" MaxLength="200" Nullable="false" />
           <Property Name="CatFlag" Type="varchar" MaxLength="200" Nullable="false" />
-          <Property Name="DateCreated" Type="smalldatetime" Nullable="false" />
+          <Property Name="DateCreated" Type="datetime" Nullable="false" />
         </EntityType>
         <!--Errors Found During Generation:
 warning 6002: The table/view 'test.dbo.Request_detail' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
@@ -130,9 +202,9 @@ warning 6002: The table/view 'test.dbo.Request_detail' does not have a primary k
             <PropertyRef Name="Id" />
           </Key>
           <Property Name="Idx" Type="int" Nullable="false" />
-          <Property Name="Update_date" Type="smalldatetime" Nullable="false" />
+          <Property Name="Update_date" Type="datetime" Nullable="false" />
           <Property Name="Update_detail" Type="nvarchar(max)" />
-          <Property Name="Id" Type="int" Nullable="false" StoreGeneratedPattern="Identity" />
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
         </EntityType>
         <!--Errors Found During Generation:
 warning 6002: The table/view 'test.dbo.Request_master' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
@@ -145,9 +217,9 @@ warning 6002: The table/view 'test.dbo.Request_master' does not have a primary k
           </Key>
           <Property Name="Idx" Type="real" Nullable="false" />
           <Property Name="Request_name" Type="nvarchar(max)" Nullable="false" />
-          <Property Name="Date_req" Type="smalldatetime" Nullable="false" />
-          <Property Name="Date_fin" Type="smalldatetime" />
-          <Property Name="Id" Type="int" Nullable="false" StoreGeneratedPattern="Identity" />
+          <Property Name="Date_req" Type="datetime" Nullable="false" />
+          <Property Name="Date_fin" Type="datetime" />
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
         </EntityType>
         <EntityType Name="SeeMain">
           <Key>
@@ -220,6 +292,60 @@ warning 6002: The table/view 'test.dbo.txtBox' does not have a primary key defin
           <EntitySet Name="SeeMain" EntityType="Self.SeeMain" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="UserActivities" EntityType="Self.UserActivities" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="UserMaster" EntityType="Self.UserMaster" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="BibleAbbreviations" EntityType="Self.BibleAbbreviations" store:Type="Tables" store:Schema="dbo">
+            <DefiningQuery>SELECT 
+    [BibleAbbreviations].[ID] AS [ID], 
+    [BibleAbbreviations].[Abbreviation] AS [Abbreviation], 
+    [BibleAbbreviations].[BibleBook] AS [BibleBook], 
+    [BibleAbbreviations].[BibleSeq] AS [BibleSeq]
+    FROM [dbo].[BibleAbbreviations] AS [BibleAbbreviations]</DefiningQuery>
+          </EntitySet>
+          <EntitySet Name="BibleBooks" EntityType="Self.BibleBooks" store:Type="Tables" store:Schema="dbo">
+            <DefiningQuery>SELECT 
+    [BibleBooks].[ID] AS [ID], 
+    [BibleBooks].[BookId] AS [BookId], 
+    [BibleBooks].[ChapterId] AS [ChapterId], 
+    [BibleBooks].[VerseId] AS [VerseId], 
+    [BibleBooks].[BodyText] AS [BodyText], 
+    [BibleBooks].[CompoKey] AS [CompoKey]
+    FROM [dbo].[BibleBooks] AS [BibleBooks]</DefiningQuery>
+          </EntitySet>
+          <EntitySet Name="BibleBooksKJV" EntityType="Self.BibleBooksKJV" store:Type="Tables" store:Schema="dbo">
+            <DefiningQuery>SELECT 
+    [BibleBooksKJV].[ID] AS [ID], 
+    [BibleBooksKJV].[BookId] AS [BookId], 
+    [BibleBooksKJV].[ChapterId] AS [ChapterId], 
+    [BibleBooksKJV].[VerseId] AS [VerseId], 
+    [BibleBooksKJV].[BodyText] AS [BodyText]
+    FROM [dbo].[BibleBooksKJV] AS [BibleBooksKJV]</DefiningQuery>
+          </EntitySet>
+          <EntitySet Name="BibleFootNoteContent" EntityType="Self.BibleFootNoteContent" store:Type="Tables" store:Schema="dbo">
+            <DefiningQuery>SELECT 
+    [BibleFootNoteContent].[ID] AS [ID], 
+    [BibleFootNoteContent].[Idx] AS [Idx], 
+    [BibleFootNoteContent].[Content] AS [Content], 
+    [BibleFootNoteContent].[BibleSeq] AS [BibleSeq], 
+    [BibleFootNoteContent].[LinkTxt] AS [LinkTxt]
+    FROM [dbo].[BibleFootNoteContent] AS [BibleFootNoteContent]</DefiningQuery>
+          </EntitySet>
+          <EntitySet Name="BibleFootNotes" EntityType="Self.BibleFootNotes" store:Type="Tables" store:Schema="dbo">
+            <DefiningQuery>SELECT 
+    [BibleFootNotes].[ID] AS [ID], 
+    [BibleFootNotes].[Idx] AS [Idx], 
+    [BibleFootNotes].[Content] AS [Content], 
+    [BibleFootNotes].[BookIdx] AS [BookIdx], 
+    [BibleFootNotes].[ChapterIdx] AS [ChapterIdx], 
+    [BibleFootNotes].[VerseIdx] AS [VerseIdx], 
+    [BibleFootNotes].[CompoKey] AS [CompoKey], 
+    [BibleFootNotes].[BibleSeq] AS [BibleSeq]
+    FROM [dbo].[BibleFootNotes] AS [BibleFootNotes]</DefiningQuery>
+          </EntitySet>
+          <EntitySet Name="BibleItalics" EntityType="Self.BibleItalics" store:Type="Tables" store:Schema="dbo">
+            <DefiningQuery>SELECT 
+    [BibleItalics].[ID] AS [ID], 
+    [BibleItalics].[Word] AS [Word]
+    FROM [dbo].[BibleItalics] AS [BibleItalics]</DefiningQuery>
+          </EntitySet>
           <EntitySet Name="FileExtensions" EntityType="Self.FileExtensions" store:Type="Tables" store:Schema="dbo">
             <DefiningQuery>SELECT 
     [FileExtensions].[id] AS [id], 
@@ -280,7 +406,7 @@ warning 6002: The table/view 'test.dbo.txtBox' does not have a primary key defin
           <Property Name="Title" Type="String" MaxLength="200" FixedLength="false" Unicode="false" Nullable="false" />
           <Property Name="CategoryN" Type="String" MaxLength="200" FixedLength="false" Unicode="false" Nullable="false" />
           <Property Name="CatFlag" Type="String" MaxLength="200" FixedLength="false" Unicode="false" Nullable="false" />
-          <Property Name="DateCreated" Type="DateTime" Nullable="false" Precision="0" />
+          <Property Name="DateCreated" Type="DateTime" Nullable="false" Precision="3" />
         </EntityType>
         <EntityType Name="FileExtension">
           <Key>
@@ -313,7 +439,7 @@ warning 6002: The table/view 'test.dbo.txtBox' does not have a primary key defin
             <PropertyRef Name="Id" />
           </Key>
           <Property Name="Idx" Type="Int32" Nullable="false" />
-          <Property Name="Update_date" Type="DateTime" Nullable="false" Precision="0" />
+          <Property Name="Update_date" Type="DateTime" Nullable="false" Precision="3" />
           <Property Name="Update_detail" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
           <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
         </EntityType>
@@ -326,8 +452,8 @@ warning 6002: The table/view 'test.dbo.txtBox' does not have a primary key defin
           </Key>
           <Property Name="Idx" Type="Single" Nullable="false" />
           <Property Name="Request_name" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" Nullable="false" />
-          <Property Name="Date_req" Type="DateTime" Nullable="false" Precision="0" />
-          <Property Name="Date_fin" Type="DateTime" Precision="0" />
+          <Property Name="Date_req" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="Date_fin" Type="DateTime" Precision="3" />
           <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
         </EntityType>
         <EntityType Name="txtBox">
@@ -362,6 +488,12 @@ warning 6002: The table/view 'test.dbo.txtBox' does not have a primary key defin
             <Parameter Name="type" Mode="In" Type="String" />
           </FunctionImport>
           <EntitySet Name="UserMasters" EntityType="testModel.UserMaster" />
+          <EntitySet Name="BibleAbbreviations" EntityType="testModel.BibleAbbreviation" />
+          <EntitySet Name="BibleBooks" EntityType="testModel.BibleBook" />
+          <EntitySet Name="BibleBooksKJVs" EntityType="testModel.BibleBooksKJV" />
+          <EntitySet Name="BibleFootNoteContents" EntityType="testModel.BibleFootNoteContent" />
+          <EntitySet Name="BibleFootNotes" EntityType="testModel.BibleFootNote" />
+          <EntitySet Name="BibleItalics" EntityType="testModel.BibleItalic" />
           <!--<FunctionImport Name="sp_EmptyReferencesDetails1" ReturnType="Collection(testModel.sp_EmptyReferencesDetails1_Result)">
             <Parameter Name="strLength" Mode="In" Type="Int32" />
             <Parameter Name="type" Mode="In" Type="String" />
@@ -520,6 +652,66 @@ warning 6002: The table/view 'test.dbo.txtBox' does not have a primary key defin
           <Property Name="IsDeleted" Type="Boolean" />
           <Property Name="isSuperAdmin" Type="Boolean" />
           <Property Name="isNew" Type="Boolean" />
+        </EntityType>
+        <EntityType Name="BibleAbbreviation">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" />
+          <Property Name="Abbreviation" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
+          <Property Name="BibleBook" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
+          <Property Name="BibleSeq" Type="Int32" />
+        </EntityType>
+        <EntityType Name="BibleBook">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" />
+          <Property Name="BookId" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
+          <Property Name="ChapterId" Type="Int32" />
+          <Property Name="VerseId" Type="Int32" />
+          <Property Name="BodyText" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="CompoKey" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
+        </EntityType>
+        <EntityType Name="BibleBooksKJV">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" />
+          <Property Name="BookId" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
+          <Property Name="ChapterId" Type="Int32" />
+          <Property Name="VerseId" Type="Int32" />
+          <Property Name="BodyText" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+        </EntityType>
+        <EntityType Name="BibleFootNoteContent">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" />
+          <Property Name="Idx" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
+          <Property Name="Content" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="BibleSeq" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
+          <Property Name="LinkTxt" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
+        </EntityType>
+        <EntityType Name="BibleFootNote">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" />
+          <Property Name="Idx" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
+          <Property Name="Content" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="BookIdx" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
+          <Property Name="ChapterIdx" Type="Int32" />
+          <Property Name="VerseIdx" Type="Int32" />
+          <Property Name="CompoKey" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
+          <Property Name="BibleSeq" Type="Int32" />
+        </EntityType>
+        <EntityType Name="BibleItalic">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" />
+          <Property Name="Word" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
         </EntityType>
       </Schema>
     </edmx:ConceptualModels>
@@ -733,6 +925,72 @@ warning 6002: The table/view 'test.dbo.txtBox' does not have a primary key defin
                 <ScalarProperty Name="Email" ColumnName="Email" />
                 <ScalarProperty Name="Surname" ColumnName="Surname" />
                 <ScalarProperty Name="Name" ColumnName="Name" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="BibleAbbreviations">
+            <EntityTypeMapping TypeName="testModel.BibleAbbreviation">
+              <MappingFragment StoreEntitySet="BibleAbbreviations">
+                <ScalarProperty Name="BibleSeq" ColumnName="BibleSeq" />
+                <ScalarProperty Name="BibleBook" ColumnName="BibleBook" />
+                <ScalarProperty Name="Abbreviation" ColumnName="Abbreviation" />
+                <ScalarProperty Name="ID" ColumnName="ID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="BibleBooks">
+            <EntityTypeMapping TypeName="testModel.BibleBook">
+              <MappingFragment StoreEntitySet="BibleBooks">
+                <ScalarProperty Name="CompoKey" ColumnName="CompoKey" />
+                <ScalarProperty Name="BodyText" ColumnName="BodyText" />
+                <ScalarProperty Name="VerseId" ColumnName="VerseId" />
+                <ScalarProperty Name="ChapterId" ColumnName="ChapterId" />
+                <ScalarProperty Name="BookId" ColumnName="BookId" />
+                <ScalarProperty Name="ID" ColumnName="ID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="BibleBooksKJVs">
+            <EntityTypeMapping TypeName="testModel.BibleBooksKJV">
+              <MappingFragment StoreEntitySet="BibleBooksKJV">
+                <ScalarProperty Name="BodyText" ColumnName="BodyText" />
+                <ScalarProperty Name="VerseId" ColumnName="VerseId" />
+                <ScalarProperty Name="ChapterId" ColumnName="ChapterId" />
+                <ScalarProperty Name="BookId" ColumnName="BookId" />
+                <ScalarProperty Name="ID" ColumnName="ID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="BibleFootNoteContents">
+            <EntityTypeMapping TypeName="testModel.BibleFootNoteContent">
+              <MappingFragment StoreEntitySet="BibleFootNoteContent">
+                <ScalarProperty Name="LinkTxt" ColumnName="LinkTxt" />
+                <ScalarProperty Name="BibleSeq" ColumnName="BibleSeq" />
+                <ScalarProperty Name="Content" ColumnName="Content" />
+                <ScalarProperty Name="Idx" ColumnName="Idx" />
+                <ScalarProperty Name="ID" ColumnName="ID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="BibleFootNotes">
+            <EntityTypeMapping TypeName="testModel.BibleFootNote">
+              <MappingFragment StoreEntitySet="BibleFootNotes">
+                <ScalarProperty Name="BibleSeq" ColumnName="BibleSeq" />
+                <ScalarProperty Name="CompoKey" ColumnName="CompoKey" />
+                <ScalarProperty Name="VerseIdx" ColumnName="VerseIdx" />
+                <ScalarProperty Name="ChapterIdx" ColumnName="ChapterIdx" />
+                <ScalarProperty Name="BookIdx" ColumnName="BookIdx" />
+                <ScalarProperty Name="Content" ColumnName="Content" />
+                <ScalarProperty Name="Idx" ColumnName="Idx" />
+                <ScalarProperty Name="ID" ColumnName="ID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="BibleItalics">
+            <EntityTypeMapping TypeName="testModel.BibleItalic">
+              <MappingFragment StoreEntitySet="BibleItalics">
+                <ScalarProperty Name="Word" ColumnName="Word" />
+                <ScalarProperty Name="ID" ColumnName="ID" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>

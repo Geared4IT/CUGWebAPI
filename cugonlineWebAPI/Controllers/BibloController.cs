@@ -95,7 +95,7 @@ namespace cugonlineWebAPI.Controllers
             List<FilesInfo> files = new List<FilesInfo>();
 
             //var filePath = "https://cugonlinestorage.blob.core.windows.net/bibloimg/";
-            var filePath = "https://cugonline.co.za/images/";
+            var filePath = "https://geared4it.net/images/";
 
             using (testEntities db = new testEntities())
             {
@@ -106,8 +106,9 @@ namespace cugonlineWebAPI.Controllers
                                   FileId = up.Id,
                                   FileName = up.fName,
                                   FilePath = filePath + up.fName,
-                                  FileComment = up.fDescription
-                              }).ToList();
+                                  // FileComment = up.fDescription
+                                  FileComment = up.fTitle
+                              }).OrderByDescending(f => f.FileId).ToList();
 
                 return images;
             }
@@ -115,7 +116,6 @@ namespace cugonlineWebAPI.Controllers
 
         [Route("UploadBiblo")]
         [HttpPost]
-        // public async Task<IHttpActionResult> Upload(string id)
         public object UploadBiblo(string comment)
         {
             var file = HttpContext.Current.Request.Files[0];//we have the file...
@@ -123,65 +123,35 @@ namespace cugonlineWebAPI.Controllers
 
             var uniquefileName = Guid.NewGuid().ToString() + Path.GetExtension(file.FileName);
 
-            string sourcepath = @"";
-            string ftpAddress = @"197.242.150.135"; // ConfigurationManager.AppSettings.Get("CloudStorageContainerReference")
-            string username = "cugftp"; // ConfigurationManager.AppSettings.Get("CloudStorageContainerReference")
-            string password = "Kjgv5FtNX!2$7qBtP3"; // ConfigurationManager.AppSettings.Get("CloudStorageContainerReference")
+            //string ftpAddress = @"197.242.150.135"; // ConfigurationManager.AppSettings.Get("CloudStorageContainerReference")
+            //string username = "cugftp"; // ConfigurationManager.AppSettings.Get("CloudStorageContainerReference")
+            //string password = "Kjgv5FtNX!2$7qBtP3"; // ConfigurationManager.AppSettings.Get("CloudStorageContainerReference")
 
 
-            try
+            var postedFile = HttpContext.Current.Request.Files[0];
+            var filePath = HttpContext.Current.Server.MapPath("~/images/" + postedFile.FileName);
+
+            var rootPath = "https://geared4it.net/images/";
+
+            var nextFileId = cugDB.BibloUploads.OrderByDescending(mf => mf.Id).FirstOrDefault().Id + 1;
+            BibloUpload f = new BibloUpload
             {
+                Id = nextFileId,
+                fName = postedFile.FileName,// uniquefileName,// file.FileName;
+                                       // f.fNamePath = rootPath + uniquefileName;
+                fDescription = comment,
+                fTitle = comment,
+                fType = Path.GetExtension(file.FileName)
+            };
 
-                var postedFile = HttpContext.Current.Request.Files[0];
-                var filePath = HttpContext.Current.Server.MapPath("~/images/" + postedFile.FileName);
-                postedFile.SaveAs(filePath);
+            cugDB.BibloUploads.Add(f);
+            cugDB.SaveChanges();
 
-                using (StreamReader stream = new StreamReader(filePath))
-                {
-                    FtpWebRequest request = (FtpWebRequest)WebRequest.Create("ftp://" + ftpAddress + "/" + uniquefileName);
-                    request.Method = WebRequestMethods.Ftp.UploadFile;
-                    request.Credentials = new NetworkCredential(username, password);
-                    Stream reqStream = request.GetRequestStream();
+            postedFile.SaveAs(filePath);
 
-                    byte[] buffer = new byte[1024];
-
-                    int byteRead = 0;
-                    FileStream fs = System.IO.File.OpenRead(filePath);
-
-                    do
-                    {
-                        byteRead = fs.Read(buffer, 0, buffer.Length);
-                        reqStream.Write(buffer, 0, byteRead);
-                    } while (byteRead != 0);
-
-                    fs.Close();
-                    reqStream.Close();
-
-                }
-
-                var nextFileId = cugDB.BibloUploads.OrderByDescending(mf => mf.Id).FirstOrDefault().Id + 1;
-                BibloUpload f = new BibloUpload
-                {
-                    Id = nextFileId,
-                    fName = uniquefileName,// file.FileName;
-                                           // f.fNamePath = rootPath + uniquefileName;
-                    fDescription = comment,
-                    fType = Path.GetExtension(file.FileName)
-                };
-
-                cugDB.BibloUploads.Add(f);
-                cugDB.SaveChanges();
+            return postedFile.FileName + " filePath: " + filePath;
 
 
-            }
-            catch (Exception ex)
-            {
-
-                throw ex;
-            }
-
-
-            return Ok();
         }
 
         [Route("UploadBibloAzure")]
@@ -254,7 +224,7 @@ namespace cugonlineWebAPI.Controllers
                 return new Response
                 { Status = "Success", Message = "Image Deleted Saved." };
             }
-           // updateImage.IsDeleted = false;
+            // updateImage.IsDeleted = false;
 
             cugDB.Entry(updateImage).State = System.Data.Entity.EntityState.Deleted;
             cugDB.SaveChanges();

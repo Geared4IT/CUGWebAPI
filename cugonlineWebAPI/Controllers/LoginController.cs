@@ -141,6 +141,72 @@ namespace cugonlineWebAPI.Controllers
 
         }
 
+
+        [Route("BibleFootNoteContent")]
+        [HttpGet]
+        public BibleFootNoteContentDTO BibleFootNoteContent(string compoKey)
+        {
+            try
+            {
+                var key = cugDB.BibleFootNotes.Where(b => b.CompoKey.Equals(compoKey)).FirstOrDefault();
+
+                if (key != null)
+                {
+                    var results = cugDB.BibleFootNoteContents.Where(
+                      m => m.Idx.Equals(key.Idx)
+                      ).Select(m => new BibleFootNoteContentDTO
+                      {
+                          Idx = m.Idx,
+                          Content = m.Content
+                      }).FirstOrDefault();
+
+                    return results;
+
+                }
+                else
+                {
+                    return null;
+                }
+
+            }
+            catch (Exception ex)
+            {
+                throw;
+            }
+        }
+
+
+        [Route("BibleReferences")]
+        [HttpGet]
+        public List<BibleReferencesDTO> GetBibleReferences(string searchFilter)
+        {
+            
+            var results = cugDB.BibleBooks.Where(//m => m.BookId.Contains(filter) && 
+                  m => m.ChapterId != 0
+                  //&& m.BookId.Contains("Genesis") //&& m.ChapterId == 1 && m.VerseId == 16
+                  ).Select(m => new BibleReferencesDTO
+                  {
+                      Id = m.ID,
+                      BookOf = m.BookId,
+                      ChapterId = m.ChapterId.Value,
+                      VerseId = m.VerseId.Value,
+                      BodyText = m.BodyText,
+                      CompoKey = m.CompoKey
+                  }).OrderBy(m => m.BookOf).ThenBy(m => m.ChapterId).ThenBy(m => m.VerseId).ToList();
+
+            if (!searchFilter.Equals("undefined"))
+            {
+                results = results.Where(b => b.BodyText.Contains(searchFilter)).ToList();
+            }
+
+            if (results != null)
+            {
+                return results;
+            }
+            else
+                return null;
+        }
+
         /// <summary>
         /// get list of Figures
         /// </summary>
@@ -439,7 +505,7 @@ namespace cugonlineWebAPI.Controllers
                                LinkIdx = sm.Idx,// sm.Idx,
                                LinkTitle = sm.Title,
                                LinkIdxFriendlyName = sm.Idx.Replace("_", " ")
-                           }).ToList();
+                           }).OrderBy(x => x.LinkIdx).ToList();
 
             if (results != null) return results;
             return new List<FigureLinksDTO>();
@@ -741,7 +807,7 @@ namespace cugonlineWebAPI.Controllers
         /// Edit Upload Reference
         /// </summary>
         /// <param name="idx"></param>
-        private void LogUserActivityEditReferenceUpload(MainFilesLink m, int userId)
+        public void LogUserActivityEditReferenceUpload(MainFilesLink m, int userId)
         {
 
 
@@ -812,7 +878,7 @@ namespace cugonlineWebAPI.Controllers
                 }
 
                 //send to David admin
-                 toAddress = new MailAddress("cugonlinesa@gmail.com", "CUG Admin");
+                toAddress = new MailAddress("cugonlinesa@gmail.com", "CUG Admin");
                 using (var message = new MailMessage(fromAddress, toAddress)
                 {
                     Subject = subject,
@@ -875,7 +941,7 @@ namespace cugonlineWebAPI.Controllers
             string subject = "CUG : Online Registration request";
             string htmlBody;
 
-           
+
             var smtp = new SmtpClient
             {
                 Host = "relay-hosting.secureserver.net",
@@ -982,7 +1048,7 @@ namespace cugonlineWebAPI.Controllers
                 cugDB.SaveChanges();
 
 
-              
+
 
 
 
@@ -1047,7 +1113,7 @@ namespace cugonlineWebAPI.Controllers
                                                       && ua.Uploaded.Equals(null)).ToList().Select(ua => new UserActivitiesDTO
                                                       {
                                                           Editor = ua.Editor,
-                                                          DateInFormatted =  (ua.DateIn.HasValue) ? ua.DateIn.Value.ToString("dd MMM yyyy HH:mm") : "",
+                                                          DateInFormatted = (ua.DateIn.HasValue) ? ua.DateIn.Value.ToString("dd MMM yyyy HH:mm") : "",
                                                           DateIn = ua.DateIn.Value
                                                       }).OrderByDescending(ua => ua.DateIn).ToList();
 
@@ -1069,7 +1135,11 @@ namespace cugonlineWebAPI.Controllers
         [HttpGet]
         public List<UserActivitiesDTO> GetUserActivityEditHistory(DateTime loginFrom, DateTime loginTo)
         {
-            loginTo = loginTo.AddDays(1);
+
+            try
+            {
+
+                loginTo = loginTo.AddDays(1);
             var referenceResult = cugDB.UserActivities.Where(ua => (ua.DateIn >= loginFrom && ua.DateIn <= loginTo)
                                                    && !ua.Reference.Equals(null)
                                                    && !ua.AttachmentId.HasValue
@@ -1087,43 +1157,52 @@ namespace cugonlineWebAPI.Controllers
                                                    }).OrderByDescending(ua => ua.DateIn).ToList();
 
 
+                var uploadResult = (from ua in cugDB.UserActivities
+                                    join ml in cugDB.MainFiles on ua.AttachmentId.Value equals ml.id
+                                    where ua.DateIn.Value >= loginFrom && ua.DateIn.Value <= loginTo
+                                    && ua.AttachmentId != null
+                                    && ml.IsDeleted.Value != true
+                                    select new UserActivitiesDTO
+                                    {
+                                        Editor = ua.Editor,
+                                        DateInFormatted = (ua.DateIn != null) ? ua.DateIn.Value.ToString() : "",
+                                        Reference = ua.Reference,
+                                        FileUploadComment = ml.fComment,
+                                        FileUploaded = ml.fName,
+                                        UploadUrl = ml.fNamePath,
+                                        AttachmentId = ua.AttachmentId.Value,
+                                        DateIn = ua.DateIn.Value
 
-            var uploadResult = (from ua in cugDB.UserActivities
-                                join ml in cugDB.MainFiles on ua.AttachmentId.Value equals ml.id
-                                where ua.DateIn.Value >= loginFrom && ua.DateIn.Value <= loginTo
-                                && ua.AttachmentId != null
-                                select new UserActivitiesDTO
-                                {
-                                    Editor = ua.Editor,
-                                    DateInFormatted = (ua.DateIn != null) ? ua.DateIn.Value.ToString() : "",
-                                    Reference = ua.Reference,
-                                    FileUploadComment = ml.fComment,
-                                    FileUploaded = ml.fName,
-                                    UploadUrl = ml.fNamePath,
-                                    AttachmentId = ua.AttachmentId.Value,
-                                    DateIn = ua.DateIn.Value
+
+                                    }).OrderByDescending(u => u.DateIn).ToList();
+
+                var formattedUpload = new List<UserActivitiesDTO>();
+
+                foreach (var item in uploadResult)
+                {
+                    item.DateInFormatted = item.DateIn.Value.ToString("dd MMM yyyy HH:mm");
+                    formattedUpload.Add(item);
+                }
 
 
-                                }).OrderByDescending(u => u.DateIn).ToList();
+                var result = referenceResult.Union(formattedUpload).ToList();
 
-            var formattedUpload = new List<UserActivitiesDTO>();
+                if (result != null)
+                {
+                    //return result.OrderByDescending(u => u.DateInFormatted).ToList();
+                    return result.OrderByDescending(u => u.DateIn).ToList();
+                }
+                else
+                    return new List<UserActivitiesDTO>();
 
-            foreach (var item in uploadResult)
+            }
+            catch (Exception ex)
             {
-                item.DateInFormatted = item.DateIn.Value.ToString("dd MMM yyyy HH:mm");
-                formattedUpload.Add(item);
+
+                throw;
             }
 
-
-            var result = referenceResult.Union(formattedUpload).ToList();
-
-            if (result != null)
-            {
-                //return result.OrderByDescending(u => u.DateInFormatted).ToList();
-                return result.OrderByDescending(u => u.DateIn).ToList();
-            }
-            else
-                return new List<UserActivitiesDTO>();
+            
         }
 
         [Route("GetNewRegistration")]
@@ -1133,9 +1212,9 @@ namespace cugonlineWebAPI.Controllers
             var u = cugDB.UserMasters.Where(x => x.isNew.Value == true).FirstOrDefault();
 
             if (u == null)
-                {
-                    return false;
-                }
+            {
+                return false;
+            }
             return true;//we have a user!!
         }
 
@@ -1177,17 +1256,17 @@ namespace cugonlineWebAPI.Controllers
         {
             var file = HttpContext.Current.Request.Files[0];//we have the file...
 
-            var uniquefileName = id + "_" + Guid.NewGuid().ToString() + Path.GetExtension(file.FileName);
+            // var uniquefileName = id + "_" + Guid.NewGuid().ToString() + Path.GetExtension(file.FileName);
 
-            string ftpAddress = @"197.242.150.135"; // ConfigurationManager.AppSettings.Get("CloudStorageContainerReference")
-            string username = "cugftp"; // ConfigurationManager.AppSettings.Get("CloudStorageContainerReference")
-            string password = "Kjgv5FtNX!2$7qBtP3"; // ConfigurationManager.AppSettings.Get("CloudStorageContainerReference")
+            //string ftpAddress = @"197.242.150.135"; // ConfigurationManager.AppSettings.Get("CloudStorageContainerReference")
+            //string username = "cugftp"; // ConfigurationManager.AppSettings.Get("CloudStorageContainerReference")
+            //string password = "Kjgv5FtNX!2$7qBtP3"; // ConfigurationManager.AppSettings.Get("CloudStorageContainerReference")
 
             var postedFile = HttpContext.Current.Request.Files[0];
             var filePath = HttpContext.Current.Server.MapPath("~/images/" + postedFile.FileName);
-            var dbtesting = filePath;
+            // var dbtesting = filePath;
 
-            var destinationDirectory = new DirectoryInfo(Path.GetDirectoryName(filePath));
+            // var destinationDirectory = new DirectoryInfo(Path.GetDirectoryName(filePath));
 
             //log tp database
             try
@@ -1227,50 +1306,10 @@ namespace cugonlineWebAPI.Controllers
             {
                 return ex.Message;
             }
-
-            try
-            {
-
-                postedFile.SaveAs(filePath);
-                return postedFile.FileName + " filePath: " + filePath;
+            postedFile.SaveAs(filePath);
+            return postedFile.FileName + " filePath: " + filePath;
 
 
-                using (StreamReader stream = new StreamReader(filePath))
-                {
-
-                    FtpWebRequest request = (FtpWebRequest)WebRequest.Create("ftp://" + ftpAddress + "/" + uniquefileName);
-                    return filePath;
-                    request.Method = WebRequestMethods.Ftp.UploadFile;
-                    request.Credentials = new NetworkCredential(username, password);
-                    Stream reqStream = request.GetRequestStream();
-
-                    byte[] buffer = new byte[1024];
-
-                    int byteRead = 0;
-                    FileStream fs = System.IO.File.OpenRead(filePath);
-
-                    do
-                    {
-                        byteRead = fs.Read(buffer, 0, buffer.Length);
-                        reqStream.Write(buffer, 0, byteRead);
-                    } while (byteRead != 0);
-
-                    fs.Close();
-                    reqStream.Close();
-                }
-
-
-
-            }
-
-            catch (Exception ex)
-            {
-                return ex.InnerException;
-
-            }
-
-
-            return Ok();
         }
 
         [Route("UploadOld")]
@@ -1421,6 +1460,22 @@ namespace cugonlineWebAPI.Controllers
         public string label { get; set; }
         public string value { get; set; }
     }
+
+    public class BibleFootNoteContentDTO
+    {
+        public string Idx { get; set; }
+        public string Content { get; set; }
+    }
+    public class BibleReferencesDTO
+    {
+        public int Id { get; set; }
+        public string BookOf { get; set; }
+        public int ChapterId { get; set; }
+        public int VerseId { get; set; }
+        public string BodyText { get; set; }
+        public string CompoKey { get; set; }
+    }
+
     public class FiguresDTO
     {
         public int Id { get; set; }

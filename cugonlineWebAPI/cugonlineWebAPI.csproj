@@ -200,6 +200,24 @@
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
+    <Compile Include="Models\BibleAbbreviation.cs">
+      <DependentUpon>CugModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\BibleBook.cs">
+      <DependentUpon>CugModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\BibleBooksKJV.cs">
+      <DependentUpon>CugModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\BibleFootNote.cs">
+      <DependentUpon>CugModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\BibleFootNoteContent.cs">
+      <DependentUpon>CugModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\BibleItalic.cs">
+      <DependentUpon>CugModel.tt</DependentUpon>
+    </Compile>
     <Compile Include="Models\BibloMain.cs">
       <DependentUpon>CugModel.tt</DependentUpon>
     </Compile>

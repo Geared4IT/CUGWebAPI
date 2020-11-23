@@ -43,6 +43,12 @@ namespace cugonlineWebAPI.Models
         public virtual DbSet<BibloUpload> BibloUploads { get; set; }
         public virtual DbSet<UserActivity> UserActivities { get; set; }
         public virtual DbSet<UserMaster> UserMasters { get; set; }
+        public virtual DbSet<BibleAbbreviation> BibleAbbreviations { get; set; }
+        public virtual DbSet<BibleBook> BibleBooks { get; set; }
+        public virtual DbSet<BibleBooksKJV> BibleBooksKJVs { get; set; }
+        public virtual DbSet<BibleFootNoteContent> BibleFootNoteContents { get; set; }
+        public virtual DbSet<BibleFootNote> BibleFootNotes { get; set; }
+        public virtual DbSet<BibleItalic> BibleItalics { get; set; }
     
         public virtual ObjectResult<sp_EmptyReferences_Result> sp_EmptyReferences(Nullable<int> strLength)
         {
