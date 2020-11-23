@@ -1,0 +1,31 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 15
+VisualStudioVersion = 15.0.28307.757
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "cugonlineWebAPI", "cugonlineWebAPI\cugonlineWebAPI.csproj", "{8DC332A3-B62E-4FDD-8238-095D1443C211}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "cugonlineWebAPI.Tests", "cugonlineWebAPI.Tests\cugonlineWebAPI.Tests.csproj", "{B4E90720-9469-471E-BB8F-8187CD115017}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{8DC332A3-B62E-4FDD-8238-095D1443C211}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8DC332A3-B62E-4FDD-8238-095D1443C211}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8DC332A3-B62E-4FDD-8238-095D1443C211}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8DC332A3-B62E-4FDD-8238-095D1443C211}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B4E90720-9469-471E-BB8F-8187CD115017}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B4E90720-9469-471E-BB8F-8187CD115017}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B4E90720-9469-471E-BB8F-8187CD115017}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B4E90720-9469-471E-BB8F-8187CD115017}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {0CA39054-4B03-43E9-BED9-9775FD87C834}
+	EndGlobalSection
+EndGlobal
