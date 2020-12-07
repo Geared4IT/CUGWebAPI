@@ -17,6 +17,7 @@ using Microsoft.WindowsAzure.Storage.Auth;
 using System.Net.Mail;
 using cugonlineWebAPI.DTO;
 using System.Text;
+using HtmlAgilityPack;
 
 namespace cugonlineWebAPI.Controllers
 {
@@ -142,14 +143,93 @@ namespace cugonlineWebAPI.Controllers
         }
 
 
+        //[Route("BibleFootNoteContent")]
+        //[HttpGet]
+        //public BibleFootNoteContentDTO BibleFootNoteContent(string compoKey)
+        //{
+        //    try
+        //    {
+        //        var key = cugDB.BibleFootNotes.Where(b => b.CompoKey.Equals(compoKey)).FirstOrDefault();
+
+        //        if (key != null)
+        //        {
+        //            var results = cugDB.BibleFootNoteContents.Where(
+        //              m => m.Idx.Equals(key.Idx)
+        //              ).Select(m => new BibleFootNoteContentDTO
+        //              {
+        //                  Idx = m.Idx,
+        //                  Content = m.Content
+        //              }).FirstOrDefault();
+
+        //            return results;
+
+        //        }
+        //        else
+        //        {
+        //            return null;
+        //        }
+
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        throw;
+        //    }
+        //}
+
         [Route("BibleFootNoteContent")]
         [HttpGet]
-        public BibleFootNoteContentDTO BibleFootNoteContent(string compoKey)
+        public BibleFootNoteContentDTO BibleFootNoteContent(string Idx)
+        {
+            try
+            {
+                var results = cugDB.BibleFootNoteContents.Where(
+                      m => m.Idx.Equals(Idx)
+                      ).Select(m => new BibleFootNoteContentDTO
+                      {
+                          Idx = m.Idx,
+                          Content = m.Content
+                      }).FirstOrDefault();
+                #region test anchor tag manipulation 
+                if (results != null)
+                {
+                    HtmlAgilityPack.HtmlDocument document = new HtmlAgilityPack.HtmlDocument();
+                    document.LoadHtml(results.Content);
+                    string strPreviousOuterHtml = string.Empty;
+                    HtmlNodeCollection nc = document.DocumentNode.SelectNodes("//a");
+                    if (nc != null)
+                    {
+                        foreach (HtmlNode node in nc)
+                        {
+                            strPreviousOuterHtml = node.OuterHtml;
+                            if (node.Attributes["href"] != null)
+                            {
+                                node.Attributes.Add("data-idx", node.Attributes["href"].Value.Substring(node.Attributes["href"].Value.LastIndexOf('=') + 1).Replace(" ", "_"));
+                                node.Attributes["href"].Value = "/bibleReferences?" + node.Attributes["href"].Value.Substring(node.Attributes["href"].Value.LastIndexOf('=') + 1).Replace(" ", "_");
+                            }
+
+                            document.DocumentNode.InnerHtml = document.DocumentNode.InnerHtml.Replace(strPreviousOuterHtml, node.OuterHtml);
+                        }
+                    }
+                    var newContent = document.DocumentNode.OuterHtml;
+                    results.Content = newContent;
+                }
+
+                #endregion
+                return results;
+            }
+            catch (Exception ex)
+            {
+                throw;
+            }
+        }
+
+        [Route("BibleFootNote")]
+        [HttpGet]
+        public BibleFootNoteContentDTO BibleFootNote(string compoKey)
         {
             try
             {
                 var key = cugDB.BibleFootNotes.Where(b => b.CompoKey.Equals(compoKey)).FirstOrDefault();
-
                 if (key != null)
                 {
                     var results = cugDB.BibleFootNoteContents.Where(
@@ -159,22 +239,42 @@ namespace cugonlineWebAPI.Controllers
                           Idx = m.Idx,
                           Content = m.Content
                       }).FirstOrDefault();
+                    #region test anchor tag manipulation 
+
+                    HtmlDocument document = new HtmlDocument();
+                    document.LoadHtml(results.Content);
+                    string strPreviousOuterHtml = string.Empty;
+                    HtmlNodeCollection nc = document.DocumentNode.SelectNodes("//a");
+                    if (nc != null)
+                    {
+                        foreach (HtmlNode node in nc)
+                        {
+                            strPreviousOuterHtml = node.OuterHtml;
+                            //JJ. updated db footnote.asp > bibleReferences?
+                            //if (node.Attributes["href"] != null)
+                            //{
+                            //    //node.Attributes.Add("data-idx", node.Attributes["href"].Value.Substring(node.Attributes["href"].Value.LastIndexOf('=') + 1).Replace(" ", "_"));
+                            //    //node.Attributes["href"].Value = "/bibleReferences?" + node.Attributes["href"].Value.Substring(node.Attributes["href"].Value.LastIndexOf('=') + 1).Replace(" ", "_");
+                            //}
+                            document.DocumentNode.InnerHtml = document.DocumentNode.InnerHtml.Replace(strPreviousOuterHtml, node.OuterHtml);
+                        }
+                    }
+                    var newContent = document.DocumentNode.OuterHtml;
+                    results.Content = newContent;
+                    #endregion
 
                     return results;
-
                 }
                 else
                 {
                     return null;
                 }
-
             }
             catch (Exception ex)
             {
                 throw;
             }
         }
-
 
         [Route("BibleReferences")]
         [HttpGet]
@@ -183,20 +283,20 @@ namespace cugonlineWebAPI.Controllers
             
             var results = cugDB.BibleBooks.Where(//m => m.BookId.Contains(filter) && 
                   m => m.ChapterId != 0
-                  //&& m.BookId.Contains("Genesis") //&& m.ChapterId == 1 && m.VerseId == 16
+                 // && m.BookId.Contains("Genesis") //&& m.ChapterId == 1 && m.VerseId == 16
                   ).Select(m => new BibleReferencesDTO
                   {
                       Id = m.ID,
                       BookOf = m.BookId,
                       ChapterId = m.ChapterId.Value,
                       VerseId = m.VerseId.Value,
-                      BodyText = m.BodyText,
+                      BodyText = m.BodyText.ToString(),
                       CompoKey = m.CompoKey
                   }).OrderBy(m => m.BookOf).ThenBy(m => m.ChapterId).ThenBy(m => m.VerseId).ToList();
 
             if (!searchFilter.Equals("undefined"))
             {
-                results = results.Where(b => b.BodyText.Contains(searchFilter)).ToList();
+                results = results.Where(b => b.BodyText.ToLower().Contains(searchFilter)).ToList();
             }
 
             if (results != null)
@@ -496,18 +596,29 @@ namespace cugonlineWebAPI.Controllers
         [HttpGet]
         public List<FigureLinksDTO> GetFigureLinksById(string idx)
         {
-            var results = (from sm in cugDB.SeeMains
-                           join m in cugDB.Mains on sm.Link equals m.Idx
-                           where m.Idx == idx
-                           select new FigureLinksDTO
-                           {
-                               LinkId = sm.Id,
-                               LinkIdx = sm.Idx,// sm.Idx,
-                               LinkTitle = sm.Title,
-                               LinkIdxFriendlyName = sm.Idx.Replace("_", " ")
-                           }).OrderBy(x => x.LinkIdx).ToList();
 
-            if (results != null) return results;
+            try
+            {
+
+                var results = (from sm in cugDB.SeeMains
+                               join m in cugDB.Mains on sm.Link equals m.Idx
+                               where m.Idx == idx
+                               select new FigureLinksDTO
+                               {
+                                   LinkId = sm.Id,
+                                   LinkIdx = sm.Idx,// sm.Idx,
+                                   LinkTitle = sm.Title,
+                                   LinkIdxFriendlyName = sm.Idx.Replace("_", " ")
+                               }).OrderBy(x => x.LinkIdx).ToList();
+
+                if (results != null) return results;
+            }
+            catch (Exception ex)
+            {
+
+                throw;
+            }
+
             return new List<FigureLinksDTO>();
         }
 
@@ -1268,12 +1379,11 @@ namespace cugonlineWebAPI.Controllers
 
             // var destinationDirectory = new DirectoryInfo(Path.GetDirectoryName(filePath));
 
-            //log tp database
+            
             try
             {
-
+                //log to database
                 var rootPath = "https://geared4it.net/images/";
-
                 var nextFileId = cugDB.MainFiles.OrderByDescending(mf => mf.id).FirstOrDefault().id + 1;
                 MainFile f = new MainFile();
                 f.id = nextFileId;
@@ -1301,13 +1411,15 @@ namespace cugonlineWebAPI.Controllers
 
                 //save to User Activies
                 LogUserActivityEditReferenceUpload(fl, userId);
+
+                postedFile.SaveAs(filePath);
+                return postedFile.FileName + " filePath: " + filePath;
             }
             catch (Exception ex)
             {
                 return ex.Message;
             }
-            postedFile.SaveAs(filePath);
-            return postedFile.FileName + " filePath: " + filePath;
+           
 
 
         }

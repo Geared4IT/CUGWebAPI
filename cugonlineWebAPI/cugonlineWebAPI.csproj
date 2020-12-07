@@ -55,6 +55,9 @@
     <Reference Include="EntityFramework.SqlServer, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
       <HintPath>..\packages\EntityFramework.6.2.0\lib\net45\EntityFramework.SqlServer.dll</HintPath>
     </Reference>
+    <Reference Include="HtmlAgilityPack, Version=1.11.28.0, Culture=neutral, PublicKeyToken=bd319b19eaf3b43a, processorArchitecture=MSIL">
+      <HintPath>..\packages\HtmlAgilityPack.1.11.28\lib\Net45\HtmlAgilityPack.dll</HintPath>
+    </Reference>
     <Reference Include="Microsoft.Azure.KeyVault.Core, Version=3.0.4.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>..\packages\Microsoft.Azure.KeyVault.Core.3.0.4\lib\net461\Microsoft.Azure.KeyVault.Core.dll</HintPath>
     </Reference>
@@ -297,23 +300,13 @@
     <Content Include="Areas\HelpPage\HelpPage.css" />
     <Content Include="assets\contact.php" />
     <Content Include="assets\css\bootstrap.min.css" />
-    <Content Include="assets\css\default.css" />
-    <Content Include="assets\css\LineIcons.css" />
-    <Content Include="assets\css\magnific-popup.css" />
-    <Content Include="assets\css\slick.css" />
-    <Content Include="assets\css\style.css" />
-    <Content Include="assets\fonts\LineIcons.svg" />
-    <Content Include="assets\images\about.jpg" />
-    <Content Include="assets\images\author-1.jpg" />
-    <Content Include="assets\images\author-2.jpg" />
-    <Content Include="assets\images\author-3.jpg" />
-    <Content Include="assets\images\author-4.jpg" />
-    <Content Include="assets\images\basic.svg" />
-    <Content Include="assets\images\enterprise.svg" />
-    <Content Include="assets\images\f-shape-1.svg" />
-    <Content Include="assets\images\favicon.png" />
-    <Content Include="assets\images\logo-2.svg" />
-    <Content Include="assets\images\logo.svg" />
+    <Content Include="assets\css\font-awesome.min.css" />
+    <Content Include="assets\fonts\fontawesome-webfont.svg" />
+    <Content Include="assets\images\home-bg.jpg" />
+    <Content Include="assets\images\portfolio-img1.jpg" />
+    <Content Include="assets\images\portfolio-img2.jpg" />
+    <Content Include="assets\images\portfolio-img3.jpg" />
+    <Content Include="assets\images\portfolio-img4.jpg" />
     <Content Include="assets\images\portfolio\1.png" />
     <Content Include="assets\images\portfolio\2.png" />
     <Content Include="assets\images\portfolio\3.png" />
@@ -324,13 +317,13 @@
     <Content Include="assets\images\portfolio\8.png" />
     <Content Include="assets\images\portfolio\9.png" />
     <Content Include="assets\images\portfolio\shape.svg" />
-    <Content Include="assets\images\pro.svg" />
     <Content Include="assets\images\slider\1.png" />
     <Content Include="assets\images\slider\2.png" />
     <Content Include="assets\images\slider\3.png" />
-    <Content Include="assets\images\team-1.jpg" />
-    <Content Include="assets\images\team-2.jpg" />
-    <Content Include="assets\images\team-3.jpg" />
+    <Content Include="assets\images\team-img1.jpg" />
+    <Content Include="assets\images\team-img2.jpg" />
+    <Content Include="assets\images\team-img3.jpg" />
+    <Content Include="assets\images\team-img4.jpg" />
     <Content Include="assets\js\ajax-contact.js" />
     <Content Include="assets\js\bootstrap.min.js" />
     <Content Include="assets\js\imagesloaded.pkgd.min.js" />
@@ -390,14 +383,12 @@
       <DependentUpon>CugModel.edmx</DependentUpon>
     </Content>
     <Content Include="assets\.DS_Store" />
-    <Content Include="assets\css\style.css.map" />
-    <Content Include="assets\fonts\.DS_Store" />
-    <Content Include="assets\fonts\LineIcons.eot" />
-    <Content Include="assets\fonts\LineIcons.ttf" />
-    <Content Include="assets\fonts\LineIcons.woff" />
-    <Content Include="assets\fonts\LineIcons.woff2" />
-    <Content Include="assets\images\.DS_Store" />
     <Content Include="assets\images\portfolio\.DS_Store" />
+    <Content Include="assets\fonts\fontawesome-webfont.eot" />
+    <Content Include="assets\fonts\fontawesome-webfont.ttf" />
+    <Content Include="assets\fonts\fontawesome-webfont.woff" />
+    <Content Include="assets\fonts\fontawesome-webfont.woff2" />
+    <Content Include="assets\fonts\FontAwesome.otf" />
     <None Include="Properties\PublishProfiles\cugonlineWebAPI - Web Deploy.pubxml" />
     <None Include="Properties\PublishProfiles\FolderProfile.pubxml" />
     <None Include="Properties\PublishProfiles\Geared4GoDaddy.pubxml" />
