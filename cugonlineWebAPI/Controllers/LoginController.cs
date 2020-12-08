@@ -182,6 +182,7 @@ namespace cugonlineWebAPI.Controllers
         {
             try
             {
+                Idx = Idx.Replace(" ", "_");//Simple replace for now todo: replace function
                 var results = cugDB.BibleFootNoteContents.Where(
                       m => m.Idx.Equals(Idx)
                       ).Select(m => new BibleFootNoteContentDTO
@@ -192,7 +193,7 @@ namespace cugonlineWebAPI.Controllers
                 #region test anchor tag manipulation 
                 if (results != null)
                 {
-                    HtmlAgilityPack.HtmlDocument document = new HtmlAgilityPack.HtmlDocument();
+                    HtmlDocument document = new HtmlDocument();
                     document.LoadHtml(results.Content);
                     string strPreviousOuterHtml = string.Empty;
                     HtmlNodeCollection nc = document.DocumentNode.SelectNodes("//a");
@@ -201,11 +202,11 @@ namespace cugonlineWebAPI.Controllers
                         foreach (HtmlNode node in nc)
                         {
                             strPreviousOuterHtml = node.OuterHtml;
-                            if (node.Attributes["href"] != null)
-                            {
-                                node.Attributes.Add("data-idx", node.Attributes["href"].Value.Substring(node.Attributes["href"].Value.LastIndexOf('=') + 1).Replace(" ", "_"));
-                                node.Attributes["href"].Value = "/bibleReferences?" + node.Attributes["href"].Value.Substring(node.Attributes["href"].Value.LastIndexOf('=') + 1).Replace(" ", "_");
-                            }
+                            //if (node.Attributes["href"] != null)
+                            //{
+                            //    node.Attributes.Add("data-idx", node.Attributes["href"].Value.Substring(node.Attributes["href"].Value.LastIndexOf('=') + 1).Replace(" ", "_"));
+                            //    node.Attributes["href"].Value = "/bibleReferences?" + node.Attributes["href"].Value.Substring(node.Attributes["href"].Value.LastIndexOf('=') + 1).Replace(" ", "_");
+                            //}
 
                             document.DocumentNode.InnerHtml = document.DocumentNode.InnerHtml.Replace(strPreviousOuterHtml, node.OuterHtml);
                         }
