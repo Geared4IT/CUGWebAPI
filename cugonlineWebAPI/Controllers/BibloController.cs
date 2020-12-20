@@ -106,9 +106,9 @@ namespace cugonlineWebAPI.Controllers
                                   FileId = up.Id,
                                   FileName = up.fName,
                                   FilePath = filePath + up.fName,
-                                  // FileComment = up.fDescription
-                                  FileComment = up.fTitle
-                              }).OrderByDescending(f => f.FileId).ToList();
+                                   LinkTitle = up.fTitle,
+                                  FileComment = up.fDescription
+                              }).OrderByDescending(f => f.LinkTitle).ToList();
 
                 return images;
             }
