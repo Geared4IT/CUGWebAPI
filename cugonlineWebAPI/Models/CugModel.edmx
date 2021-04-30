@@ -94,6 +94,7 @@ warning 6002: The table/view 'test.dbo.BibleItalics' does not have a primary key
           <Property Name="fTitle" Type="nvarchar" MaxLength="255" />
           <Property Name="fDescription" Type="nvarchar" MaxLength="255" />
           <Property Name="Id" Type="int" Nullable="false" />
+          <Property Name="SortOrder" Type="int" />
         </EntityType>
         <!--Errors Found During Generation:
 warning 6002: The table/view 'test.dbo.FileExtensions' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
@@ -478,7 +479,6 @@ warning 6002: The table/view 'test.dbo.txtBox' does not have a primary key defin
           <EntitySet Name="SeeMains" EntityType="testModel.SeeMain" />
           <EntitySet Name="Mains" EntityType="testModel.Main" />
           <EntitySet Name="BibloMains" EntityType="testModel.BibloMain" />
-          <EntitySet Name="BibloUploads" EntityType="testModel.BibloUpload" />
           <EntitySet Name="UserActivities" EntityType="testModel.UserActivity" />
           <FunctionImport Name="sp_EmptyReferences" ReturnType="Collection(testModel.sp_EmptyReferences_Result)">
           <Parameter Name="strLength" Mode="In" Type="Int32" />
@@ -494,6 +494,7 @@ warning 6002: The table/view 'test.dbo.txtBox' does not have a primary key defin
           <EntitySet Name="BibleFootNoteContents" EntityType="testModel.BibleFootNoteContent" />
           <EntitySet Name="BibleFootNotes" EntityType="testModel.BibleFootNote" />
           <EntitySet Name="BibleItalics" EntityType="testModel.BibleItalic" />
+          <EntitySet Name="BibloUploads" EntityType="testModel.BibloUpload" />
           <!--<FunctionImport Name="sp_EmptyReferencesDetails1" ReturnType="Collection(testModel.sp_EmptyReferencesDetails1_Result)">
             <Parameter Name="strLength" Mode="In" Type="Int32" />
             <Parameter Name="type" Mode="In" Type="String" />
@@ -592,16 +593,6 @@ warning 6002: The table/view 'test.dbo.txtBox' does not have a primary key defin
           <Property Name="ID" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
           <Property Name="Body" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
           <Property Name="MainId" Type="Int32" Nullable="false" />
-        </EntityType>
-        <EntityType Name="BibloUpload">
-          <Key>
-            <PropertyRef Name="Id" />
-          </Key>
-          <Property Name="fName" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
-          <Property Name="fType" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
-          <Property Name="fTitle" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
-          <Property Name="fDescription" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
-          <Property Name="Id" Type="Int32" Nullable="false" />
         </EntityType>
         <EntityType Name="UserActivity">
           <Key>
@@ -712,6 +703,17 @@ warning 6002: The table/view 'test.dbo.txtBox' does not have a primary key defin
           </Key>
           <Property Name="ID" Type="Int32" Nullable="false" />
           <Property Name="Word" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
+        </EntityType>
+        <EntityType Name="BibloUpload">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="fName" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
+          <Property Name="fType" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
+          <Property Name="fTitle" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
+          <Property Name="fDescription" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
+          <Property Name="Id" Type="Int32" Nullable="false" />
+          <Property Name="SortOrder" Type="Int32" />
         </EntityType>
       </Schema>
     </edmx:ConceptualModels>
@@ -871,17 +873,6 @@ warning 6002: The table/view 'test.dbo.txtBox' does not have a primary key defin
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
-          <EntitySetMapping Name="BibloUploads">
-            <EntityTypeMapping TypeName="testModel.BibloUpload">
-              <MappingFragment StoreEntitySet="BibloUploads">
-                <ScalarProperty Name="Id" ColumnName="Id" />
-                <ScalarProperty Name="fDescription" ColumnName="fDescription" />
-                <ScalarProperty Name="fTitle" ColumnName="fTitle" />
-                <ScalarProperty Name="fType" ColumnName="fType" />
-                <ScalarProperty Name="fName" ColumnName="fName" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
           <EntitySetMapping Name="UserActivities">
             <EntityTypeMapping TypeName="testModel.UserActivity">
               <MappingFragment StoreEntitySet="UserActivities">
@@ -991,6 +982,18 @@ warning 6002: The table/view 'test.dbo.txtBox' does not have a primary key defin
               <MappingFragment StoreEntitySet="BibleItalics">
                 <ScalarProperty Name="Word" ColumnName="Word" />
                 <ScalarProperty Name="ID" ColumnName="ID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="BibloUploads">
+            <EntityTypeMapping TypeName="testModel.BibloUpload">
+              <MappingFragment StoreEntitySet="BibloUploads">
+                <ScalarProperty Name="SortOrder" ColumnName="SortOrder" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="fDescription" ColumnName="fDescription" />
+                <ScalarProperty Name="fTitle" ColumnName="fTitle" />
+                <ScalarProperty Name="fType" ColumnName="fType" />
+                <ScalarProperty Name="fName" ColumnName="fName" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>

@@ -190,6 +190,7 @@
     <Compile Include="Areas\HelpPage\SampleGeneration\SampleDirection.cs" />
     <Compile Include="Areas\HelpPage\SampleGeneration\TextSample.cs" />
     <Compile Include="Areas\HelpPage\XmlDocumentationProvider.cs" />
+    <Compile Include="Caching\CacheFilter.cs" />
     <Compile Include="Controllers\BibloController.cs" />
     <Compile Include="DTO\DataBaseInfoDTO.cs" />
     <Compile Include="Controllers\EmailController.cs" />
@@ -298,8 +299,9 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Areas\HelpPage\HelpPage.css" />
-    <Content Include="assets\contact.php" />
+   
     <Content Include="assets\css\bootstrap.min.css" />
+    <Content Include="assets\css\font-awesome.min.css" />
     <Content Include="assets\css\font-awesome.min.css" />
     <Content Include="assets\fonts\fontawesome-webfont.svg" />
     <Content Include="assets\images\home-bg.jpg" />
@@ -307,38 +309,7 @@
     <Content Include="assets\images\portfolio-img2.jpg" />
     <Content Include="assets\images\portfolio-img3.jpg" />
     <Content Include="assets\images\portfolio-img4.jpg" />
-    <Content Include="assets\images\portfolio\1.png" />
-    <Content Include="assets\images\portfolio\2.png" />
-    <Content Include="assets\images\portfolio\3.png" />
-    <Content Include="assets\images\portfolio\4.png" />
-    <Content Include="assets\images\portfolio\5.png" />
-    <Content Include="assets\images\portfolio\6.png" />
-    <Content Include="assets\images\portfolio\7.png" />
-    <Content Include="assets\images\portfolio\8.png" />
-    <Content Include="assets\images\portfolio\9.png" />
-    <Content Include="assets\images\portfolio\shape.svg" />
-    <Content Include="assets\images\slider\1.png" />
-    <Content Include="assets\images\slider\2.png" />
-    <Content Include="assets\images\slider\3.png" />
-    <Content Include="assets\images\team-img1.jpg" />
-    <Content Include="assets\images\team-img2.jpg" />
-    <Content Include="assets\images\team-img3.jpg" />
-    <Content Include="assets\images\team-img4.jpg" />
-    <Content Include="assets\js\ajax-contact.js" />
-    <Content Include="assets\js\bootstrap.min.js" />
-    <Content Include="assets\js\imagesloaded.pkgd.min.js" />
-    <Content Include="assets\js\isotope.pkgd.min.js" />
-    <Content Include="assets\js\jquery.easing.min.js" />
-    <Content Include="assets\js\jquery.magnific-popup.min.js" />
-    <Content Include="assets\js\main.js" />
-    <Content Include="assets\js\popper.min.js" />
-    <Content Include="assets\js\scrolling-nav.js" />
-    <Content Include="assets\js\slick.min.js" />
-    <Content Include="assets\js\vendor\jquery-1.12.4.min.js" />
-    <Content Include="assets\js\vendor\modernizr-3.7.1.min.js" />
-    <Content Include="Content\bootstrap-theme.css" />
-    <Content Include="Content\bootstrap-theme.min.css" />
-    <Content Include="Content\bootstrap.css" />
+   
     <Content Include="Content\bootstrap.min.css" />
     <Content Include="favicon.ico" />
     <Content Include="fonts\glyphicons-halflings-regular.svg" />
@@ -382,13 +353,7 @@
     <Content Include="Models\CugModel.edmx.diagram">
       <DependentUpon>CugModel.edmx</DependentUpon>
     </Content>
-    <Content Include="assets\.DS_Store" />
-    <Content Include="assets\images\portfolio\.DS_Store" />
-    <Content Include="assets\fonts\fontawesome-webfont.eot" />
-    <Content Include="assets\fonts\fontawesome-webfont.ttf" />
-    <Content Include="assets\fonts\fontawesome-webfont.woff" />
-    <Content Include="assets\fonts\fontawesome-webfont.woff2" />
-    <Content Include="assets\fonts\FontAwesome.otf" />
+   
     <None Include="Properties\PublishProfiles\cugonlineWebAPI - Web Deploy.pubxml" />
     <None Include="Properties\PublishProfiles\FolderProfile.pubxml" />
     <None Include="Properties\PublishProfiles\Geared4GoDaddy.pubxml" />

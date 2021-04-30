@@ -106,17 +106,18 @@ namespace cugonlineWebAPI.Controllers
                                   FileId = up.Id,
                                   FileName = up.fName,
                                   FilePath = filePath + up.fName,
-                                   LinkTitle = up.fTitle,
-                                  FileComment = up.fDescription
-                              }).OrderByDescending(f => f.LinkTitle).ToList();
+                                  FileTitle = up.fTitle,
+                                  FileComment = up.fDescription,
+                                  SortOrder = up.SortOrder
+                              }).OrderBy(f => f.SortOrder).ThenByDescending(f => f.FileTitle).ToList();
 
                 return images;
             }
         }
 
-        [Route("UploadBiblo")]
+        [Route("UploadBiblo_Old")]
         [HttpPost]
-        public object UploadBiblo(string comment)
+        public object UploadBiblo_Old(string comment)
         {
             var file = HttpContext.Current.Request.Files[0];//we have the file...
 
@@ -138,7 +139,7 @@ namespace cugonlineWebAPI.Controllers
             {
                 Id = nextFileId,
                 fName = postedFile.FileName,// uniquefileName,// file.FileName;
-                                       // f.fNamePath = rootPath + uniquefileName;
+                                            // f.fNamePath = rootPath + uniquefileName;
                 fDescription = comment,
                 fTitle = comment,
                 fType = Path.GetExtension(file.FileName)
@@ -154,65 +155,83 @@ namespace cugonlineWebAPI.Controllers
 
         }
 
-        [Route("UploadBibloAzure")]
+        [Route("UploadBiblo")]
         [HttpPost]
-        // public async Task<IHttpActionResult> Upload(string id)
-        public object UploadBibloAzure(string comment)
+        public object UploadBiblo(string description, string title)
         {
             var file = HttpContext.Current.Request.Files[0];//we have the file...
 
-            if (HttpContext.Current.Request.Files.Count > 0)
+
+            var postedFile = HttpContext.Current.Request.Files[0];
+            var filePath = HttpContext.Current.Server.MapPath("~/images/" + postedFile.FileName);
+
+
+            try
             {
-                var accountName = "cugonlinestorage";// ConfigurationManager.AppSettings["cugonlinestorage"];
-                var accountKey = "V9xb1fQUAt/90BtzG5+1o1rlcKMP1cY83PGONzzNu5bxXW4DZ09c+/yLW4ixbdnLaNcRpkrJX7OqFALKet0FcQ==";
-                CloudStorageAccount storageAccount = new CloudStorageAccount(new StorageCredentials(accountName, accountKey), true);
-
-                var storageClient = storageAccount.CreateCloudBlobClient();
-                var storageContainer = storageClient.GetContainerReference(ConfigurationManager.AppSettings.Get("CloudStorageContainerReference"));
-                storageContainer.CreateIfNotExists();
-                for (int fileNum = 0; fileNum < HttpContext.Current.Request.Files.Count; fileNum++)
+                var rootPath = "https://geared4it.net/images/";
+                var nextFileId = cugDB.BibloUploads.OrderByDescending(mf => mf.Id).FirstOrDefault().Id + 1;
+                BibloUpload f = new BibloUpload
                 {
+                    Id = nextFileId,
+                    fName = postedFile.FileName,// uniquefileName,// file.FileName;
+                                                // f.fNamePath = rootPath + uniquefileName;
+                    fDescription = description,
+                    fTitle = title,
+                    fType = Path.GetExtension(file.FileName)
+                };
 
-                    var uniquefileName = Guid.NewGuid().ToString() + Path.GetExtension(file.FileName);
+                cugDB.BibloUploads.Add(f);
+                cugDB.SaveChanges();
 
-                    if (HttpContext.Current.Request.Files[fileNum] != null && HttpContext.Current.Request.Files[fileNum].ContentLength > 0)
-                    {
-                        //do upload r
+                postedFile.SaveAs(filePath);
 
-
-
-
-                        CloudBlockBlob azureBlockBlob = storageContainer.GetBlockBlobReference(uniquefileName);
-                        azureBlockBlob.UploadFromStream(HttpContext.Current.Request.Files[fileNum].InputStream);
-
-                        try//saving to database...
-                        {
-                            var nextFileId = cugDB.BibloUploads.OrderByDescending(mf => mf.Id).FirstOrDefault().Id + 1;
-                            BibloUpload f = new BibloUpload
-                            {
-                                Id = nextFileId,
-                                fName = uniquefileName,// file.FileName;
-                                                       // f.fNamePath = rootPath + uniquefileName;
-                                fDescription = comment,
-                                fType = Path.GetExtension(file.FileName)
-                            };
-
-                            cugDB.BibloUploads.Add(f);
-                            cugDB.SaveChanges();
-
-                        }
-
-                        catch (Exception ex)
-                        {
-                            throw ex;
-
-                        }
-                    }
-                }
+                return postedFile.FileName + " filePath: " + filePath;
             }
-            return Ok();
+            catch (Exception ex)
+            {
+                return ex.Message;
+            }
         }
 
+
+        [Route("DeleteFile")]
+        [HttpPost]
+        public object DeleteFile(string id)
+        {
+            int fileId = int.Parse(id);
+            var item = cugDB.BibloUploads.Where(u => u.Id.Equals(fileId)).FirstOrDefault();
+
+            cugDB.BibloUploads.Remove(item);
+            cugDB.SaveChanges();
+
+            return new Response
+            { Status = "Success", Message = "File Reference Deleted Saved." };
+        }
+        [Route("EditFileDetails")]
+        [HttpPost]
+        public object EditFileDetails(string description, string title, string id, string sortOrder)
+        {
+            try
+            {
+                int fileId = int.Parse(id);
+                var item = cugDB.BibloUploads.Where(u => u.Id.Equals(fileId)).FirstOrDefault();
+
+                item.fTitle = title;
+                item.fDescription = description;
+                item.SortOrder = int.Parse(sortOrder);
+
+                cugDB.SaveChanges();
+                return new Response
+                { Status = "saved", Message = "Record SuccessFully Saved." };
+            }
+            catch (Exception ex)
+            {
+
+                throw;
+            }
+
+
+        }
         [Route("DeleteBibloImage")]
         [HttpPost]
         public object DeleteBibloImage(FilesInfo item)

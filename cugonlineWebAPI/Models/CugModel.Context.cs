@@ -40,7 +40,6 @@ namespace cugonlineWebAPI.Models
         public virtual DbSet<SeeMain> SeeMains { get; set; }
         public virtual DbSet<Main> Mains { get; set; }
         public virtual DbSet<BibloMain> BibloMains { get; set; }
-        public virtual DbSet<BibloUpload> BibloUploads { get; set; }
         public virtual DbSet<UserActivity> UserActivities { get; set; }
         public virtual DbSet<UserMaster> UserMasters { get; set; }
         public virtual DbSet<BibleAbbreviation> BibleAbbreviations { get; set; }
@@ -49,6 +48,7 @@ namespace cugonlineWebAPI.Models
         public virtual DbSet<BibleFootNoteContent> BibleFootNoteContents { get; set; }
         public virtual DbSet<BibleFootNote> BibleFootNotes { get; set; }
         public virtual DbSet<BibleItalic> BibleItalics { get; set; }
+        public virtual DbSet<BibloUpload> BibloUploads { get; set; }
     
         public virtual ObjectResult<sp_EmptyReferences_Result> sp_EmptyReferences(Nullable<int> strLength)
         {

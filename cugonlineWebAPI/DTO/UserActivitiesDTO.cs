@@ -24,5 +24,6 @@ namespace cugonlineWebAPI.DTO
         public int? AttachmentId { get; set; }
         public string FileUploaded { get; set; }
         public string UploadUrl { get; set; }
+        public  string Idx { get; set; }
     }
 }

@@ -18,5 +18,6 @@ namespace cugonlineWebAPI.VM
         public string CategoryN { get; set; }
         public int UserId { get; set; }
         public bool IsSuperAdmin { get; set; }
+        public string CurrentStatus { get; set; }
     }
 }

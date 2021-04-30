@@ -18,7 +18,6 @@
         <EntityTypeShape EntityType="testModel.SeeMain" Width="1.5" PointX="0.75" PointY="8.75" />
         <EntityTypeShape EntityType="testModel.Main" Width="1.5" PointX="5.375" PointY="6.375" />
         <EntityTypeShape EntityType="testModel.BibloMain" Width="1.5" PointX="7.375" PointY="9.75" />
-        <EntityTypeShape EntityType="testModel.BibloUpload" Width="1.5" PointX="9.375" PointY="9.75" />
         <EntityTypeShape EntityType="testModel.UserActivity" Width="1.5" PointX="10.375" PointY="5.75" />
         <EntityTypeShape EntityType="testModel.UserMaster" Width="1.5" PointX="11.375" PointY="0.75" />
         <EntityTypeShape EntityType="testModel.BibleAbbreviation" Width="1.5" PointX="3.75" PointY="11.75" />
@@ -27,6 +26,7 @@
         <EntityTypeShape EntityType="testModel.BibleFootNoteContent" Width="1.5" PointX="12.75" PointY="5.75" />
         <EntityTypeShape EntityType="testModel.BibleFootNote" Width="1.5" PointX="5.75" PointY="12.75" />
         <EntityTypeShape EntityType="testModel.BibleItalic" Width="1.5" PointX="7.75" PointY="12.75" />
+        <EntityTypeShape EntityType="testModel.BibloUpload" Width="1.5" PointX="10.375" PointY="12.75" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

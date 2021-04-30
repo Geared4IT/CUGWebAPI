@@ -19,5 +19,6 @@ namespace cugonlineWebAPI.Models
         public string fTitle { get; set; }
         public string fDescription { get; set; }
         public int Id { get; set; }
+        public Nullable<int> SortOrder { get; set; }
     }
 }

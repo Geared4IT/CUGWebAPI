@@ -18,13 +18,23 @@ using System.Net.Mail;
 using cugonlineWebAPI.DTO;
 using System.Text;
 using HtmlAgilityPack;
+using cugonlineWebAPI.Caching;
 
 namespace cugonlineWebAPI.Controllers
 {
 
+
+
     [RoutePrefix("Api/login")]
     public class LoginController : ApiController
     {
+        private string stopWords = "a,able,about,across,after,all,almost,also,am,among,an,and,any,are,as,at,be,because,been,but,by,can,cannot,could,dear,did,do,does,either" +
+            ",else,ever,every,for,from,get,got,had,has,have,he,her,hers,him,his,how,however,i,if,in,into,is,it,its,just,least,let,like" +
+            ",likely,may,me,might,most,must,my,neither,no,nor,not,of,off,often,on,only,or,other,our,own,rather,said,say,says,she,should,since,so,some,than,that,the,their,them,then,there,these,they,this,tis" +
+            ",to,too,twas,us,wants,was,we,were,what,when,where,which,while,who,whom,why,will,with,would,yet,you,your";
+
+
+
         //string rootPath = "https://cugonlinestorage.blob.core.windows.net/images/";
         //readonly string rootPath = "https://cugonlinestorage.blob.core.windows.net/img/";
         testEntities cugDB = new testEntities();
@@ -125,6 +135,7 @@ namespace cugonlineWebAPI.Controllers
                 var dt = DateTime.Now.AddHours(9);
                 UserActivity ua = new UserActivity
                 {
+                    Reference = "login",
                     Editor = u.Name,
                     DateIn = dt,
                     TimeIn = dt.ToString(),
@@ -268,7 +279,7 @@ namespace cugonlineWebAPI.Controllers
                 }
                 else
                 {
-                    return null;
+                    return null;// new BibleFootNoteContentDTO();
                 }
             }
             catch (Exception ex)
@@ -278,13 +289,15 @@ namespace cugonlineWebAPI.Controllers
         }
 
         [Route("BibleReferences")]
+        [CacheFilter(TimeDuration = 60000)] // 1 minutes
         [HttpGet]
         public List<BibleReferencesDTO> GetBibleReferences(string searchFilter)
         {
-            
+            //implement caching
+            Dictionary<object, object> obj = new Dictionary<object, object>();
+
             var results = cugDB.BibleBooks.Where(//m => m.BookId.Contains(filter) && 
                   m => m.ChapterId != 0
-                 // && m.BookId.Contains("Genesis") //&& m.ChapterId == 1 && m.VerseId == 16
                   ).Select(m => new BibleReferencesDTO
                   {
                       Id = m.ID,
@@ -297,7 +310,27 @@ namespace cugonlineWebAPI.Controllers
 
             if (!searchFilter.Equals("undefined"))
             {
-                results = results.Where(b => b.BodyText.ToLower().Contains(searchFilter)).ToList();
+                //store results
+                //var resultRepo = results;//clone
+                List<BibleReferencesDTO> resultRepo = new List<BibleReferencesDTO>();//clone
+                                                                                     //split keywords
+                string[] keywords = searchFilter.Split(' ');
+
+                //remove stop words from key words
+                string[] array_stopWords = stopWords.Split(',');
+
+                keywords = keywords.Except(array_stopWords).ToArray();
+
+                //iterate through keywords
+                foreach (var word in keywords)
+                {
+                    var keyword = word.ToLower();
+                    resultRepo.AddRange(results.Where(b => b.BodyText.ToLower().Contains(keyword)
+                                                    && !resultRepo.Select(r => r.BodyText.ToLower()).Contains(keyword)));
+                    //var temptest = results.Where(b => b.BodyText.ToLower().Contains(keyword)).ToList();
+
+                }
+                results = resultRepo.Distinct().ToList();
             }
 
             if (results != null)
@@ -312,19 +345,86 @@ namespace cugonlineWebAPI.Controllers
         /// get list of Figures
         /// </summary>
         /// <returns>list of figures</returns>
-        [Route("Figures")]
+        [Route("XReferences")]
+       // [CacheFilter(TimeDuration = 60000)] // 1 minutes
         [HttpGet]
-        public List<FiguresDTO> GetFigures(string filter)
+        public List<FiguresDTO> GetXReferences(string searchFilter = null)
         {
-            var results = cugDB.Mains.Where(m => m.Title.Contains(filter)).Select(m => new FiguresDTO
+            //implement caching
+           // Dictionary<object, object> obj = new Dictionary<object, object>();
+
+            List<FiguresDTO> results = new List<FiguresDTO>();
+
+            results = cugDB.Mains.Where(m => m.currentStatus.ToLower().Equals("live")
+            && !m.Title.Equals("")
+            && !m.Title.Equals("")
+            && m.Title != null).Select(m => new FiguresDTO
             {
                 Id = m.Id,
                 Idx = m.Idx,
                 Title = m.Title.ToUpper(),
                 LastUpdated = m.LastUpdated.ToString(),
-                LastUpdatedBy = (m.LastUpdatedBy.HasValue == true) ? cugDB.UserMasters.Where(u => u.ID.Equals(m.LastUpdatedBy.Value)).FirstOrDefault().Name : ""
+                LastUpdatedBy = (m.LastUpdatedBy.HasValue == true) ? cugDB.UserMasters.Where(u => u.ID.Equals(m.LastUpdatedBy.Value)).FirstOrDefault().Name : "",
+                CurrentStatus = m.currentStatus
 
             }).OrderBy(m => m.Title).ToList();
+
+
+            //if (!searchFilter.Equals("undefined"))
+            //{
+            //    //store results
+
+            //    //List<FiguresDTO> seeMainResults = cugDB.SeeMains.Where(m => m.Title.ToLower().Contains(searchFilter)
+            //    //                                        && !m.Title.Equals("")
+            //    //                                        && !m.Title.Equals("")
+            //    //                                        && m.Title != null).Select(m => new FiguresDTO
+            //    //                                        {
+            //    //                                            Id = m.Id,
+            //    //                                            Idx = m.Idx,
+            //    //                                            Title = m.Title.ToUpper(),
+
+
+            //    //                                        }).OrderBy(m => m.Title).ToList();
+            //    /*
+            //      var results = (from sm in cugDB.SeeMains
+            //                   join m in cugDB.Mains on sm.Idx equals m.Idx
+            //                   where (sm.Idx == idx.Replace("_", "/")
+            //                       || sm.Idx == idx)
+
+            //     */
+
+            //    //split keywords
+            //    string[] keywords = searchFilter.Split(' ');
+
+            //    //remove stop words from key words
+            //    string[] array_stopWords = stopWords.Split(',');
+
+            //    keywords = keywords.Except(array_stopWords).ToArray();
+
+            //    //iterate through keywords
+            //    foreach (var word in keywords)
+            //    {
+            //        var keyword = word.ToLower();
+
+            //        List<FiguresDTO> seeMainResults = cugDB.SeeMains.Where(m => m.Title.ToLower().Contains(searchFilter)
+            //                                           && !m.Title.Equals("")
+            //                                           && !m.Title.Equals("")
+            //                                           && m.Title != null).Select(m => new FiguresDTO
+            //                                           {
+            //                                               Id = m.Id,
+            //                                               Idx = m.Idx,
+            //                                               Title = m.Title.ToUpper(),
+
+
+            //                                           }).OrderBy(m => m.Title).ToList();
+
+            //        //resultRepo.AddRange(results.Where(b => b.BodyText.ToLower().Contains(keyword)
+            //        //                                && !resultRepo.Select(r => r.BodyText.ToLower()).Contains(keyword)));
+            //        //var temptest = results.Where(b => b.BodyText.ToLower().Contains(keyword)).ToList();
+
+            //    }
+            //    results = results.Distinct().ToList();
+            //}
 
             if (results != null)
             {
@@ -332,6 +432,60 @@ namespace cugonlineWebAPI.Controllers
             }
             else
                 return null;
+        }
+
+
+        [Route("Figures")]
+       
+        [HttpGet]
+        public List<FiguresDTO> GetFigures(string search,string isAdmin)
+        {
+
+            List<FiguresDTO> results = new List<FiguresDTO>();
+
+            if (String.IsNullOrEmpty(search))
+            {
+                results = cugDB.Mains.Where(m => m.currentStatus.ToLower().Equals("live")
+                 && !m.Title.Equals("")
+                 && !m.Title.Equals("")
+                 && m.Title != null).OrderBy(m => m.Title).Take(50).Select(m => new FiguresDTO
+                 {
+                     Id = m.Id,
+                     Idx = m.Idx,
+                     Title = m.Title.ToUpper(),
+                     LastUpdated = m.LastUpdated.ToString(),
+                     LastUpdatedBy = (m.LastUpdatedBy.HasValue == true) ? cugDB.UserMasters.Where(u => u.ID.Equals(m.LastUpdatedBy.Value)).FirstOrDefault().Name : "",
+                     CurrentStatus = m.currentStatus
+                 }).ToList();
+            }
+            else
+            {
+                results = cugDB.Mains.Where(m =>  !m.Title.Equals("")
+                && !m.Title.Equals("")
+                && m.Title.Contains(search)
+                && m.Title != null).OrderBy(m => m.Title).Select(m => new FiguresDTO
+                {
+                    Id = m.Id,
+                    Idx = m.Idx,
+                    Title = m.Title.ToUpper(),
+                    LastUpdated = m.LastUpdated.ToString(),
+                    LastUpdatedBy = (m.LastUpdatedBy.HasValue == true) ? cugDB.UserMasters.Where(u => u.ID.Equals(m.LastUpdatedBy.Value)).FirstOrDefault().Name : "",
+                    CurrentStatus = m.currentStatus
+                }).ToList();                     
+            }
+
+
+
+            if (results != null)
+            {
+                if (!isAdmin.Equals("true") && search != null)//only show live References
+                {
+                    results = results.Where(r => r.CurrentStatus.ToLower().Equals("Live")).ToList();
+                }
+                return results;
+            }
+            else
+                return new List<FiguresDTO>();//no results
         }
 
         /// <summary>
@@ -484,19 +638,57 @@ namespace cugonlineWebAPI.Controllers
         [HttpGet]
         public List<FiguresLinkDTO> FigureLinksList(string filter)
         {
-            //var results = cugDB.Mains.Select(m => new FiguresLinkDTO
-            var results = cugDB.Mains.Where(m => m.Title.Contains(filter)).Select(m => new FiguresLinkDTO
-            {
-                value = m.Idx,
-                label = m.Title.ToUpper(),
-            }).OrderBy(m => m.value).ToList();
 
-            if (results != null)
+            try
             {
-                return results;
+                List<FiguresLinkDTO> results = new List<FiguresLinkDTO>();
+                if (!string.IsNullOrEmpty(filter))
+                {
+                    //implement caching
+                    // Dictionary<object, object> obj = new Dictionary<object, object>();
+                    results = cugDB.Mains.Where(m => !m.currentStatus.Equals("Deleted") && m.Title.Contains(filter)
+                     && !m.Title.Equals("")
+                     && m.Title != null
+                       ).OrderBy(m => m.Title).Select(m => new FiguresLinkDTO
+                       {
+                           Id = m.Id,
+                           value = m.Idx,
+                           label = m.Title.ToUpper(),
+                           body = m.Body,
+                           meaning = m.Meaning
+
+                       }).ToList();
+                }
+
+                else
+                {
+                    results = cugDB.Mains.Where(m => m.currentStatus.ToLower().Equals("live")
+                        && !m.Title.Equals("")
+                        && m.Title != null
+                        ).OrderBy(m => m.Title).Take(10).Select(m => new FiguresLinkDTO
+                        {
+                            Id = m.Id,
+                            value = m.Idx,
+                            label = m.Title.ToUpper(),
+                            body = m.Body,
+                            meaning = m.Meaning
+
+                        }).ToList();
+                }
+
+
+                if (results != null)
+                {
+                    return results;
+                }
+                else
+                    return null;
             }
-            else
-                return null;
+            catch (Exception ex)
+            {
+
+                throw;
+            }
         }
 
         //
@@ -602,21 +794,21 @@ namespace cugonlineWebAPI.Controllers
             {
 
                 var results = (from sm in cugDB.SeeMains
-                               join m in cugDB.Mains on sm.Link equals m.Idx
-                               where m.Idx == idx
+                               join m in cugDB.Mains on sm.Idx equals m.Idx
+                               where (sm.Idx == idx.Replace("_", "/")
+                                   || sm.Idx == idx)
                                select new FigureLinksDTO
                                {
                                    LinkId = sm.Id,
-                                   LinkIdx = sm.Idx,// sm.Idx,
+                                   LinkIdx = sm.Link.Replace("/", "_"),// sm.Idx,
                                    LinkTitle = sm.Title,
-                                   LinkIdxFriendlyName = sm.Idx.Replace("_", " ")
+                                   LinkIdxFriendlyName = sm.Title// sm.Idx.Replace("_", " ")
                                }).OrderBy(x => x.LinkIdx).ToList();
 
                 if (results != null) return results;
             }
             catch (Exception ex)
             {
-
                 throw;
             }
 
@@ -655,16 +847,17 @@ namespace cugonlineWebAPI.Controllers
         [HttpPost]
         public object DeleteReference(FigureLinksDTO reference)
         {
-            var updateReferece = cugDB.SeeMains.Where(sm => sm.Idx.Equals(reference.LinkIdx) && sm.Link.Equals(reference.LinkTitle)).FirstOrDefault();
+            //var updateReferece = cugDB.SeeMains.Where(sm => sm.Idx.Equals(reference.LinkIdx) && sm.Link.Equals(reference.LinkTitle)).FirstOrDefault();
+            var updateReferece = cugDB.SeeMains.Where(sm => sm.Id.Equals(reference.LinkId) && sm.Link.Equals(reference.LinkTitle)).FirstOrDefault();
 
-            cugDB.SeeMains.Remove(updateReferece);
-            cugDB.SaveChanges();
+            if (updateReferece != null) cugDB.SeeMains.Remove(updateReferece);
+            //cugDB.SaveChanges();
 
             //remove  reciprocal
             var updateReciprocal = cugDB.SeeMains.Where(sm => sm.Idx.Equals(reference.LinkTitle)
                                                      && sm.Link.Equals(reference.LinkIdx)).FirstOrDefault();
 
-            cugDB.SeeMains.Remove(updateReciprocal);
+            if (updateReciprocal != null) cugDB.SeeMains.Remove(updateReciprocal);
             cugDB.SaveChanges();
 
             return new Response
@@ -680,7 +873,7 @@ namespace cugonlineWebAPI.Controllers
             if (updateImage == null)
             {
                 return new Response
-                { Status = "Success", Message = "Image Deleted Saved." };
+                { Status = "Success", Message = "Image Deleted." };
             }
             updateImage.IsDeleted = true;
 
@@ -688,7 +881,7 @@ namespace cugonlineWebAPI.Controllers
             cugDB.SaveChanges();
 
             return new Response
-            { Status = "Success", Message = "Reference Deleted Saved." };
+            { Status = "Success", Message = "Reference Deleted." };
         }
 
         [Route("AddReference")]
@@ -696,23 +889,25 @@ namespace cugonlineWebAPI.Controllers
         public object AddReference(FigureLinksDTO reference)
         {
 
-            var linkInfo = cugDB.Mains.Where(m => m.Idx.Equals(reference.LinkIdx)).FirstOrDefault();//get link information
+            if(reference.Link == reference.LinkIdx)
+                return new Response
+                { Status = "Success", Message = "Cannot self XReference." };
 
-            var updateReferece = cugDB.SeeMains.Where(sm => sm.Idx.Equals(reference.LinkIdx)  //check if link exists in Reference...
-                                                         && sm.Link.Equals(reference.Link)).FirstOrDefault();
+            var linkInfo = cugDB.Mains.Where(m => m.Id.Equals(reference.LinkId)).FirstOrDefault();//get link information
+
+            var updateReference = cugDB.SeeMains.Where(sm => sm.Idx.Equals(reference.Link)  //check if link exists in Reference...
+                                                         && sm.Link.Equals(reference.LinkIdx)).FirstOrDefault();
 
             try
             {
-                if (updateReferece == null)
+                if (updateReference == null)
                 {
                     //add to seemain
                     SeeMain m = new SeeMain();
-                    //var maxId = cugDB.SeeMains.Max(sm => sm.Id) + 1;
-                    //m.Id = maxId;
-                    m.Idx = reference.LinkIdx;
-                    m.Link = reference.Link;
+                    m.Idx = reference.Link;//reference.LinkIdx.Replace("/","_");
+                    m.Link = reference.LinkIdx;// reference.Link;
                     m.Title = linkInfo.Title;//.LinkTitle.Replace("_", " ");
-                    m.categoryN = linkInfo.CategoryN.Trim();//.Link;
+                    m.categoryN = !string.IsNullOrEmpty(linkInfo.CategoryN) ? linkInfo.CategoryN.Trim() : "All";//.Link; linkInfo.CategoryN.Trim();//.Link;
                     m.catFlag = "O";
                     cugDB.SeeMains.Add(m);
                     cugDB.SaveChanges();
@@ -720,36 +915,37 @@ namespace cugonlineWebAPI.Controllers
                     //do reciprocal
                     var recipricolInfo = cugDB.Mains.Where(m_recip => m_recip.Idx.Equals(reference.Link)).FirstOrDefault();//get inverse link information
 
-                    var reciprocalReferece = cugDB.SeeMains.Where(sm_recip => sm_recip.Idx.Equals(reference.Link)  //check inverse...
-                                                                 && sm_recip.Link.Equals(reference.LinkIdx)).FirstOrDefault();
+                    //var reciprocalReferece = cugDB.SeeMains.Where(sm_recip => sm_recip.Idx.Equals(reference.Link)  //check inverse...
+                    //                                             && sm_recip.Link.Equals(reference.LinkIdx)).FirstOrDefault();
+                    var reciprocalReferece = cugDB.SeeMains.Where(sm_recip => sm_recip.Idx.Equals(reference.LinkIdx)  //check inverse...
+                                                           && sm_recip.Link.Equals(reference.Link)).FirstOrDefault();
 
                     if (reciprocalReferece == null)
                     {
                         //add to reciprocal seemain
                         SeeMain m_recip = new SeeMain();
-                        m_recip.Idx = reference.Link;
-                        m_recip.Link = reference.LinkIdx;
+                        m_recip.Idx = reference.LinkIdx;
+                        m_recip.Link = reference.Link;
                         m_recip.Title = recipricolInfo.Title;
                         m_recip.categoryN = !string.IsNullOrEmpty(recipricolInfo.CategoryN) ? recipricolInfo.CategoryN.Trim() : "All";//.Link;
                         m_recip.catFlag = "O";
                         cugDB.SeeMains.Add(m_recip);
                         cugDB.SaveChanges();
-
                     }
 
                     return new Response
-                    { Status = "Success", Message = "Record SuccessFully Saved." };
+                    { Status = "Success", Message = "XReference Saved!" };
 
                 }
 
                 return new Response
-                { Status = "Success", Message = "Reference Already Exists." };
+                { Status = "Success", Message = "XReference Already Exists." };
             }
             catch (Exception ex)
             {
-                return "Error " + ex.Message;
+                return new Response
+                { Status = "Success", Message = ex.Message };
             }
-
 
         }
 
@@ -772,7 +968,7 @@ namespace cugonlineWebAPI.Controllers
                     referenceItem.LastUpdatedBy = fig.LastUpdatedBy;
                     referenceItem.CategoryN = (fig.CategoryN == null) ? "All" : fig.CategoryN.Trim();// fig.CategoryN.Trim();
                     // referenceItem.currentStatus = (fig.LastUpdatedBy == 6) ? "live" : "review";
-                    referenceItem.currentStatus = "review";// (fig.IsSuperAdmin) ? "live" : "review";
+                    referenceItem.currentStatus = (fig.CurrentStatus == null) ? "review" : fig.CurrentStatus;// (fig.IsSuperAdmin) ? "live" : "review";
 
                     cugDB.Entry(referenceItem).State = System.Data.Entity.EntityState.Modified;
 
@@ -792,7 +988,7 @@ namespace cugonlineWebAPI.Controllers
                     m.Meaning = fig.Meaning;
                     m.DateCreated = DateTime.Now;
                     m.CreatedBy = fig.LastUpdatedBy;
-                    m.LastUpdatedBy = fig.LastUpdatedBy.Value;
+                    m.LastUpdatedBy = (fig.LastUpdatedBy.HasValue) ? fig.LastUpdatedBy.Value : 0;
                     m.CategoryN = (fig.CategoryN == null) ? "All" : fig.CategoryN.Trim();
                     m.currentStatus = (fig.IsSuperAdmin) ? "review" : "new";
                     m.LastUpdated = DateTime.Now;
@@ -800,14 +996,14 @@ namespace cugonlineWebAPI.Controllers
                     cugDB.Mains.Add(m);
                     cugDB.SaveChanges();
                     //log to User Activities
-                    LogUserActivityEditReference(m, fig.LastUpdatedBy.Value);
+                    LogUserActivityEditReference(m, fig.UserId);
                 }
 
                 //email hotlink to David for Review
                 //EmailHotLink(refIdx);
-
+                var message = (fig.CurrentStatus != "Deleted") ? "Record SuccessFully Saved." : "Record Deleted.";
                 return new Response
-                { Status = refIdx.ToString(), Message = "Record SuccessFully Saved." };
+                { Status = refIdx.ToString(), Message = message };
             }
             catch (Exception ex)
             {
@@ -841,7 +1037,7 @@ namespace cugonlineWebAPI.Controllers
 
                     refIdx = referenceItem.Idx;
                     cugDB.SaveChanges();
-                    LogUserActivityEditReference(referenceItem, fig.LastUpdatedBy.Value);
+                    LogUserActivityEditReference(referenceItem, fig.UserId);
                 }
                 else//add
                 {
@@ -864,7 +1060,7 @@ namespace cugonlineWebAPI.Controllers
                     cugDB.Mains.Add(m);
                     cugDB.SaveChanges();
                     //log to User Activities
-                    LogUserActivityEditReference(m, fig.LastUpdatedBy.Value);
+                    LogUserActivityEditReference(m, fig.UserId);
                 }
 
                 //email hotlink to David for Review
@@ -891,20 +1087,39 @@ namespace cugonlineWebAPI.Controllers
 
             try
             {
+
+                // return;
                 var u = cugDB.UserMasters.Where(x => x.ID.Equals(userId)).FirstOrDefault();
+                if (u == null) return;
+                //check if reference already logged
+                var ar = cugDB.UserActivities.Where(ua => ua.AttachmentId.Value.Equals(m.Id)).FirstOrDefault();
 
                 var dt = DateTime.Now.AddHours(9);
-                UserActivity ua = new UserActivity
+                if (ar == null)//log
                 {
-                    Editor = u.UserName,
-                    Reference = m.Idx,
-                    DateIn = Convert.ToDateTime(dt),
-                    Edited = DateTime.Now.ToString(),
-                    UserActivitiesID = cugDB.UserActivities.Max(maxID => maxID.UserActivitiesID) + 1,
-                    ID = cugDB.UserActivities.Max(maxID => maxID.UserActivitiesID) + 1
-                };
+                    UserActivity ua = new UserActivity
+                    {
+                        Editor = u.UserName,
+                        Reference = m.Title,
+                        DateIn = Convert.ToDateTime(dt),
+                        Edited = Convert.ToDateTime(dt).ToString(),
+                        UserActivitiesID = cugDB.UserActivities.Max(maxID => maxID.UserActivitiesID) + 1,
+                        ID = cugDB.UserActivities.Max(maxID => maxID.UserActivitiesID) + 1,
+                        AttachmentId = m.Id
+                    };
 
-                cugDB.UserActivities.Add(ua);
+                    cugDB.UserActivities.Add(ua);
+                }
+                else
+                {//update datein time stamp
+                    ar.Editor = u.UserName;
+                    ar.Reference = m.Title;
+                    ar.DateIn = Convert.ToDateTime(dt);
+                    ar.Edited = Convert.ToDateTime(dt).ToString();
+                    cugDB.SaveChanges();
+                }
+
+
                 cugDB.SaveChanges();
             }
             catch (Exception ex)
@@ -925,6 +1140,7 @@ namespace cugonlineWebAPI.Controllers
 
             try
             {
+                return;
                 var u = cugDB.UserMasters.Where(x => x.ID.Equals(userId)).FirstOrDefault();
 
                 var dt = DateTime.Now.AddHours(9);
@@ -1221,8 +1437,9 @@ namespace cugonlineWebAPI.Controllers
             {
                 loginTo = loginTo.AddDays(1);
                 var result = cugDB.UserActivities.Where(ua => (ua.DateIn >= loginFrom && ua.DateIn <= loginTo)
-                                                      && ua.Reference.Equals(null)
-                                                      && ua.Uploaded.Equals(null)).ToList().Select(ua => new UserActivitiesDTO
+                                                      && ua.Reference.Equals("login")
+                                                      //   && ua.Uploaded.Equals(null)
+                                                      ).ToList().Select(ua => new UserActivitiesDTO
                                                       {
                                                           Editor = ua.Editor,
                                                           DateInFormatted = (ua.DateIn.HasValue) ? ua.DateIn.Value.ToString("dd MMM yyyy HH:mm") : "",
@@ -1252,52 +1469,61 @@ namespace cugonlineWebAPI.Controllers
             {
 
                 loginTo = loginTo.AddDays(1);
-            var referenceResult = cugDB.UserActivities.Where(ua => (ua.DateIn >= loginFrom && ua.DateIn <= loginTo)
-                                                   && !ua.Reference.Equals(null)
-                                                   && !ua.AttachmentId.HasValue
-                                                   ).ToList().Select(ua => new UserActivitiesDTO
-                                                   {
-                                                       Editor = ua.Editor,
-                                                       DateInFormatted = (ua.DateIn.HasValue) ? ua.DateIn.Value.ToString("dd MMM yyyy HH:mm") : "",
-                                                       Reference = ua.Reference,
-                                                       FileUploadComment = "",
-                                                       FileUploaded = "",
-                                                       UploadUrl = "",
-                                                       AttachmentId = null,
-                                                       DateIn = ua.DateIn.Value,
+                var lastHistoryDate = DateTime.Now.AddMonths(-1);
 
-                                                   }).OrderByDescending(ua => ua.DateIn).ToList();
+                var referenceResult = (from ua in cugDB.UserActivities
+                                       join m in cugDB.Mains on ua.AttachmentId equals m.Id //userActity ID = ReferenceId
+                                       where ua.DateIn.Value >= loginFrom && ua.DateIn.Value <= loginTo
+                                        && ua.AttachmentId != null
+                                        && m.currentStatus.ToLower() != "deleted"
+                                       && ua.DateIn > lastHistoryDate
+                                       orderby ua.DateIn descending
+                                       select new { ua.Editor, ua.DateIn, m.Title, ua.AttachmentId, m.Id, m.Idx }).ToList().Select(x => new UserActivitiesDTO
+                                       {
+                                           Editor = x.Editor,
+                                           //DateInFormatted = Convert.ToString(x.DateIn.Value),
+                                           DateInFormatted = (x.DateIn.HasValue) ? x.DateIn.Value.ToString("dd MMM yyyy HH:mm") : "",
+                                           Reference = x.Title,
+                                           FileUploadComment = "",
+                                           FileUploaded = "",
+                                           UploadUrl = "",
+                                           AttachmentId = x.Id,
+                                           DateIn = x.DateIn.Value,
+                                           ID = x.AttachmentId.Value,
+                                           Idx = x.Idx
 
+                                       }).ToList();
 
-                var uploadResult = (from ua in cugDB.UserActivities
-                                    join ml in cugDB.MainFiles on ua.AttachmentId.Value equals ml.id
-                                    where ua.DateIn.Value >= loginFrom && ua.DateIn.Value <= loginTo
-                                    && ua.AttachmentId != null
-                                    && ml.IsDeleted.Value != true
-                                    select new UserActivitiesDTO
-                                    {
-                                        Editor = ua.Editor,
-                                        DateInFormatted = (ua.DateIn != null) ? ua.DateIn.Value.ToString() : "",
-                                        Reference = ua.Reference,
-                                        FileUploadComment = ml.fComment,
-                                        FileUploaded = ml.fName,
-                                        UploadUrl = ml.fNamePath,
-                                        AttachmentId = ua.AttachmentId.Value,
-                                        DateIn = ua.DateIn.Value
-
-
-                                    }).OrderByDescending(u => u.DateIn).ToList();
-
-                var formattedUpload = new List<UserActivitiesDTO>();
-
-                foreach (var item in uploadResult)
-                {
-                    item.DateInFormatted = item.DateIn.Value.ToString("dd MMM yyyy HH:mm");
-                    formattedUpload.Add(item);
-                }
+                //var uploadResult = (from ua in cugDB.UserActivities
+                //                    join ml in cugDB.MainFiles on ua.AttachmentId.Value equals ml.id
+                //                    where ua.DateIn.Value >= loginFrom && ua.DateIn.Value <= loginTo
+                //                    && ua.AttachmentId != null
+                //                    && ml.IsDeleted.Value != true
+                //                    select new UserActivitiesDTO
+                //                    {
+                //                        Editor = ua.Editor,
+                //                        DateInFormatted = (ua.DateIn != null) ? ua.DateIn.Value.ToString("dd MMM yyyy HH:mm") : "",
+                //                        Reference = ua.Reference,
+                //                        FileUploadComment = ml.fComment,
+                //                        FileUploaded = ml.fName,
+                //                        UploadUrl = ml.fNamePath,
+                //                        AttachmentId = ua.AttachmentId.Value,
+                //                        DateIn = ua.DateIn.Value
 
 
-                var result = referenceResult.Union(formattedUpload).ToList();
+                //                    }).OrderByDescending(u => u.DateIn).ToList();
+
+                //var formattedUpload = new List<UserActivitiesDTO>();
+
+                //foreach (var item in uploadResult)
+                //{
+                //    item.DateInFormatted = item.DateIn.Value.ToString("dd MMM yyyy HH:mm");
+                //    formattedUpload.Add(item);
+                //}
+
+
+                //var result = referenceResult.Union(formattedUpload).ToList();
+                var result = referenceResult.ToList();
 
                 if (result != null)
                 {
@@ -1314,7 +1540,7 @@ namespace cugonlineWebAPI.Controllers
                 throw;
             }
 
-            
+
         }
 
         [Route("GetNewRegistration")]
@@ -1349,6 +1575,7 @@ namespace cugonlineWebAPI.Controllers
                 var images = (from mfl in cugDB.MainFilesLinks
                               join mf in cugDB.MainFiles on mfl.idFiles equals mf.id
                               where mfl.Idx == idx
+                              && mfl.Idx != "0"
                               && mf.IsDeleted != true
                               select new FilesInfo()
                               {
@@ -1368,19 +1595,9 @@ namespace cugonlineWebAPI.Controllers
         {
             var file = HttpContext.Current.Request.Files[0];//we have the file...
 
-            // var uniquefileName = id + "_" + Guid.NewGuid().ToString() + Path.GetExtension(file.FileName);
-
-            //string ftpAddress = @"197.242.150.135"; // ConfigurationManager.AppSettings.Get("CloudStorageContainerReference")
-            //string username = "cugftp"; // ConfigurationManager.AppSettings.Get("CloudStorageContainerReference")
-            //string password = "Kjgv5FtNX!2$7qBtP3"; // ConfigurationManager.AppSettings.Get("CloudStorageContainerReference")
-
             var postedFile = HttpContext.Current.Request.Files[0];
             var filePath = HttpContext.Current.Server.MapPath("~/images/" + postedFile.FileName);
-            // var dbtesting = filePath;
 
-            // var destinationDirectory = new DirectoryInfo(Path.GetDirectoryName(filePath));
-
-            
             try
             {
                 //log to database
@@ -1420,7 +1637,7 @@ namespace cugonlineWebAPI.Controllers
             {
                 return ex.Message;
             }
-           
+
 
 
         }
@@ -1570,8 +1787,11 @@ namespace cugonlineWebAPI.Controllers
 
     public class FiguresLinkDTO
     {
+        public int Id { get; set; }
         public string label { get; set; }
         public string value { get; set; }
+        public string body { get; set; }
+        public string meaning { get; set; }
     }
 
     public class BibleFootNoteContentDTO
@@ -1587,6 +1807,7 @@ namespace cugonlineWebAPI.Controllers
         public int VerseId { get; set; }
         public string BodyText { get; set; }
         public string CompoKey { get; set; }
+        public int ResultsFound { get; set; }
     }
 
     public class FiguresDTO
@@ -1640,7 +1861,8 @@ namespace cugonlineWebAPI.Controllers
         public string FilePath { get; set; }
         public string FileName { get; set; }
         public string FileComment { get; set; }
-        public string LinkTitle { get; set; }
+        public string FileTitle { get; set; }
+        public int? SortOrder { get; set; }
     }
     #endregion
 }
