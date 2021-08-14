@@ -346,12 +346,12 @@ namespace cugonlineWebAPI.Controllers
         /// </summary>
         /// <returns>list of figures</returns>
         [Route("XReferences")]
-       // [CacheFilter(TimeDuration = 60000)] // 1 minutes
+        // [CacheFilter(TimeDuration = 60000)] // 1 minutes
         [HttpGet]
         public List<FiguresDTO> GetXReferences(string searchFilter = null)
         {
             //implement caching
-           // Dictionary<object, object> obj = new Dictionary<object, object>();
+            // Dictionary<object, object> obj = new Dictionary<object, object>();
 
             List<FiguresDTO> results = new List<FiguresDTO>();
 
@@ -436,9 +436,9 @@ namespace cugonlineWebAPI.Controllers
 
 
         [Route("Figures")]
-       
+
         [HttpGet]
-        public List<FiguresDTO> GetFigures(string search,string isAdmin)
+        public List<FiguresDTO> GetFigures(string search, string isAdmin)
         {
 
             List<FiguresDTO> results = new List<FiguresDTO>();
@@ -447,7 +447,7 @@ namespace cugonlineWebAPI.Controllers
             {
                 results = cugDB.Mains.Where(m => m.currentStatus.ToLower().Equals("live")
                  && !m.Title.Equals("")
-                 && !m.Title.Equals("")
+                  || m.Body.Contains(search)
                  && m.Title != null).OrderBy(m => m.Title).Take(50).Select(m => new FiguresDTO
                  {
                      Id = m.Id,
@@ -460,9 +460,10 @@ namespace cugonlineWebAPI.Controllers
             }
             else
             {
-                results = cugDB.Mains.Where(m =>  !m.Title.Equals("")
+                results = cugDB.Mains.Where(m => !m.Title.Equals("")
                 && !m.Title.Equals("")
                 && m.Title.Contains(search)
+                || m.Body.Contains(search)
                 && m.Title != null).OrderBy(m => m.Title).Select(m => new FiguresDTO
                 {
                     Id = m.Id,
@@ -471,7 +472,7 @@ namespace cugonlineWebAPI.Controllers
                     LastUpdated = m.LastUpdated.ToString(),
                     LastUpdatedBy = (m.LastUpdatedBy.HasValue == true) ? cugDB.UserMasters.Where(u => u.ID.Equals(m.LastUpdatedBy.Value)).FirstOrDefault().Name : "",
                     CurrentStatus = m.currentStatus
-                }).ToList();                     
+                }).ToList();
             }
 
 
@@ -480,7 +481,7 @@ namespace cugonlineWebAPI.Controllers
             {
                 if (!isAdmin.Equals("true") && search != null)//only show live References
                 {
-                    results = results.Where(r => r.CurrentStatus.ToLower().Equals("Live")).ToList();
+                    results = results.Where(r => r.CurrentStatus.ToLower().Equals("live")).ToList();
                 }
                 return results;
             }
@@ -638,15 +639,13 @@ namespace cugonlineWebAPI.Controllers
         [HttpGet]
         public List<FiguresLinkDTO> FigureLinksList(string filter)
         {
-
             try
             {
                 List<FiguresLinkDTO> results = new List<FiguresLinkDTO>();
                 if (!string.IsNullOrEmpty(filter))
                 {
-                    //implement caching
-                    // Dictionary<object, object> obj = new Dictionary<object, object>();
-                    results = cugDB.Mains.Where(m => !m.currentStatus.Equals("Deleted") && m.Title.Contains(filter)
+                    results = cugDB.Mains.Where(m => !m.currentStatus.Equals("Deleted") 
+                    && (m.Title.Contains(filter) || m.Body.Contains(filter))
                      && !m.Title.Equals("")
                      && m.Title != null
                        ).OrderBy(m => m.Title).Select(m => new FiguresLinkDTO
@@ -654,7 +653,7 @@ namespace cugonlineWebAPI.Controllers
                            Id = m.Id,
                            value = m.Idx,
                            label = m.Title.ToUpper(),
-                           body = m.Body,
+                           body = "",// m.Body,
                            meaning = m.Meaning
 
                        }).ToList();
@@ -789,10 +788,8 @@ namespace cugonlineWebAPI.Controllers
         [HttpGet]
         public List<FigureLinksDTO> GetFigureLinksById(string idx)
         {
-
             try
             {
-
                 var results = (from sm in cugDB.SeeMains
                                join m in cugDB.Mains on sm.Idx equals m.Idx
                                where (sm.Idx == idx.Replace("_", "/")
@@ -805,7 +802,7 @@ namespace cugonlineWebAPI.Controllers
                                    LinkIdxFriendlyName = sm.Title// sm.Idx.Replace("_", " ")
                                }).OrderBy(x => x.LinkIdx).ToList();
 
-                if (results != null) return results;
+                if (results != null) return results.Where(r => !r.LinkTitle.Equals(idx)).ToList();
             }
             catch (Exception ex)
             {
@@ -848,7 +845,7 @@ namespace cugonlineWebAPI.Controllers
         public object DeleteReference(FigureLinksDTO reference)
         {
             //var updateReferece = cugDB.SeeMains.Where(sm => sm.Idx.Equals(reference.LinkIdx) && sm.Link.Equals(reference.LinkTitle)).FirstOrDefault();
-            var updateReferece = cugDB.SeeMains.Where(sm => sm.Id.Equals(reference.LinkId) && sm.Link.Equals(reference.LinkTitle)).FirstOrDefault();
+            var updateReferece = cugDB.SeeMains.Where(sm => sm.Idx.Equals(reference.LinkIdx) && sm.Link.Equals(reference.LinkTitle)).FirstOrDefault();
 
             if (updateReferece != null) cugDB.SeeMains.Remove(updateReferece);
             //cugDB.SaveChanges();
@@ -884,12 +881,18 @@ namespace cugonlineWebAPI.Controllers
             { Status = "Success", Message = "Reference Deleted." };
         }
 
+        /// <summary>
+        /// Add Cross Reference to current Figure
+        /// Reciprocal Definition: Add current Figure to Cross Reference Figure... (Cross Polunate)
+        /// </summary>
+        /// <param name="reference"></param>
+        /// <returns></returns>
         [Route("AddReference")]
         [HttpPost]
         public object AddReference(FigureLinksDTO reference)
         {
 
-            if(reference.Link == reference.LinkIdx)
+            if (reference.Link == reference.LinkIdx)
                 return new Response
                 { Status = "Success", Message = "Cannot self XReference." };
 
@@ -902,24 +905,24 @@ namespace cugonlineWebAPI.Controllers
             {
                 if (updateReference == null)
                 {
-                    //add to seemain
+                    var titleFormatted = (reference.LinkIdx.Contains("_") ? reference.LinkIdx.Remove(reference.LinkIdx.LastIndexOf("_")) : reference.LinkIdx);
+                    //add to seemain ( //selected XRef does not exist in current Figure so add it..._
                     SeeMain m = new SeeMain();
                     m.Idx = reference.Link;//reference.LinkIdx.Replace("/","_");
                     m.Link = reference.LinkIdx;// reference.Link;
-                    m.Title = linkInfo.Title;//.LinkTitle.Replace("_", " ");
+                    m.Title = titleFormatted ;// remove ID number
                     m.categoryN = !string.IsNullOrEmpty(linkInfo.CategoryN) ? linkInfo.CategoryN.Trim() : "All";//.Link; linkInfo.CategoryN.Trim();//.Link;
                     m.catFlag = "O";
                     cugDB.SeeMains.Add(m);
                     cugDB.SaveChanges();
 
                     //do reciprocal
-                    var recipricolInfo = cugDB.Mains.Where(m_recip => m_recip.Idx.Equals(reference.Link)).FirstOrDefault();//get inverse link information
-
-                    //var reciprocalReferece = cugDB.SeeMains.Where(sm_recip => sm_recip.Idx.Equals(reference.Link)  //check inverse...
-                    //                                             && sm_recip.Link.Equals(reference.LinkIdx)).FirstOrDefault();
-                    var reciprocalReferece = cugDB.SeeMains.Where(sm_recip => sm_recip.Idx.Equals(reference.LinkIdx)  //check inverse...
+                    var recipricolInfo = cugDB.Mains.Where(m_recip => m_recip.Idx.Equals(reference.Link)).FirstOrDefault();//1. get inverse link information (Cross Reference Details)
+          
+                    var reciprocalReferece = cugDB.SeeMains.Where(sm_recip => sm_recip.Idx.Equals(reference.LinkIdx)  //2. check inverse in Main Details...if current Figure details exists
                                                            && sm_recip.Link.Equals(reference.Link)).FirstOrDefault();
 
+                    //select XRef does not exist in current Figure so add it...
                     if (reciprocalReferece == null)
                     {
                         //add to reciprocal seemain
@@ -1309,7 +1312,7 @@ namespace cugonlineWebAPI.Controllers
         {
             try
             {
-                if (user.ID != -1)
+                if (user.ID > 0)
                 {
 
                     var Update = cugDB.UserMasters.Find(user.ID);
@@ -1339,6 +1342,8 @@ namespace cugonlineWebAPI.Controllers
                     um.Password = user.Password;
                     um.Email = user.Email;
                     um.categoryN = user.categoryN;
+                    um.isSuperAdmin = user.isSuperAdmin;
+                    um.IsDeleted = false;
                     um.Date_added = DateTime.Now.Date.ToLongDateString();
 
                     cugDB.UserMasters.Add(um);
@@ -1569,7 +1574,7 @@ namespace cugonlineWebAPI.Controllers
             List<FilesInfo> files = new List<FilesInfo>();
 
             //var filePath = "https://cugonlinestorage.blob.core.windows.net/img/";//!cid_00ba01ca6c31%245f9e07f0%240f01a8c0%40desktoptammy_t.jpg";//
-            var filePath = "https://cugonline.co.za/images/";
+            var filePath = "https://cugonline.co.za/images/pdf_icon.png";
             using (testEntities db = new testEntities())
             {
                 var images = (from mfl in cugDB.MainFilesLinks
@@ -1581,8 +1586,13 @@ namespace cugonlineWebAPI.Controllers
                               {
                                   FileId = mf.id,
                                   FileName = mf.fName,
-                                  FilePath = mf.fNamePath,//  filePath + mf.fName,
-                                  FileComment = mf.fComment
+                                  FilePath = (mf.fNamePath != null) ?
+                                                (mf.fNamePath.Contains(".pdf") || mf.fNamePath.Contains(".doc")) ? filePath : mf.fNamePath
+                                                : filePath,//  filePath + mf.fName,
+                                  FileComment = mf.fComment,
+                                  ThumbNail = (mf.fNamePath != null) ?
+                                                (mf.fNamePath.Contains(".pdf") || mf.fNamePath.Contains(".doc")) ? mf.fNamePath : mf.fNamePath
+                                                : filePath
                               }).ToList();
 
                 return images;
@@ -1861,7 +1871,7 @@ namespace cugonlineWebAPI.Controllers
         public string FilePath { get; set; }
         public string FileName { get; set; }
         public string FileComment { get; set; }
-        public string FileTitle { get; set; }
+        public string ThumbNail { get; set; }
         public int? SortOrder { get; set; }
     }
     #endregion
