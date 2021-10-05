@@ -27,7 +27,7 @@ namespace cugonlineWebAPI.Controllers
             using (var client = new HttpClient())
             {
                 //Passing service base url    
-                client.BaseAddress = new Uri("http://cugonline.co.za");
+                client.BaseAddress = new Uri("https://cugonline.co.za/");
 
                 client.DefaultRequestHeaders.Clear();
                 //Define request data format    

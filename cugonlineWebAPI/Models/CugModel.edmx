@@ -118,7 +118,7 @@ warning 6002: The table/view 'test.dbo.FileExtensions' does not have a primary k
           <Property Name="fThumbs" Type="nvarchar" MaxLength="16" />
           <Property Name="filePath" Type="varchar" MaxLength="255" />
           <Property Name="fMainId" Type="int" Nullable="false" />
-          <Property Name="fileID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="fileID" Type="int" Nullable="false" StoreGeneratedPattern="Identity" />
         </EntityType>
         <!--Errors Found During Generation:
 warning 6002: The table/view 'test.dbo.FilesLink' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
@@ -186,13 +186,13 @@ warning 6002: The table/view 'test.dbo.FileTypes' does not have a primary key de
           <Key>
             <PropertyRef Name="id" />
           </Key>
-          <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="id" Type="int" Nullable="false" StoreGeneratedPattern="Identity" />
           <Property Name="Idx" Type="varchar" MaxLength="200" Nullable="false" />
           <Property Name="Link" Type="varchar" MaxLength="200" Nullable="false" />
           <Property Name="Title" Type="varchar" MaxLength="200" Nullable="false" />
           <Property Name="CategoryN" Type="varchar" MaxLength="200" Nullable="false" />
           <Property Name="CatFlag" Type="varchar" MaxLength="200" Nullable="false" />
-          <Property Name="DateCreated" Type="datetime" Nullable="false" />
+          <Property Name="DateCreated" Type="smalldatetime" Nullable="false" />
         </EntityType>
         <!--Errors Found During Generation:
 warning 6002: The table/view 'test.dbo.Request_detail' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
@@ -203,9 +203,9 @@ warning 6002: The table/view 'test.dbo.Request_detail' does not have a primary k
             <PropertyRef Name="Id" />
           </Key>
           <Property Name="Idx" Type="int" Nullable="false" />
-          <Property Name="Update_date" Type="datetime" Nullable="false" />
+          <Property Name="Update_date" Type="smalldatetime" Nullable="false" />
           <Property Name="Update_detail" Type="nvarchar(max)" />
-          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Id" Type="int" Nullable="false" StoreGeneratedPattern="Identity" />
         </EntityType>
         <!--Errors Found During Generation:
 warning 6002: The table/view 'test.dbo.Request_master' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
@@ -218,9 +218,9 @@ warning 6002: The table/view 'test.dbo.Request_master' does not have a primary k
           </Key>
           <Property Name="Idx" Type="real" Nullable="false" />
           <Property Name="Request_name" Type="nvarchar(max)" Nullable="false" />
-          <Property Name="Date_req" Type="datetime" Nullable="false" />
-          <Property Name="Date_fin" Type="datetime" />
-          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Date_req" Type="smalldatetime" Nullable="false" />
+          <Property Name="Date_fin" Type="smalldatetime" />
+          <Property Name="Id" Type="int" Nullable="false" StoreGeneratedPattern="Identity" />
         </EntityType>
         <EntityType Name="SeeMain">
           <Key>
@@ -281,6 +281,10 @@ warning 6002: The table/view 'test.dbo.txtBox' does not have a primary key defin
         </EntityType>
         <Function Name="sp_EmptyReferences" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="strLength" Type="int" Mode="In" />
+        </Function>
+        <Function Name="sp_EmptyReferencesDetails" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="ph17694754111">
+          <Parameter Name="strLength" Type="int" Mode="In" />
+          <Parameter Name="type" Type="nvarchar" Mode="In" />
         </Function>
         <EntityContainer Name="testModelStoreContainer">
           <EntitySet Name="BibloMain" EntityType="Self.BibloMain" Schema="dbo" store:Type="Tables" />
@@ -407,7 +411,7 @@ warning 6002: The table/view 'test.dbo.txtBox' does not have a primary key defin
           <Property Name="Title" Type="String" MaxLength="200" FixedLength="false" Unicode="false" Nullable="false" />
           <Property Name="CategoryN" Type="String" MaxLength="200" FixedLength="false" Unicode="false" Nullable="false" />
           <Property Name="CatFlag" Type="String" MaxLength="200" FixedLength="false" Unicode="false" Nullable="false" />
-          <Property Name="DateCreated" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="DateCreated" Type="DateTime" Nullable="false" Precision="0" />
         </EntityType>
         <EntityType Name="FileExtension">
           <Key>
@@ -440,7 +444,7 @@ warning 6002: The table/view 'test.dbo.txtBox' does not have a primary key defin
             <PropertyRef Name="Id" />
           </Key>
           <Property Name="Idx" Type="Int32" Nullable="false" />
-          <Property Name="Update_date" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="Update_date" Type="DateTime" Nullable="false" Precision="0" />
           <Property Name="Update_detail" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
           <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
         </EntityType>
@@ -453,8 +457,8 @@ warning 6002: The table/view 'test.dbo.txtBox' does not have a primary key defin
           </Key>
           <Property Name="Idx" Type="Single" Nullable="false" />
           <Property Name="Request_name" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" Nullable="false" />
-          <Property Name="Date_req" Type="DateTime" Nullable="false" Precision="3" />
-          <Property Name="Date_fin" Type="DateTime" Precision="3" />
+          <Property Name="Date_req" Type="DateTime" Nullable="false" Precision="0" />
+          <Property Name="Date_fin" Type="DateTime" Precision="0" />
           <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
         </EntityType>
         <EntityType Name="txtBox">
@@ -483,10 +487,6 @@ warning 6002: The table/view 'test.dbo.txtBox' does not have a primary key defin
           <FunctionImport Name="sp_EmptyReferences" ReturnType="Collection(testModel.sp_EmptyReferences_Result)">
           <Parameter Name="strLength" Mode="In" Type="Int32" />
           </FunctionImport>
-          <FunctionImport Name="sp_EmptyReferencesDetails" ReturnType="Collection(testModel.sp_EmptyReferencesDetails_Result)">
-            <Parameter Name="strLength" Mode="In" Type="Int32" />
-            <Parameter Name="type" Mode="In" Type="String" />
-          </FunctionImport>
           <EntitySet Name="UserMasters" EntityType="testModel.UserMaster" />
           <EntitySet Name="BibleAbbreviations" EntityType="testModel.BibleAbbreviation" />
           <EntitySet Name="BibleBooks" EntityType="testModel.BibleBook" />
@@ -495,6 +495,10 @@ warning 6002: The table/view 'test.dbo.txtBox' does not have a primary key defin
           <EntitySet Name="BibleFootNotes" EntityType="testModel.BibleFootNote" />
           <EntitySet Name="BibleItalics" EntityType="testModel.BibleItalic" />
           <EntitySet Name="BibloUploads" EntityType="testModel.BibloUpload" />
+          <FunctionImport Name="sp_EmptyReferencesDetails" ReturnType="Collection(testModel.sp_EmptyReferencesDetails_Result1)">
+            <Parameter Name="strLength" Mode="In" Type="Int32" />
+            <Parameter Name="type" Mode="In" Type="String" />
+          </FunctionImport>
           <!--<FunctionImport Name="sp_EmptyReferencesDetails1" ReturnType="Collection(testModel.sp_EmptyReferencesDetails1_Result)">
             <Parameter Name="strLength" Mode="In" Type="Int32" />
             <Parameter Name="type" Mode="In" Type="String" />
@@ -715,6 +719,21 @@ warning 6002: The table/view 'test.dbo.txtBox' does not have a primary key defin
           <Property Name="Id" Type="Int32" Nullable="false" />
           <Property Name="SortOrder" Type="Int32" />
         </EntityType>
+        <ComplexType Name="sp_EmptyReferences1_Result">
+          <Property Type="Int32" Name="ID" Nullable="false" />
+          <Property Type="String" Name="Title" Nullable="false" MaxLength="16" />
+          <Property Type="Int32" Name="numRecords" Nullable="true" />
+        </ComplexType>
+        <ComplexType Name="sp_EmptyReferencesDetails_Result1">
+          <Property Type="Int32" Name="id" Nullable="false" />
+          <Property Type="String" Name="Idx" Nullable="true" MaxLength="250" />
+          <Property Type="String" Name="body" Nullable="true" MaxLength="Max" />
+          <Property Type="String" Name="Title" Nullable="true" MaxLength="200" />
+          <Property Type="String" Name="CategoryN" Nullable="true" MaxLength="10" />
+          <Property Type="String" Name="currentStatus" Nullable="true" MaxLength="10" />
+          <Property Type="Int32" Name="LastUpdatedBy" Nullable="true" />
+          <Property Type="DateTime" Name="LastUpdated" Nullable="false" Precision="23" />
+        </ComplexType>
       </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -997,6 +1016,20 @@ warning 6002: The table/view 'test.dbo.txtBox' does not have a primary key defin
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
+          <FunctionImportMapping FunctionImportName="sp_EmptyReferencesDetails" FunctionName="testModel.Store.sp_EmptyReferencesDetails">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="testModel.sp_EmptyReferencesDetails_Result1">
+                <ScalarProperty Name="id" ColumnName="id" />
+                <ScalarProperty Name="Idx" ColumnName="Idx" />
+                <ScalarProperty Name="body" ColumnName="body" />
+                <ScalarProperty Name="Title" ColumnName="Title" />
+                <ScalarProperty Name="CategoryN" ColumnName="CategoryN" />
+                <ScalarProperty Name="currentStatus" ColumnName="currentStatus" />
+                <ScalarProperty Name="LastUpdatedBy" ColumnName="LastUpdatedBy" />
+                <ScalarProperty Name="LastUpdated" ColumnName="LastUpdated" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
         </EntityContainerMapping>
       </Mapping>
     </edmx:Mappings>

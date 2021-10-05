@@ -369,63 +369,6 @@ namespace cugonlineWebAPI.Controllers
 
             }).OrderBy(m => m.Title).ToList();
 
-
-            //if (!searchFilter.Equals("undefined"))
-            //{
-            //    //store results
-
-            //    //List<FiguresDTO> seeMainResults = cugDB.SeeMains.Where(m => m.Title.ToLower().Contains(searchFilter)
-            //    //                                        && !m.Title.Equals("")
-            //    //                                        && !m.Title.Equals("")
-            //    //                                        && m.Title != null).Select(m => new FiguresDTO
-            //    //                                        {
-            //    //                                            Id = m.Id,
-            //    //                                            Idx = m.Idx,
-            //    //                                            Title = m.Title.ToUpper(),
-
-
-            //    //                                        }).OrderBy(m => m.Title).ToList();
-            //    /*
-            //      var results = (from sm in cugDB.SeeMains
-            //                   join m in cugDB.Mains on sm.Idx equals m.Idx
-            //                   where (sm.Idx == idx.Replace("_", "/")
-            //                       || sm.Idx == idx)
-
-            //     */
-
-            //    //split keywords
-            //    string[] keywords = searchFilter.Split(' ');
-
-            //    //remove stop words from key words
-            //    string[] array_stopWords = stopWords.Split(',');
-
-            //    keywords = keywords.Except(array_stopWords).ToArray();
-
-            //    //iterate through keywords
-            //    foreach (var word in keywords)
-            //    {
-            //        var keyword = word.ToLower();
-
-            //        List<FiguresDTO> seeMainResults = cugDB.SeeMains.Where(m => m.Title.ToLower().Contains(searchFilter)
-            //                                           && !m.Title.Equals("")
-            //                                           && !m.Title.Equals("")
-            //                                           && m.Title != null).Select(m => new FiguresDTO
-            //                                           {
-            //                                               Id = m.Id,
-            //                                               Idx = m.Idx,
-            //                                               Title = m.Title.ToUpper(),
-
-
-            //                                           }).OrderBy(m => m.Title).ToList();
-
-            //        //resultRepo.AddRange(results.Where(b => b.BodyText.ToLower().Contains(keyword)
-            //        //                                && !resultRepo.Select(r => r.BodyText.ToLower()).Contains(keyword)));
-            //        //var temptest = results.Where(b => b.BodyText.ToLower().Contains(keyword)).ToList();
-
-            //    }
-            //    results = results.Distinct().ToList();
-            //}
-
             if (results != null)
             {
                 return results;
@@ -565,22 +508,21 @@ namespace cugonlineWebAPI.Controllers
 
             try
             {
-                //result = cugDB.sp_EmptyReferencesDetails(filter, type).Select(m => new FiguresDTO
-                //{
-                //    Id = m.id,
-                //    Idx = m.Idx,
-                //    Title = m.Title.ToUpper(),
-                //    LastUpdated = m.LastUpdated.ToString(),
-                //    CategoryName = m.CategoryN.Trim(),
-                //    CurrentStatus = m.currentStatus.Trim(),
-                //    LastUpdatedBy = (m.LastUpdatedBy.HasValue == true) ? cugDB.UserMasters.Where(u => u.ID.Equals(m.LastUpdatedBy.Value)).FirstOrDefault().Name : "",
+                result = cugDB.sp_EmptyReferencesDetails(filter, type).Select(m => new FiguresDTO
+                {
+                    Id = m.id,
+                    Idx = m.Idx,
+                    Title = m.Title.ToUpper(),
+                    LastUpdated = m.LastUpdated.ToString(),
+                    CategoryName = m.CategoryN.Trim(),
+                    CurrentStatus = m.currentStatus.Trim(),
+                    LastUpdatedBy = (m.LastUpdatedBy.HasValue == true) ? cugDB.UserMasters.Where(u => u.ID.Equals(m.LastUpdatedBy.Value)).FirstOrDefault().Name : "",
 
 
-                //}).OrderBy(m => m.Title).ToList();
+                }).OrderBy(m => m.Title).ToList();
             }
             catch (Exception ex)
             {
-
                 throw;
             }
 
@@ -798,7 +740,7 @@ namespace cugonlineWebAPI.Controllers
                                {
                                    LinkId = sm.Id,
                                    LinkIdx = sm.Link.Replace("/", "_"),// sm.Idx,
-                                   LinkTitle = sm.Title,
+                                   LinkTitle = sm.Title ?? "",
                                    LinkIdxFriendlyName = sm.Title// sm.Idx.Replace("_", " ")
                                }).OrderBy(x => x.LinkIdx).ToList();
 
@@ -951,7 +893,18 @@ namespace cugonlineWebAPI.Controllers
             }
 
         }
+        [Route("EditAttachmentTitle")]
+        [HttpPost]
+        public object EditAttachmentTitle(FilesInfo info)
+        {
+            var item = cugDB.MainFiles.Where(m => m.id.Equals(info.FileId)).FirstOrDefault();            
+            item.fComment = info.FileComment;
+            cugDB.SaveChanges();
 
+            var message = "Title SuccessFully updated.";
+                return new Response
+                { Status = item.id.ToString(), Message = message };
+        }
         [Route("EditFigure")]
         [HttpPost]
         public object EditFigure(Figure fig)

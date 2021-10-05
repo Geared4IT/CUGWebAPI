@@ -59,7 +59,7 @@ namespace cugonlineWebAPI.Models
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<sp_EmptyReferences_Result>("sp_EmptyReferences", strLengthParameter);
         }
     
-        public virtual ObjectResult<sp_EmptyReferencesDetails_Result> sp_EmptyReferencesDetails(Nullable<int> strLength, string type)
+        public virtual ObjectResult<sp_EmptyReferencesDetails_Result1> sp_EmptyReferencesDetails(Nullable<int> strLength, string type)
         {
             var strLengthParameter = strLength.HasValue ?
                 new ObjectParameter("strLength", strLength) :
@@ -69,7 +69,7 @@ namespace cugonlineWebAPI.Models
                 new ObjectParameter("type", type) :
                 new ObjectParameter("type", typeof(string));
     
-            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<sp_EmptyReferencesDetails_Result>("sp_EmptyReferencesDetails", strLengthParameter, typeParameter);
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<sp_EmptyReferencesDetails_Result1>("sp_EmptyReferencesDetails", strLengthParameter, typeParameter);
         }
     }
 }
