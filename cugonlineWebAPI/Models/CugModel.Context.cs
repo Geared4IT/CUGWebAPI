@@ -49,6 +49,18 @@ namespace cugonlineWebAPI.Models
         public virtual DbSet<BibleFootNote> BibleFootNotes { get; set; }
         public virtual DbSet<BibleItalic> BibleItalics { get; set; }
         public virtual DbSet<BibloUpload> BibloUploads { get; set; }
+        public virtual DbSet<BusinessUser> BusinessUsers { get; set; }
+        public virtual DbSet<Business> Businesses { get; set; }
+        public virtual DbSet<BusinessProduct> BusinessProducts { get; set; }
+    
+        public virtual ObjectResult<sp_ProcessFootNoteContent_Result> sp_ProcessFootNoteContent(string idx)
+        {
+            var idxParameter = idx != null ?
+                new ObjectParameter("Idx", idx) :
+                new ObjectParameter("Idx", typeof(string));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<sp_ProcessFootNoteContent_Result>("sp_ProcessFootNoteContent", idxParameter);
+        }
     
         public virtual ObjectResult<sp_EmptyReferences_Result> sp_EmptyReferences(Nullable<int> strLength)
         {
@@ -59,7 +71,7 @@ namespace cugonlineWebAPI.Models
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<sp_EmptyReferences_Result>("sp_EmptyReferences", strLengthParameter);
         }
     
-        public virtual ObjectResult<sp_EmptyReferencesDetails_Result1> sp_EmptyReferencesDetails(Nullable<int> strLength, string type)
+        public virtual ObjectResult<sp_EmptyReferencesDetails_Result> sp_EmptyReferencesDetails(Nullable<int> strLength, string type)
         {
             var strLengthParameter = strLength.HasValue ?
                 new ObjectParameter("strLength", strLength) :
@@ -69,7 +81,16 @@ namespace cugonlineWebAPI.Models
                 new ObjectParameter("type", type) :
                 new ObjectParameter("type", typeof(string));
     
-            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<sp_EmptyReferencesDetails_Result1>("sp_EmptyReferencesDetails", strLengthParameter, typeParameter);
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<sp_EmptyReferencesDetails_Result>("sp_EmptyReferencesDetails", strLengthParameter, typeParameter);
+        }
+    
+        public virtual ObjectResult<sp_SearchFigures_Result> sp_SearchFigures(string search)
+        {
+            var searchParameter = search != null ?
+                new ObjectParameter("Search", search) :
+                new ObjectParameter("Search", typeof(string));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<sp_SearchFigures_Result>("sp_SearchFigures", searchParameter);
         }
     }
 }

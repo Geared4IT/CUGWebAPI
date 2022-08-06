@@ -191,7 +191,12 @@
     <Compile Include="Areas\HelpPage\SampleGeneration\TextSample.cs" />
     <Compile Include="Areas\HelpPage\XmlDocumentationProvider.cs" />
     <Compile Include="Caching\CacheFilter.cs" />
+    <Compile Include="Controllers\BusinessUsersController.cs" />
     <Compile Include="Controllers\BibloController.cs" />
+    <Compile Include="Controllers\ContactsController.cs" />
+    <Compile Include="Helper\HelpMeWith.cs" />
+    <Compile Include="DTO\BusinessProductsDTO.cs" />
+    <Compile Include="DTO\BusinessUsersDTO.cs" />
     <Compile Include="DTO\DataBaseInfoDTO.cs" />
     <Compile Include="Controllers\EmailController.cs" />
     <Compile Include="DTO\BibloInfoDTO.cs" />
@@ -226,6 +231,15 @@
       <DependentUpon>CugModel.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\BibloUpload.cs">
+      <DependentUpon>CugModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\Business.cs">
+      <DependentUpon>CugModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\BusinessProduct.cs">
+      <DependentUpon>CugModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\BusinessUser.cs">
       <DependentUpon>CugModel.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\CugModel.Context.cs">
@@ -276,16 +290,16 @@
     <Compile Include="Models\SeeMain.cs">
       <DependentUpon>CugModel.tt</DependentUpon>
     </Compile>
-    <Compile Include="Models\sp_EmptyReferences1_Result.cs">
-      <DependentUpon>CugModel.tt</DependentUpon>
-    </Compile>
     <Compile Include="Models\sp_EmptyReferencesDetails_Result.cs">
       <DependentUpon>CugModel.tt</DependentUpon>
     </Compile>
-    <Compile Include="Models\sp_EmptyReferencesDetails_Result1.cs">
+    <Compile Include="Models\sp_EmptyReferences_Result.cs">
       <DependentUpon>CugModel.tt</DependentUpon>
     </Compile>
-    <Compile Include="Models\sp_EmptyReferences_Result.cs">
+    <Compile Include="Models\sp_ProcessFootNoteContent_Result.cs">
+      <DependentUpon>CugModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\sp_SearchFigures_Result.cs">
       <DependentUpon>CugModel.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\txtBox.cs">
@@ -299,6 +313,7 @@
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="VM\Figure.cs" />
+    <Compile Include="VM\ImportContacts.cs" />
     <Compile Include="VM\Login.cs" />
     <Compile Include="VM\Register.cs" />
     <Compile Include="VM\Response.cs" />
@@ -318,6 +333,8 @@
     <Content Include="favicon.ico" />
     <Content Include="fonts\glyphicons-halflings-regular.svg" />
     <Content Include="Global.asax" />
+    <Content Include="images\bikers.jpg" />
+    <Content Include="images\download.jpg" />
     <Content Include="index.html" />
     <Content Include="Models\CugModel.Context.tt">
       <Generator>TextTemplatingFileGenerator</Generator>
@@ -350,6 +367,74 @@
     <Content Include="Areas\HelpPage\Views\Help\DisplayTemplates\CollectionModelDescription.cshtml" />
     <Content Include="Areas\HelpPage\Views\Help\DisplayTemplates\ApiGroup.cshtml" />
     <Content Include="Areas\HelpPage\Views\Help\Api.cshtml" />
+    <Content Include="weonline\blog.html" />
+    <Content Include="weonline\css\custom.css" />
+    <Content Include="weonline\css\default-skin\default-skin.css" />
+    <Content Include="weonline\css\default-skin\default-skin.png" />
+    <Content Include="weonline\css\default-skin\default-skin.svg" />
+    <Content Include="weonline\css\default-skin\preloader.gif" />
+    <Content Include="weonline\css\style.css" />
+    <Content Include="weonline\css\style.min.css" />
+    <Content Include="weonline\css\styles-merged.css" />
+    <Content Include="weonline\css\vendor\animate.css" />
+    <Content Include="weonline\css\vendor\bootstrap.min.css" />
+    <Content Include="weonline\css\vendor\default-skin.css" />
+    <Content Include="weonline\css\vendor\flexslider.css" />
+    <Content Include="weonline\css\vendor\icomoon.css" />
+    <Content Include="weonline\css\vendor\magnific-popup.css" />
+    <Content Include="weonline\css\vendor\owl.carousel.min.css" />
+    <Content Include="weonline\css\vendor\owl.theme.default.min.css" />
+    <Content Include="weonline\css\vendor\photoswipe.css" />
+    <Content Include="weonline\fonts\icomoon demo\demo-files\demo.css" />
+    <Content Include="weonline\fonts\icomoon demo\demo-files\demo.js" />
+    <Content Include="weonline\fonts\icomoon demo\demo.html" />
+    <Content Include="weonline\fonts\icomoon demo\fonts\icomoon.svg" />
+    <Content Include="weonline\fonts\icomoon demo\Read Me.txt" />
+    <Content Include="weonline\fonts\icomoon demo\style.css" />
+    <Content Include="weonline\fonts\icomoon\icomoon.svg" />
+    <Content Include="weonline\gulpfile.js" />
+    <Content Include="weonline\img\facebook.png" />
+    <Content Include="weonline\img\img_2.jpg" />
+    <Content Include="weonline\img\img_3.jpg" />
+    <Content Include="weonline\img\img_showcase_1.jpg" />
+    <Content Include="weonline\img\img_showcase_2.jpg" />
+    <Content Include="weonline\img\laptop_1.jpg" />
+    <Content Include="weonline\img\logo%402x.png" />
+    <Content Include="weonline\img\logo.png" />
+    <Content Include="weonline\img\person_1.jpg" />
+    <Content Include="weonline\img\person_2.jpg" />
+    <Content Include="weonline\img\person_3.jpg" />
+    <Content Include="weonline\img\person_4.jpg" />
+    <Content Include="weonline\img\person_5.jpg" />
+    <Content Include="weonline\img\person_6.jpg" />
+    <Content Include="weonline\img\person_7.jpg" />
+    <Content Include="weonline\img\twitter.png" />
+    <Content Include="weonline\img\uber.png" />
+    <Content Include="weonline\index.html" />
+    <Content Include="weonline\js\custom.js" />
+    <Content Include="weonline\js\main.js" />
+    <Content Include="weonline\js\main.min.js" />
+    <Content Include="weonline\js\scripts.js" />
+    <Content Include="weonline\js\scripts.min.js" />
+    <Content Include="weonline\js\vendor\bootstrap.min.js" />
+    <Content Include="weonline\js\vendor\circle-progress.min.js" />
+    <Content Include="weonline\js\vendor\html5shiv.min.js" />
+    <Content Include="weonline\js\vendor\jquery.appear.js" />
+    <Content Include="weonline\js\vendor\jquery.appear.min.js" />
+    <Content Include="weonline\js\vendor\jquery.countTo.js" />
+    <Content Include="weonline\js\vendor\jquery.easing.1.3.js" />
+    <Content Include="weonline\js\vendor\jquery.flexslider-min.js" />
+    <Content Include="weonline\js\vendor\jquery.magnific-popup.min.js" />
+    <Content Include="weonline\js\vendor\jquery.min.js" />
+    <Content Include="weonline\js\vendor\jquery.stellar.min.js" />
+    <Content Include="weonline\js\vendor\jquery.waypoints.min.js" />
+    <Content Include="weonline\js\vendor\owl.carousel.min.js" />
+    <Content Include="weonline\js\vendor\respond.min.js" />
+    <Content Include="weonline\login.html" />
+    <Content Include="weonline\pricing.html" />
+    <Content Include="weonline\README.txt" />
+    <Content Include="weonline\signup.html" />
+    <Content Include="weonline\tour.html" />
     <EntityDeploy Include="Models\CugModel.edmx">
       <Generator>EntityModelCodeGenerator</Generator>
       <LastGenOutput>CugModel.Designer.cs</LastGenOutput>
@@ -382,6 +467,24 @@
     <Content Include="Views\Home\Index.cshtml" />
     <Content Include="Views\Shared\Error.cshtml" />
     <Content Include="Views\Shared\_Layout.cshtml" />
+    <Content Include="weonline\css\.DS_Store" />
+    <Content Include="weonline\css\styles-merged.css.map" />
+    <Content Include="weonline\fonts\.DS_Store" />
+    <Content Include="weonline\fonts\icomoon demo\.DS_Store" />
+    <Content Include="weonline\fonts\icomoon demo\fonts\icomoon.eot" />
+    <Content Include="weonline\fonts\icomoon demo\fonts\icomoon.ttf" />
+    <Content Include="weonline\fonts\icomoon demo\fonts\icomoon.woff" />
+    <Content Include="weonline\fonts\icomoon demo\selection.json" />
+    <Content Include="weonline\fonts\icomoon\icomoon.eot" />
+    <Content Include="weonline\fonts\icomoon\icomoon.ttf" />
+    <Content Include="weonline\fonts\icomoon\icomoon.woff" />
+    <Content Include="weonline\img\.DS_Store" />
+    <Content Include="weonline\js\.DS_Store" />
+    <Content Include="weonline\js\vendor\.DS_Store" />
+    <Content Include="weonline\package.json" />
+    <Content Include="weonline\scss\.DS_Store" />
+    <Content Include="weonline\scss\style.scss" />
+    <Content Include="weonline\scss\_custom-settings.scss" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

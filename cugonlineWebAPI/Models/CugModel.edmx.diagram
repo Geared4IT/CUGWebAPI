@@ -4,7 +4,7 @@
   <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
     <!-- Diagram content (shape and connector positions) -->
     <edmx:Diagrams>
-      <Diagram DiagramId="230d47d23c024cd6ab5a92d5b772beb6" Name="Diagram1">
+      <Diagram DiagramId="230d47d23c024cd6ab5a92d5b772beb6" Name="Diagram1" ZoomLevel="86">
         <EntityTypeShape EntityType="testModel.ReciprocalSeeMainRef" Width="1.5" PointX="0.75" PointY="0.75" IsExpanded="true" />
         <EntityTypeShape EntityType="testModel.FileExtension" Width="1.5" PointX="2.75" PointY="0.75" IsExpanded="true" />
         <EntityTypeShape EntityType="testModel.FilesLink" Width="1.5" PointX="4.75" PointY="0.75" IsExpanded="true" />
@@ -27,6 +27,11 @@
         <EntityTypeShape EntityType="testModel.BibleFootNote" Width="1.5" PointX="5.75" PointY="12.75" />
         <EntityTypeShape EntityType="testModel.BibleItalic" Width="1.5" PointX="7.75" PointY="12.75" />
         <EntityTypeShape EntityType="testModel.BibloUpload" Width="1.5" PointX="10.375" PointY="12.75" />
+        <EntityTypeShape EntityType="testModel.BusinessUser" Width="1.5" PointX="13.375" PointY="0.75" />
+        <EntityTypeShape EntityType="testModel.Business" Width="1.5" PointX="15.5" PointY="0.875" />
+        <AssociationConnector Association="testModel.FK_BusinessUsers_Business" />
+        <EntityTypeShape EntityType="testModel.BusinessProduct" Width="1.5" PointX="17.75" PointY="7.625" />
+        <AssociationConnector Association="testModel.FK_BusinessProducts_Business" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

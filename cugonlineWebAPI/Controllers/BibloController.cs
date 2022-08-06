@@ -1,15 +1,9 @@
 ﻿using cugonlineWebAPI.Models;
 using cugonlineWebAPI.VM;
-using Microsoft.WindowsAzure.Storage;
-using Microsoft.WindowsAzure.Storage.Auth;
-using Microsoft.WindowsAzure.Storage.Blob;
 using System;
 using System.Collections.Generic;
-using System.Configuration;
 using System.IO;
-using System.Linq;
-using System.Net;
-using System.Net.Http;
+using System.Linq; 
 using System.Web;
 using System.Web.Http;
 
@@ -107,6 +101,7 @@ namespace cugonlineWebAPI.Controllers
                                   FileName = up.fName,
                                   FilePath = filePath + up.fName,
                                   ThumbNail = up.fTitle,
+                                  FileTitle = up.fTitle,
                                   FileComment = up.fDescription,
                                   SortOrder = up.SortOrder
                               }).OrderByDescending(f => f.SortOrder).ThenByDescending(f => f.ThumbNail).ToList();
