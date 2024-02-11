@@ -156,7 +156,7 @@ warning 6002: The table/view 'test.dbo.BibleItalics' does not have a primary key
           <Property Name="IsActive" Type="bit" Nullable="false" />
           <Property Name="DateCreated" Type="datetime" Nullable="false" />
           <Property Name="LastSyncDate" Type="datetime" />
-          <Property Name="ImagePath" Type="nvarchar" MaxLength="150" />
+          <Property Name="ImagePath" Type="varchar" MaxLength="150" />
         </EntityType>
         <!--Errors Found During Generation:
 warning 6002: The table/view 'test.dbo.FileExtensions' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
@@ -180,7 +180,7 @@ warning 6002: The table/view 'test.dbo.FileExtensions' does not have a primary k
           <Property Name="fThumbs" Type="nvarchar" MaxLength="16" />
           <Property Name="filePath" Type="varchar" MaxLength="255" />
           <Property Name="fMainId" Type="int" Nullable="false" />
-          <Property Name="fileID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="fileID" Type="int" Nullable="false" StoreGeneratedPattern="Identity" />
         </EntityType>
         <!--Errors Found During Generation:
 warning 6002: The table/view 'test.dbo.FilesLink' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
@@ -248,13 +248,13 @@ warning 6002: The table/view 'test.dbo.FileTypes' does not have a primary key de
           <Key>
             <PropertyRef Name="id" />
           </Key>
-          <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="id" Type="int" Nullable="false" StoreGeneratedPattern="Identity" />
           <Property Name="Idx" Type="varchar" MaxLength="200" Nullable="false" />
           <Property Name="Link" Type="varchar" MaxLength="200" Nullable="false" />
           <Property Name="Title" Type="varchar" MaxLength="200" Nullable="false" />
           <Property Name="CategoryN" Type="varchar" MaxLength="200" Nullable="false" />
           <Property Name="CatFlag" Type="varchar" MaxLength="200" Nullable="false" />
-          <Property Name="DateCreated" Type="datetime" Nullable="false" />
+          <Property Name="DateCreated" Type="smalldatetime" Nullable="false" />
         </EntityType>
         <!--Errors Found During Generation:
 warning 6002: The table/view 'test.dbo.Request_detail' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
@@ -265,9 +265,9 @@ warning 6002: The table/view 'test.dbo.Request_detail' does not have a primary k
             <PropertyRef Name="Id" />
           </Key>
           <Property Name="Idx" Type="int" Nullable="false" />
-          <Property Name="Update_date" Type="datetime" Nullable="false" />
+          <Property Name="Update_date" Type="smalldatetime" Nullable="false" />
           <Property Name="Update_detail" Type="nvarchar(max)" />
-          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Id" Type="int" Nullable="false" StoreGeneratedPattern="Identity" />
         </EntityType>
         <!--Errors Found During Generation:
 warning 6002: The table/view 'test.dbo.Request_master' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
@@ -280,9 +280,9 @@ warning 6002: The table/view 'test.dbo.Request_master' does not have a primary k
           </Key>
           <Property Name="Idx" Type="real" Nullable="false" />
           <Property Name="Request_name" Type="nvarchar(max)" Nullable="false" />
-          <Property Name="Date_req" Type="datetime" Nullable="false" />
-          <Property Name="Date_fin" Type="datetime" />
-          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Date_req" Type="smalldatetime" Nullable="false" />
+          <Property Name="Date_fin" Type="smalldatetime" />
+          <Property Name="Id" Type="int" Nullable="false" StoreGeneratedPattern="Identity" />
         </EntityType>
         <EntityType Name="SeeMain">
           <Key>
@@ -290,7 +290,7 @@ warning 6002: The table/view 'test.dbo.Request_master' does not have a primary k
           </Key>
           <Property Name="Idx" Type="nvarchar" MaxLength="250" />
           <Property Name="Link" Type="nvarchar" MaxLength="250" />
-          <Property Name="Title" Type="varchar" MaxLength="100" />
+          <Property Name="Title" Type="nvarchar" MaxLength="50" />
           <Property Name="categoryN" Type="nchar" MaxLength="10" />
           <Property Name="catFlag" Type="nvarchar(max)" />
           <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
@@ -367,6 +367,14 @@ warning 6002: The table/view 'test.dbo.txtBox' does not have a primary key defin
         </Association>
         <Function Name="sp_EmptyReferences" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="strLength" Type="int" Mode="In" />
+        </Function>
+        <Function Name="sp_EmptyReferencesDetails" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="ph17694754111">
+          <Parameter Name="strLength" Type="int" Mode="In" />
+          <Parameter Name="type" Type="nvarchar" Mode="In" />
+        </Function>
+        <Function Name="sp_SearchFigures" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="ph17694754111">
+          <Parameter Name="Search" Type="varchar" Mode="In" />
+          <Parameter Name="isStartsWith" Type="bit" Mode="In" />
         </Function>
         <EntityContainer Name="testModelStoreContainer">
           <EntitySet Name="BibloMain" EntityType="Self.BibloMain" Schema="dbo" store:Type="Tables" />
@@ -504,7 +512,7 @@ warning 6002: The table/view 'test.dbo.txtBox' does not have a primary key defin
           <Property Name="Title" Type="String" MaxLength="200" FixedLength="false" Unicode="false" Nullable="false" />
           <Property Name="CategoryN" Type="String" MaxLength="200" FixedLength="false" Unicode="false" Nullable="false" />
           <Property Name="CatFlag" Type="String" MaxLength="200" FixedLength="false" Unicode="false" Nullable="false" />
-          <Property Name="DateCreated" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="DateCreated" Type="DateTime" Nullable="false" Precision="0" />
         </EntityType>
         <EntityType Name="FileExtension">
           <Key>
@@ -537,7 +545,7 @@ warning 6002: The table/view 'test.dbo.txtBox' does not have a primary key defin
             <PropertyRef Name="Id" />
           </Key>
           <Property Name="Idx" Type="Int32" Nullable="false" />
-          <Property Name="Update_date" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="Update_date" Type="DateTime" Nullable="false" Precision="0" />
           <Property Name="Update_detail" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
           <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
         </EntityType>
@@ -550,8 +558,8 @@ warning 6002: The table/view 'test.dbo.txtBox' does not have a primary key defin
           </Key>
           <Property Name="Idx" Type="Single" Nullable="false" />
           <Property Name="Request_name" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" Nullable="false" />
-          <Property Name="Date_req" Type="DateTime" Nullable="false" Precision="3" />
-          <Property Name="Date_fin" Type="DateTime" Precision="3" />
+          <Property Name="Date_req" Type="DateTime" Nullable="false" Precision="0" />
+          <Property Name="Date_fin" Type="DateTime" Precision="0" />
           <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
         </EntityType>
         <EntityType Name="txtBox">
@@ -585,12 +593,7 @@ warning 6002: The table/view 'test.dbo.txtBox' does not have a primary key defin
           <EntitySet Name="BibleFootNotes" EntityType="testModel.BibleFootNote" />
           <EntitySet Name="BibleItalics" EntityType="testModel.BibleItalic" />
           <EntitySet Name="BibloUploads" EntityType="testModel.BibloUpload" />
-          <EntitySet Name="BusinessUsers" EntityType="testModel.BusinessUser" />
           <EntitySet Name="Businesses" EntityType="testModel.Business" />
-          <AssociationSet Name="FK_BusinessUsers_Business" Association="testModel.FK_BusinessUsers_Business">
-            <End Role="Business" EntitySet="Businesses" />
-            <End Role="BusinessUser" EntitySet="BusinessUsers" />
-          </AssociationSet>
           <FunctionImport Name="sp_ProcessFootNoteContent" ReturnType="Collection(testModel.sp_ProcessFootNoteContent_Result)">
             <Parameter Name="Idx" Mode="In" Type="String" />
           </FunctionImport>
@@ -601,14 +604,28 @@ warning 6002: The table/view 'test.dbo.txtBox' does not have a primary key defin
             <Parameter Name="strLength" Mode="In" Type="Int32" />
             <Parameter Name="type" Mode="In" Type="String" />
           </FunctionImport>
-          <FunctionImport Name="sp_SearchFigures" ReturnType="Collection(testModel.sp_SearchFigures_Result)">
-            <Parameter Name="Search" Mode="In" Type="String" />
-          </FunctionImport>
           <EntitySet Name="BusinessProducts" EntityType="testModel.BusinessProduct" />
           <AssociationSet Name="FK_BusinessProducts_Business" Association="testModel.FK_BusinessProducts_Business">
             <End Role="Business" EntitySet="Businesses" />
             <End Role="BusinessProduct" EntitySet="BusinessProducts" />
           </AssociationSet>
+          <FunctionImport Name="sp_EmptyReferencesDetails1" ReturnType="Collection(testModel.sp_EmptyReferencesDetails1_Result)">
+            <Parameter Name="strLength" Mode="In" Type="Int32" />
+            <Parameter Name="type" Mode="In" Type="String" />
+          </FunctionImport>
+          <EntitySet Name="BusinessUsers" EntityType="testModel.BusinessUser" />
+          <AssociationSet Name="FK_BusinessUsers_Business" Association="testModel.FK_BusinessUsers_Business">
+            <End Role="Business" EntitySet="Businesses" />
+            <End Role="BusinessUser" EntitySet="BusinessUsers" />
+          </AssociationSet>
+          <FunctionImport Name="sp_EmptyReferencesDetails2" ReturnType="Collection(testModel.sp_EmptyReferencesDetails2_Result)">
+            <Parameter Name="strLength" Mode="In" Type="Int32" />
+            <Parameter Name="type" Mode="In" Type="String" />
+          </FunctionImport>
+          <FunctionImport Name="sp_SearchFigures" ReturnType="Collection(testModel.sp_SearchFigures_Result)">
+            <Parameter Name="Search" Mode="In" Type="String" />
+            <Parameter Name="isStartsWith" Mode="In" Type="Boolean" />
+          </FunctionImport>
           <!--<FunctionImport Name="sp_EmptyReferencesDetails1" ReturnType="Collection(testModel.sp_EmptyReferencesDetails1_Result)">
             <Parameter Name="strLength" Mode="In" Type="Int32" />
             <Parameter Name="type" Mode="In" Type="String" />
@@ -674,7 +691,7 @@ warning 6002: The table/view 'test.dbo.txtBox' does not have a primary key defin
           </Key>
           <Property Name="Idx" Type="String" MaxLength="250" FixedLength="false" Unicode="true" />
           <Property Name="Link" Type="String" MaxLength="250" FixedLength="false" Unicode="true" />
-          <Property Name="Title" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="Title" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
           <Property Name="categoryN" Type="String" MaxLength="10" FixedLength="true" Unicode="true" />
           <Property Name="catFlag" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
           <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
@@ -814,28 +831,6 @@ warning 6002: The table/view 'test.dbo.txtBox' does not have a primary key defin
           <Property Name="Id" Type="Int32" Nullable="false" />
           <Property Name="SortOrder" Type="Int32" />
         </EntityType>
-        <EntityType Name="BusinessUser">
-          <Key>
-            <PropertyRef Name="Id" />
-          </Key>
-          <Property Name="Id" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="FirstName" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Name="Surname" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Name="UserName" Type="String" Nullable="false" MaxLength="10" FixedLength="false" Unicode="true" />
-          <Property Name="CellNumber" Type="String" Nullable="false" MaxLength="15" FixedLength="false" Unicode="false" />
-          <Property Name="UnlockCode" Type="String" MaxLength="10" FixedLength="false" Unicode="true" />
-          <Property Name="BackupCellNumber" Type="String" MaxLength="15" FixedLength="false" Unicode="true" />
-          <Property Name="UUID" Type="String" Nullable="false" MaxLength="30" FixedLength="false" Unicode="true" />
-          <Property Name="CompanyCodePrimary" Type="String" Nullable="false" MaxLength="10" FixedLength="false" Unicode="true" />
-          <Property Name="Email" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Name="Password" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Name="IsActive" Type="Boolean" Nullable="false" />
-          <Property Name="DateCreated" Type="DateTime" Nullable="false" Precision="3" />
-          <Property Name="LastSyncDate" Type="DateTime" Precision="3" />
-          <Property Name="BusinessId" Type="Int64" />
-          <NavigationProperty Name="Business" Relationship="testModel.FK_BusinessUsers_Business" FromRole="BusinessUser" ToRole="Business" />
-          <Property Name="ImagePath" Type="String" MaxLength="150" FixedLength="false" Unicode="true" />
-        </EntityType>
         <EntityType Name="Business">
           <Key>
             <PropertyRef Name="Id" />
@@ -853,21 +848,9 @@ warning 6002: The table/view 'test.dbo.txtBox' does not have a primary key defin
           <Property Name="IsActive" Type="Boolean" Nullable="false" />
           <Property Name="DateCreated" Type="DateTime" Nullable="false" Precision="3" />
           <Property Name="LastSyncDate" Type="DateTime" Precision="3" />
-          <NavigationProperty Name="BusinessUsers" Relationship="testModel.FK_BusinessUsers_Business" FromRole="Business" ToRole="BusinessUser" />
           <NavigationProperty Name="BusinessProducts" Relationship="testModel.FK_BusinessProducts_Business" FromRole="Business" ToRole="BusinessProduct" />
+          <NavigationProperty Name="BusinessUsers" Relationship="testModel.FK_BusinessUsers_Business" FromRole="Business" ToRole="BusinessUser" />
         </EntityType>
-        <Association Name="FK_BusinessUsers_Business">
-          <End Type="testModel.Business" Role="Business" Multiplicity="0..1" />
-          <End Type="testModel.BusinessUser" Role="BusinessUser" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="Business">
-              <PropertyRef Name="Id" />
-            </Principal>
-            <Dependent Role="BusinessUser">
-              <PropertyRef Name="BusinessId" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
         <ComplexType Name="sp_ProcessFootNoteContent_Result">
           <Property Type="Int32" Name="ID" Nullable="false" />
           <Property Type="String" Name="Idx" Nullable="true" MaxLength="255" />
@@ -888,16 +871,6 @@ warning 6002: The table/view 'test.dbo.txtBox' does not have a primary key defin
           <Property Type="String" Name="currentStatus" Nullable="true" MaxLength="10" />
           <Property Type="Int32" Name="LastUpdatedBy" Nullable="true" />
           <Property Type="DateTime" Name="LastUpdated" Nullable="false" Precision="23" />
-        </ComplexType>
-        <ComplexType Name="sp_SearchFigures_Result">
-          <Property Type="Int32" Name="Id" Nullable="false" />
-          <Property Type="String" Name="Idx" Nullable="true" MaxLength="250" />
-          <Property Type="String" Name="Title" Nullable="true" MaxLength="200" />
-          <Property Type="String" Name="Body" Nullable="true" MaxLength="Max" />
-          <Property Type="String" Name="Meaning" Nullable="true" MaxLength="200" />
-          <Property Type="DateTime" Name="LastUpdated" Nullable="false" Precision="23" />
-          <Property Type="Int32" Name="LastUpdatedBy" Nullable="true" />
-          <Property Type="String" Name="CurrentStatus" Nullable="true" MaxLength="10" />
         </ComplexType>
         <EntityType Name="BusinessProduct">
           <Key>
@@ -935,6 +908,70 @@ warning 6002: The table/view 'test.dbo.txtBox' does not have a primary key defin
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <ComplexType Name="sp_EmptyReferencesDetails1_Result">
+          <Property Type="Int32" Name="id" Nullable="false" />
+          <Property Type="String" Name="Idx" Nullable="true" MaxLength="250" />
+          <Property Type="String" Name="body" Nullable="true" MaxLength="Max" />
+          <Property Type="String" Name="Title" Nullable="true" MaxLength="200" />
+          <Property Type="String" Name="CategoryN" Nullable="true" MaxLength="10" />
+          <Property Type="String" Name="currentStatus" Nullable="true" MaxLength="10" />
+          <Property Type="Int32" Name="LastUpdatedBy" Nullable="true" />
+          <Property Type="DateTime" Name="LastUpdated" Nullable="false" Precision="23" />
+        </ComplexType>
+        <EntityType Name="BusinessUser">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="BusinessId" Type="Int64" />
+          <Property Name="FirstName" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="Surname" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="UserName" Type="String" Nullable="false" MaxLength="10" FixedLength="false" Unicode="true" />
+          <Property Name="CellNumber" Type="String" Nullable="false" MaxLength="15" FixedLength="false" Unicode="false" />
+          <Property Name="UnlockCode" Type="String" MaxLength="10" FixedLength="false" Unicode="true" />
+          <Property Name="BackupCellNumber" Type="String" MaxLength="15" FixedLength="false" Unicode="true" />
+          <Property Name="UUID" Type="String" Nullable="false" MaxLength="30" FixedLength="false" Unicode="true" />
+          <Property Name="CompanyCodePrimary" Type="String" Nullable="false" MaxLength="10" FixedLength="false" Unicode="true" />
+          <Property Name="Email" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="Password" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="IsActive" Type="Boolean" Nullable="false" />
+          <Property Name="DateCreated" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="LastSyncDate" Type="DateTime" Precision="3" />
+          <Property Name="ImagePath" Type="String" MaxLength="150" FixedLength="false" Unicode="false" />
+          <NavigationProperty Name="Business" Relationship="testModel.FK_BusinessUsers_Business" FromRole="BusinessUser" ToRole="Business" />
+        </EntityType>
+        <Association Name="FK_BusinessUsers_Business">
+          <End Type="testModel.Business" Role="Business" Multiplicity="0..1" />
+          <End Type="testModel.BusinessUser" Role="BusinessUser" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Business">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="BusinessUser">
+              <PropertyRef Name="BusinessId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <ComplexType Name="sp_EmptyReferencesDetails2_Result">
+          <Property Type="Int32" Name="id" Nullable="false" />
+          <Property Type="String" Name="Idx" Nullable="true" MaxLength="250" />
+          <Property Type="String" Name="body" Nullable="true" MaxLength="Max" />
+          <Property Type="String" Name="Title" Nullable="true" MaxLength="200" />
+          <Property Type="String" Name="CategoryN" Nullable="true" MaxLength="10" />
+          <Property Type="String" Name="currentStatus" Nullable="true" MaxLength="10" />
+          <Property Type="Int32" Name="LastUpdatedBy" Nullable="true" />
+          <Property Type="DateTime" Name="LastUpdated" Nullable="false" Precision="23" />
+        </ComplexType>
+        <ComplexType Name="sp_SearchFigures_Result">
+          <Property Type="Int32" Name="Id" Nullable="false" />
+          <Property Type="String" Name="Idx" Nullable="true" MaxLength="250" />
+          <Property Type="String" Name="Title" Nullable="true" MaxLength="200" />
+          <Property Type="String" Name="Body" Nullable="true" MaxLength="Max" />
+          <Property Type="String" Name="Meaning" Nullable="true" MaxLength="200" />
+          <Property Type="DateTime" Name="LastUpdated" Nullable="false" Precision="23" />
+          <Property Type="Int32" Name="LastUpdatedBy" Nullable="true" />
+          <Property Type="String" Name="CurrentStatus" Nullable="true" MaxLength="10" />
+        </ComplexType>
       </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -1208,28 +1245,6 @@ warning 6002: The table/view 'test.dbo.txtBox' does not have a primary key defin
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
-          <EntitySetMapping Name="BusinessUsers">
-            <EntityTypeMapping TypeName="testModel.BusinessUser">
-              <MappingFragment StoreEntitySet="BusinessUsers">
-                <ScalarProperty Name="ImagePath" ColumnName="ImagePath" />
-                <ScalarProperty Name="BusinessId" ColumnName="BusinessId" />
-                <ScalarProperty Name="LastSyncDate" ColumnName="LastSyncDate" />
-                <ScalarProperty Name="DateCreated" ColumnName="DateCreated" />
-                <ScalarProperty Name="IsActive" ColumnName="IsActive" />
-                <ScalarProperty Name="Password" ColumnName="Password" />
-                <ScalarProperty Name="Email" ColumnName="Email" />
-                <ScalarProperty Name="CompanyCodePrimary" ColumnName="CompanyCodePrimary" />
-                <ScalarProperty Name="UUID" ColumnName="UUID" />
-                <ScalarProperty Name="BackupCellNumber" ColumnName="BackupCellNumber" />
-                <ScalarProperty Name="UnlockCode" ColumnName="UnlockCode" />
-                <ScalarProperty Name="CellNumber" ColumnName="CellNumber" />
-                <ScalarProperty Name="UserName" ColumnName="UserName" />
-                <ScalarProperty Name="Surname" ColumnName="Surname" />
-                <ScalarProperty Name="FirstName" ColumnName="FirstName" />
-                <ScalarProperty Name="Id" ColumnName="Id" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
           <EntitySetMapping Name="Businesses">
             <EntityTypeMapping TypeName="testModel.Business">
               <MappingFragment StoreEntitySet="Business">
@@ -1282,6 +1297,56 @@ warning 6002: The table/view 'test.dbo.txtBox' does not have a primary key defin
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
+          <EntitySetMapping Name="BusinessUsers">
+            <EntityTypeMapping TypeName="testModel.BusinessUser">
+              <MappingFragment StoreEntitySet="BusinessUsers">
+                <ScalarProperty Name="ImagePath" ColumnName="ImagePath" />
+                <ScalarProperty Name="LastSyncDate" ColumnName="LastSyncDate" />
+                <ScalarProperty Name="DateCreated" ColumnName="DateCreated" />
+                <ScalarProperty Name="IsActive" ColumnName="IsActive" />
+                <ScalarProperty Name="Password" ColumnName="Password" />
+                <ScalarProperty Name="Email" ColumnName="Email" />
+                <ScalarProperty Name="CompanyCodePrimary" ColumnName="CompanyCodePrimary" />
+                <ScalarProperty Name="UUID" ColumnName="UUID" />
+                <ScalarProperty Name="BackupCellNumber" ColumnName="BackupCellNumber" />
+                <ScalarProperty Name="UnlockCode" ColumnName="UnlockCode" />
+                <ScalarProperty Name="CellNumber" ColumnName="CellNumber" />
+                <ScalarProperty Name="UserName" ColumnName="UserName" />
+                <ScalarProperty Name="Surname" ColumnName="Surname" />
+                <ScalarProperty Name="FirstName" ColumnName="FirstName" />
+                <ScalarProperty Name="BusinessId" ColumnName="BusinessId" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <FunctionImportMapping FunctionImportName="sp_EmptyReferencesDetails2" FunctionName="testModel.Store.sp_EmptyReferencesDetails">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="testModel.sp_EmptyReferencesDetails2_Result">
+                <ScalarProperty Name="id" ColumnName="id" />
+                <ScalarProperty Name="Idx" ColumnName="Idx" />
+                <ScalarProperty Name="body" ColumnName="body" />
+                <ScalarProperty Name="Title" ColumnName="Title" />
+                <ScalarProperty Name="CategoryN" ColumnName="CategoryN" />
+                <ScalarProperty Name="currentStatus" ColumnName="currentStatus" />
+                <ScalarProperty Name="LastUpdatedBy" ColumnName="LastUpdatedBy" />
+                <ScalarProperty Name="LastUpdated" ColumnName="LastUpdated" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="sp_SearchFigures" FunctionName="testModel.Store.sp_SearchFigures">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="testModel.sp_SearchFigures_Result">
+                <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="Idx" ColumnName="Idx" />
+                <ScalarProperty Name="Title" ColumnName="Title" />
+                <ScalarProperty Name="Body" ColumnName="Body" />
+                <ScalarProperty Name="Meaning" ColumnName="Meaning" />
+                <ScalarProperty Name="LastUpdated" ColumnName="LastUpdated" />
+                <ScalarProperty Name="LastUpdatedBy" ColumnName="LastUpdatedBy" />
+                <ScalarProperty Name="CurrentStatus" ColumnName="CurrentStatus" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
           </EntityContainerMapping>
       </Mapping>
     </edmx:Mappings>

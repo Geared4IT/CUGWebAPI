@@ -331,5 +331,30 @@ namespace cugonlineWebAPI.Controllers
 
         #endregion
 
+        [Route("UserLogin")]
+        [HttpPost]
+        public async Task<BusinessUsersDTO> UserLogin(Login login)
+        {
+            try
+            {
+                var u = geared4it_DB.BusinessUsers.Where(r => r.Email.Equals(login.UserName) && r.Password.Equals(login.Password)).FirstOrDefault();
+
+                var user = new BusinessUsersDTO
+                {
+                    FirstName = u.FirstName,
+                    Surname = u.Surname,
+                    CompanyCodePrimary= u.CompanyCodePrimary,
+                    IsActive = u.IsActive,
+                    LastSyncDate = u.LastSyncDate.Value
+                };
+
+                return user;
+            }
+            catch (Exception ex )
+            {
+                return new BusinessUsersDTO { ErrorMessage = "UserLogin : " + ex.Message };
+            }
+            return new BusinessUsersDTO();
+        }
     }
 }

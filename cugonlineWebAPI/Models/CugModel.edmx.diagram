@@ -27,11 +27,11 @@
         <EntityTypeShape EntityType="testModel.BibleFootNote" Width="1.5" PointX="5.75" PointY="12.75" />
         <EntityTypeShape EntityType="testModel.BibleItalic" Width="1.5" PointX="7.75" PointY="12.75" />
         <EntityTypeShape EntityType="testModel.BibloUpload" Width="1.5" PointX="10.375" PointY="12.75" />
-        <EntityTypeShape EntityType="testModel.BusinessUser" Width="1.5" PointX="13.375" PointY="0.75" />
         <EntityTypeShape EntityType="testModel.Business" Width="1.5" PointX="15.5" PointY="0.875" />
-        <AssociationConnector Association="testModel.FK_BusinessUsers_Business" />
         <EntityTypeShape EntityType="testModel.BusinessProduct" Width="1.5" PointX="17.75" PointY="7.625" />
         <AssociationConnector Association="testModel.FK_BusinessProducts_Business" />
+        <EntityTypeShape EntityType="testModel.BusinessUser" Width="1.5" PointX="17.75" PointY="13.25" />
+        <AssociationConnector Association="testModel.FK_BusinessUsers_Business" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

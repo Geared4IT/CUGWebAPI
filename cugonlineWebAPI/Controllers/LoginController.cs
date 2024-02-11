@@ -2,21 +2,13 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Net;
-using System.Net.Http;
 using cugonlineWebAPI.Models;
 using cugonlineWebAPI.VM;
-using System.Web.Hosting;
 using System.IO;
-using System.Threading.Tasks;
 using System.Web;
-using Microsoft.WindowsAzure.Storage.Blob;
-using System.Configuration;
-using Microsoft.WindowsAzure.Storage;
-using Microsoft.WindowsAzure.Storage.Auth;
+
 using System.Net.Mail;
 using cugonlineWebAPI.DTO;
-using System.Text;
 using HtmlAgilityPack;
 using cugonlineWebAPI.Caching;
 
@@ -343,33 +335,17 @@ namespace cugonlineWebAPI.Controllers
 
         [Route("Figures")]
         [HttpGet]
-        [CacheFilter(TimeDuration = 999999999)] // 11 days
-        public List<FiguresDTO> GetFigures(string search, string isAdmin, bool? isSearchAttachments)
+        [CacheFilter(TimeDuration = 99999999)] // 11 days
+        public List<FiguresDTO> GetFigures(string search, string isAdmin, bool? isSearchAttachments, bool? isStartsWith)
         {
             Dictionary<object, object> obj = new Dictionary<object, object>();
 
             //bool isSearchAttachments = true;
             List<FiguresDTO> results = new List<FiguresDTO>();
-            if (search == "undefined" || search == null) search = "";
+            if (search == "undefined" || search == "null" || search == null) search = "";
             if (String.IsNullOrEmpty(search))
             {
-                results = cugDB.sp_SearchFigures(search).Select(m => new FiguresDTO
-                {
-                        Id = m.Id,
-                        Idx = m.Idx,
-                        Title = m.Title.ToUpper(),
-                        Body = m.Body,
-                        Meaning = m.Meaning,
-                        LastUpdated = m.LastUpdated.ToString(),
-                        LastUpdatedBy = (m.LastUpdatedBy.HasValue == true) ? cugDB.UserMasters.Where(u => u.ID.Equals(m.LastUpdatedBy.Value)).FirstOrDefault().Name : "",
-                        CurrentStatus = m.CurrentStatus
-                    }).ToList();
-                 
-            }
-            else
-            {            
-
-                results = cugDB.sp_SearchFigures(search).Select(m => new FiguresDTO
+                results = cugDB.sp_SearchFigures(search,false).Select(m => new FiguresDTO
                 {
                     Id = m.Id,
                     Idx = m.Idx,
@@ -379,60 +355,80 @@ namespace cugonlineWebAPI.Controllers
                     LastUpdated = m.LastUpdated.ToString(),
                     LastUpdatedBy = (m.LastUpdatedBy.HasValue == true) ? cugDB.UserMasters.Where(u => u.ID.Equals(m.LastUpdatedBy.Value)).FirstOrDefault().Name : "",
                     CurrentStatus = m.CurrentStatus
-                }).ToList();
-
-                //get list of attachments linked to References
-                var attachmentFilesLink = cugDB.MainFilesLinks.ToList();
-
-                //update results with attachment status
-                foreach (var item in results)
-                {
-                    item.HasAttachments = attachmentFilesLink.Where(r => r.Idx == item.Idx).Count() > 0 ? "Yes" : "No";
-                }
+                }).OrderBy(r=>r.Title).ToList();
 
             }
+            else
+            {
+                try
+                {
+                    results = cugDB.sp_SearchFigures(search, isStartsWith).Select(m => new FiguresDTO
+                    {
+                        Id = m.Id,
+                        Idx = m.Idx,
+                        Title = m.Title.ToUpper(),
+                        Body = m.Body,
+                        Meaning = m.Meaning,
+                        LastUpdated = m.LastUpdated.ToString(),
+                        LastUpdatedBy = (m.LastUpdatedBy.HasValue == true) ? cugDB.UserMasters.Where(u => u.ID.Equals(m.LastUpdatedBy.Value)).FirstOrDefault().Name : "",
+                        CurrentStatus = m.CurrentStatus
+                    }).OrderBy(r => r.Title).ToList();
 
-            if (isSearchAttachments.Value)//include attachments
-            {           
+                    //get list of attachments linked to References
+                    var attachmentFilesLink = cugDB.MainFilesLinks.ToList();
+
+                    //update results with attachment status
+                    foreach (var item in results)
+                    {
+                        item.HasAttachments = attachmentFilesLink.Where(r => r.Idx == item.Idx).Count() > 0 ? "Yes" : "No";
+                    }
+                }
+                catch (Exception ex)
+                {
+                    throw;
+                }
+            }
+
+            if (isSearchAttachments != null && isSearchAttachments.Value)//include attachments
+            {
 
                 //get list of attachments filtered by search criteria
                 var attachmentResults = (from mfl in cugDB.MainFilesLinks
                                          join mf in cugDB.MainFiles on mfl.idFiles equals mf.id
                                          join m in cugDB.Mains on mfl.Idx equals m.Idx
-                                        where mf.fName.Contains(search)
-                                               || mf.fComment.Contains(search)
-                                              
-                                           select new FiguresDTO
-                                           {
-                                               Id = m.Id,
-                                               Idx = m.Idx,
-                                               Title = m.Title.ToUpper(),
-                                               Body = m.Body,
-                                               Meaning = m.Meaning,
-                                               LastUpdated = m.LastUpdated.ToString(),
-                                               LastUpdatedBy = (m.LastUpdatedBy.HasValue == true) ? cugDB.UserMasters.Where(u => u.ID.Equals(m.LastUpdatedBy.Value)).FirstOrDefault().Name : "",
-                                               CurrentStatus = m.currentStatus,
-                                               HasAttachments = "Yes"
-                                           }).OrderBy(x => x.Title).ToList();
+                                         where mf.fComment.Contains(search)
+                                                //|| mf.fName.Contains(search)
+
+                                         select new FiguresDTO
+                                         {
+                                             Id = m.Id,
+                                             Idx = m.Idx,
+                                             Title = m.Title.ToUpper(),
+                                             Body = m.Body,
+                                             Meaning = m.Meaning,
+                                             LastUpdated = m.LastUpdated.ToString(),
+                                             LastUpdatedBy = (m.LastUpdatedBy.HasValue == true) ? cugDB.UserMasters.Where(u => u.ID.Equals(m.LastUpdatedBy.Value)).FirstOrDefault().Name : "",
+                                             CurrentStatus = m.currentStatus,
+                                             HasAttachments = "Yes"
+                                         }).OrderBy(x => x.Title).ToList();
                 //add attachment results to results.
                 foreach (var item in attachmentResults)
-                { 
+                {
                     //check if idx exists in results
                     var refereceExists = results.Where(r => r.Idx == item.Idx).Count() > 0 ? true : false;
                     if (!refereceExists)
                     {
                         results.Add(item);
-                    }                    
-                }                
+                    }
+                }
             }
 
-          
-
+            
             if (results != null)
             {
                 if (!isAdmin.Equals("true") && search != null)//only show live References
                 {
-                    results = results.Where(r => r.CurrentStatus.ToLower().Equals("live")).ToList();
+                    results = results.Where(r => r.CurrentStatus.ToLower().Equals("live")).OrderBy(r => r.Title).ToList();
                 }
                 var distinctResults = results.Distinct().ToList();
                 return distinctResults;
@@ -647,6 +643,7 @@ namespace cugonlineWebAPI.Controllers
         public List<FigureStasticsDTO> GetFigureCurrentStatus()
         {
             var results = (from m in cugDB.Mains
+                           where !m.currentStatus.Equals("Deleted")
                            group m by m.currentStatus into newGroup
                            orderby newGroup.Key
                            select new FigureStasticsDTO
@@ -750,8 +747,8 @@ namespace cugonlineWebAPI.Controllers
                                {
                                    LinkId = sm.Id,
                                    LinkIdx = sm.Link.Replace("/", "_"),// sm.Idx,
-                                   LinkTitle = sm.Title ?? "",
-                                   LinkIdxFriendlyName = sm.Title.Replace("_", " ")// sm.Idx.Replace("_", " ")
+                                   LinkTitle = sm.Title.Replace("%60", "'") ?? "",
+                                   LinkIdxFriendlyName = sm.Title.Replace("_", " ").Replace("%60", "'")// sm.Idx.Replace("_", " ")
                                }).Distinct().OrderBy(x => x.LinkIdx).ToList();
 
                 if (results != null) return results.Where(r => !r.LinkTitle.Equals(idx)).ToList();
@@ -1342,7 +1339,7 @@ namespace cugonlineWebAPI.Controllers
                 userDetails.isNew = false;
                 cugDB.Entry(userDetails).State = System.Data.Entity.EntityState.Modified;
                 cugDB.SaveChanges();
-                 
+
                 return new SystemUsersDTO { IsDeleted = true };
             }
             catch (Exception ex)
@@ -1430,7 +1427,7 @@ namespace cugonlineWebAPI.Controllers
 
             try
             {
-
+                
                 loginTo = loginTo.AddDays(1);
                 var lastHistoryDate = DateTime.Now.AddMonths(-1);
 

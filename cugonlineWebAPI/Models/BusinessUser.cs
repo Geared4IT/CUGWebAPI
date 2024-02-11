@@ -15,6 +15,7 @@ namespace cugonlineWebAPI.Models
     public partial class BusinessUser
     {
         public long Id { get; set; }
+        public Nullable<long> BusinessId { get; set; }
         public string FirstName { get; set; }
         public string Surname { get; set; }
         public string UserName { get; set; }
@@ -28,7 +29,6 @@ namespace cugonlineWebAPI.Models
         public bool IsActive { get; set; }
         public System.DateTime DateCreated { get; set; }
         public Nullable<System.DateTime> LastSyncDate { get; set; }
-        public Nullable<long> BusinessId { get; set; }
         public string ImagePath { get; set; }
     
         public virtual Business Business { get; set; }

@@ -16,8 +16,9 @@ namespace cugonlineWebAPI.Controllers
         {
             ViewBag.Title = "Home Page";
 
-           // return View();
+            // return View();
             return Redirect("~/weonline/index.html");
+            //return Redirect("~/devfolio/index.html");
         }
 
         [HttpPost]

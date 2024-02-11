@@ -1,5 +1,6 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="15.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="..\packages\EntityFramework.6.4.4\build\EntityFramework.props" Condition="Exists('..\packages\EntityFramework.6.4.4\build\EntityFramework.props')" />
   <Import Project="..\packages\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.2.0.0\build\net46\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.props" Condition="Exists('..\packages\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.2.0.0\build\net46\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.props')" />
   <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
   <PropertyGroup>
@@ -50,10 +51,10 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="EntityFramework, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
-      <HintPath>..\packages\EntityFramework.6.2.0\lib\net45\EntityFramework.dll</HintPath>
+      <HintPath>..\packages\EntityFramework.6.4.4\lib\net45\EntityFramework.dll</HintPath>
     </Reference>
     <Reference Include="EntityFramework.SqlServer, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
-      <HintPath>..\packages\EntityFramework.6.2.0\lib\net45\EntityFramework.SqlServer.dll</HintPath>
+      <HintPath>..\packages\EntityFramework.6.4.4\lib\net45\EntityFramework.SqlServer.dll</HintPath>
     </Reference>
     <Reference Include="HtmlAgilityPack, Version=1.11.28.0, Culture=neutral, PublicKeyToken=bd319b19eaf3b43a, processorArchitecture=MSIL">
       <HintPath>..\packages\HtmlAgilityPack.1.11.28\lib\Net45\HtmlAgilityPack.dll</HintPath>
@@ -76,27 +77,28 @@
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="System.Drawing" />
     <Reference Include="System.Net" />
-    <Reference Include="System.Net.Http.Formatting, Version=5.2.7.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
-      <HintPath>..\packages\Microsoft.AspNet.WebApi.Client.5.2.7\lib\net45\System.Net.Http.Formatting.dll</HintPath>
+    <Reference Include="System.Net.Http.Formatting, Version=5.2.9.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.AspNet.WebApi.Client.5.2.9\lib\net45\System.Net.Http.Formatting.dll</HintPath>
     </Reference>
+    <Reference Include="System.Numerics" />
     <Reference Include="System.Runtime" />
     <Reference Include="System.Security" />
     <Reference Include="System.Web.ApplicationServices" />
-    <Reference Include="System.Web.Cors, Version=5.2.7.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
-      <HintPath>..\packages\Microsoft.AspNet.Cors.5.2.7\lib\net45\System.Web.Cors.dll</HintPath>
+    <Reference Include="System.Web.Cors, Version=5.2.9.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.AspNet.Cors.5.2.9\lib\net45\System.Web.Cors.dll</HintPath>
     </Reference>
     <Reference Include="System.Web.DynamicData" />
     <Reference Include="System.Web.Entity" />
     <Reference Include="System.ComponentModel.DataAnnotations" />
     <Reference Include="System.Web.Extensions" />
-    <Reference Include="System.Web.Http, Version=5.2.7.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
-      <HintPath>..\packages\Microsoft.AspNet.WebApi.Core.5.2.7\lib\net45\System.Web.Http.dll</HintPath>
-    </Reference>
-    <Reference Include="System.Web.Http.Cors, Version=5.2.7.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
-      <HintPath>..\packages\Microsoft.AspNet.WebApi.Cors.5.2.7\lib\net45\System.Web.Http.Cors.dll</HintPath>
-    </Reference>
     <Reference Include="System.Web" />
     <Reference Include="System.Web.Abstractions" />
+    <Reference Include="System.Web.Http, Version=5.2.9.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.AspNet.WebApi.Core.5.2.9\lib\net45\System.Web.Http.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.Http.Cors, Version=5.2.9.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.AspNet.WebApi.Cors.5.2.9\lib\net45\System.Web.Http.Cors.dll</HintPath>
+    </Reference>
     <Reference Include="System.Web.Routing" />
     <Reference Include="System.Xml" />
     <Reference Include="System.Configuration" />
@@ -191,9 +193,10 @@
     <Compile Include="Areas\HelpPage\SampleGeneration\TextSample.cs" />
     <Compile Include="Areas\HelpPage\XmlDocumentationProvider.cs" />
     <Compile Include="Caching\CacheFilter.cs" />
+    <Compile Include="Models\Bibles.cs" />
     <Compile Include="Controllers\BusinessUsersController.cs" />
     <Compile Include="Controllers\BibloController.cs" />
-    <Compile Include="Controllers\ContactsController.cs" />
+    <Compile Include="Controllers\ContactController.cs" />
     <Compile Include="Helper\HelpMeWith.cs" />
     <Compile Include="DTO\BusinessProductsDTO.cs" />
     <Compile Include="DTO\BusinessUsersDTO.cs" />
@@ -242,6 +245,7 @@
     <Compile Include="Models\BusinessUser.cs">
       <DependentUpon>CugModel.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\Contact.cs" />
     <Compile Include="Models\CugModel.Context.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -290,6 +294,12 @@
     <Compile Include="Models\SeeMain.cs">
       <DependentUpon>CugModel.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\sp_EmptyReferencesDetails1_Result.cs">
+      <DependentUpon>CugModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\sp_EmptyReferencesDetails2_Result.cs">
+      <DependentUpon>CugModel.tt</DependentUpon>
+    </Compile>
     <Compile Include="Models\sp_EmptyReferencesDetails_Result.cs">
       <DependentUpon>CugModel.tt</DependentUpon>
     </Compile>
@@ -329,7 +339,209 @@
     <Content Include="assets\images\portfolio-img2.jpg" />
     <Content Include="assets\images\portfolio-img3.jpg" />
     <Content Include="assets\images\portfolio-img4.jpg" />
+    <Content Include="bakerman\404.html" />
+    <Content Include="bakerman\about.html" />
+    <Content Include="bakerman\bakery-website-template.jpg" />
+    <Content Include="bakerman\contact.html" />
+    <Content Include="bakerman\css\bootstrap.min.css" />
+    <Content Include="bakerman\css\style.css" />
+    <Content Include="bakerman\img\about-1.jpg" />
+    <Content Include="bakerman\img\about-2.jpg" />
+    <Content Include="bakerman\img\carousel-1.jpg" />
+    <Content Include="bakerman\img\carousel-2.jpg" />
+    <Content Include="bakerman\img\product-1.jpg" />
+    <Content Include="bakerman\img\product-2.jpg" />
+    <Content Include="bakerman\img\product-3.jpg" />
+    <Content Include="bakerman\img\service-1.jpg" />
+    <Content Include="bakerman\img\service-2.jpg" />
+    <Content Include="bakerman\img\team-1.jpg" />
+    <Content Include="bakerman\img\team-2.jpg" />
+    <Content Include="bakerman\img\team-3.jpg" />
+    <Content Include="bakerman\img\team-4.jpg" />
+    <Content Include="bakerman\img\testimonial-1.jpg" />
+    <Content Include="bakerman\img\testimonial-2.jpg" />
+    <Content Include="bakerman\img\testimonial-3.jpg" />
+    <Content Include="bakerman\img\testimonial-4.jpg" />
+    <Content Include="bakerman\index.html" />
+    <Content Include="bakerman\js\main.js" />
+    <Content Include="bakerman\lib\animate\animate.css" />
+    <Content Include="bakerman\lib\animate\animate.min.css" />
+    <Content Include="bakerman\lib\counterup\counterup.min.js" />
+    <Content Include="bakerman\lib\easing\easing.js" />
+    <Content Include="bakerman\lib\easing\easing.min.js" />
+    <Content Include="bakerman\lib\owlcarousel\assets\ajax-loader.gif" />
+    <Content Include="bakerman\lib\owlcarousel\assets\owl.carousel.css" />
+    <Content Include="bakerman\lib\owlcarousel\assets\owl.carousel.min.css" />
+    <Content Include="bakerman\lib\owlcarousel\assets\owl.theme.default.css" />
+    <Content Include="bakerman\lib\owlcarousel\assets\owl.theme.default.min.css" />
+    <Content Include="bakerman\lib\owlcarousel\assets\owl.theme.green.css" />
+    <Content Include="bakerman\lib\owlcarousel\assets\owl.theme.green.min.css" />
+    <Content Include="bakerman\lib\owlcarousel\assets\owl.video.play.png" />
+    <Content Include="bakerman\lib\owlcarousel\owl.carousel.js" />
+    <Content Include="bakerman\lib\owlcarousel\owl.carousel.min.js" />
+    <Content Include="bakerman\lib\waypoints\links.php" />
+    <Content Include="bakerman\lib\waypoints\waypoints.min.js" />
+    <Content Include="bakerman\lib\wow\wow.js" />
+    <Content Include="bakerman\lib\wow\wow.min.js" />
+    <Content Include="bakerman\LICENSE.txt" />
+    <Content Include="bakerman\product.html" />
+    <Content Include="bakerman\READ-ME.txt" />
+    <Content Include="bakerman\service.html" />
+    <Content Include="bakerman\team.html" />
+    <Content Include="bakerman\testimonial.html" />
     <Content Include="Content\bootstrap.min.css" />
+    <Content Include="katrinedove\bat\MailHandler-sub.php" />
+    <Content Include="katrinedove\bat\MailHandler.php" />
+    <Content Include="katrinedove\css\camera.css" />
+    <Content Include="katrinedove\css\font-awesome.css" />
+    <Content Include="katrinedove\css\form.css" />
+    <Content Include="katrinedove\css\grid.css" />
+    <Content Include="katrinedove\css\ie.css" />
+    <Content Include="katrinedove\css\owl.carousel.css" />
+    <Content Include="katrinedove\css\stuck.css" />
+    <Content Include="katrinedove\css\style.css" />
+    <Content Include="katrinedove\css\superfish.css" />
+    <Content Include="katrinedove\css\touchTouch.css" />
+    <Content Include="katrinedove\fonts\fontawesome-webfont.svg" />
+    <Content Include="katrinedove\images\arrowws.png" />
+    <Content Include="katrinedove\images\big1.jpg" />
+    <Content Include="katrinedove\images\big2.jpg" />
+    <Content Include="katrinedove\images\big3.jpg" />
+    <Content Include="katrinedove\images\big4.jpg" />
+    <Content Include="katrinedove\images\big5.jpg" />
+    <Content Include="katrinedove\images\big6.jpg" />
+    <Content Include="katrinedove\images\camera-loader.gif" />
+    <Content Include="katrinedove\images\car_img1.jpg" />
+    <Content Include="katrinedove\images\car_img2.jpg" />
+    <Content Include="katrinedove\images\car_img3.jpg" />
+    <Content Include="katrinedove\images\car_img4.jpg" />
+    <Content Include="katrinedove\images\car_img5.jpg" />
+    <Content Include="katrinedove\images\car_img6.jpg" />
+    <Content Include="katrinedove\images\car_img7.jpg" />
+    <Content Include="katrinedove\images\full1.jpg" />
+    <Content Include="katrinedove\images\full2.jpg" />
+    <Content Include="katrinedove\images\full3.jpg" />
+    <Content Include="katrinedove\images\full4.jpg" />
+    <Content Include="katrinedove\images\full5.jpg" />
+    <Content Include="katrinedove\images\full6.jpg" />
+    <Content Include="katrinedove\images\full7.jpg" />
+    <Content Include="katrinedove\images\full8.jpg" />
+    <Content Include="katrinedove\images\full9.jpg" />
+    <Content Include="katrinedove\images\katrina.jpg" />
+    <Content Include="katrinedove\images\logo.png" />
+    <Content Include="katrinedove\images\magnify.png" />
+    <Content Include="katrinedove\images\page1_img1.jpg" />
+    <Content Include="katrinedove\images\page1_img2.jpg" />
+    <Content Include="katrinedove\images\page1_img3.jpg" />
+    <Content Include="katrinedove\images\page1_img4.jpg" />
+    <Content Include="katrinedove\images\page1_img5.jpg" />
+    <Content Include="katrinedove\images\page1_img6.jpg" />
+    <Content Include="katrinedove\images\page2_img1.jpg" />
+    <Content Include="katrinedove\images\page2_img2.jpg" />
+    <Content Include="katrinedove\images\page2_img3.jpg" />
+    <Content Include="katrinedove\images\page2_img4.jpg" />
+    <Content Include="katrinedove\images\page2_img5.jpg" />
+    <Content Include="katrinedove\images\page2_img6.jpg" />
+    <Content Include="katrinedove\images\page2_img7.jpg" />
+    <Content Include="katrinedove\images\page2_img8.jpg" />
+    <Content Include="katrinedove\images\page2_img9.jpg" />
+    <Content Include="katrinedove\images\page4_img1.jpg" />
+    <Content Include="katrinedove\images\page4_img2.jpg" />
+    <Content Include="katrinedove\images\page4_img3.jpg" />
+    <Content Include="katrinedove\images\preloader.gif" />
+    <Content Include="katrinedove\images\prevnext.png" />
+    <Content Include="katrinedove\images\prevnext1.png" />
+    <Content Include="katrinedove\images\slide.jpg" />
+    <Content Include="katrinedove\images\slide1.jpg" />
+    <Content Include="katrinedove\images\slide2.jpg" />
+    <Content Include="katrinedove\images\totop.png" />
+    <Content Include="katrinedove\index-1.html" />
+    <Content Include="katrinedove\index-2.html" />
+    <Content Include="katrinedove\index-3.html" />
+    <Content Include="katrinedove\index-4.html" />
+    <Content Include="katrinedove\index.html" />
+    <Content Include="katrinedove\js\camera.js" />
+    <Content Include="katrinedove\js\html5shiv.js" />
+    <Content Include="katrinedove\js\jquery-migrate-1.1.1.js" />
+    <Content Include="katrinedove\js\jquery.easing.1.3.js" />
+    <Content Include="katrinedove\js\jquery.equalheights.js" />
+    <Content Include="katrinedove\js\jquery.js" />
+    <Content Include="katrinedove\js\jquery.mobile.customized.min.js" />
+    <Content Include="katrinedove\js\jquery.mobilemenu.js" />
+    <Content Include="katrinedove\js\jquery.ui.totop.js" />
+    <Content Include="katrinedove\js\owl.carousel.js" />
+    <Content Include="katrinedove\js\PIE.htc" />
+    <Content Include="katrinedove\js\PIE.php" />
+    <Content Include="katrinedove\js\script.js" />
+    <Content Include="katrinedove\js\sForm.js" />
+    <Content Include="katrinedove\js\superfish.js" />
+    <Content Include="katrinedove\js\TMForm.js" />
+    <Content Include="katrinedove\js\tmStickUp.js" />
+    <Content Include="katrinedove\js\touchTouch.jquery.js" />
+    <Content Include="katrinedove\readme.html" />
+    <Content Include="weonline\assets\css\style.css" />
+    <Content Include="weonline\assets\img\apple-touch-icon.png" />
+    <Content Include="weonline\assets\img\counters-bg.jpg" />
+    <Content Include="weonline\assets\img\favicon.png" />
+    <Content Include="weonline\assets\img\hero-bg.jpg" />
+    <Content Include="weonline\assets\img\overlay-bg.jpg" />
+    <Content Include="weonline\assets\img\portfolio-details-1.jpg" />
+    <Content Include="weonline\assets\img\portfolio-details-2.jpg" />
+    <Content Include="weonline\assets\img\portfolio-details-3.jpg" />
+    <Content Include="weonline\assets\img\post-1.jpg" />
+    <Content Include="weonline\assets\img\post-2.jpg" />
+    <Content Include="weonline\assets\img\post-3.jpg" />
+    <Content Include="weonline\assets\img\testimonial-2.jpg" />
+    <Content Include="weonline\assets\img\testimonial-4.jpg" />
+    <Content Include="weonline\assets\img\work-1.jpg" />
+    <Content Include="weonline\assets\img\work-2.jpg" />
+    <Content Include="weonline\assets\img\work-3.jpg" />
+    <Content Include="weonline\assets\img\work-4.jpg" />
+    <Content Include="weonline\assets\img\work-5.jpg" />
+    <Content Include="weonline\assets\img\work-6.jpg" />
+    <Content Include="weonline\assets\js\main.js" />
+    <Content Include="weonline\assets\scss\Readme.txt" />
+    <Content Include="weonline\assets\vendor\bootstrap-icons\bootstrap-icons.css" />
+    <Content Include="weonline\assets\vendor\bootstrap\css\bootstrap-grid.css" />
+    <Content Include="weonline\assets\vendor\bootstrap\css\bootstrap-grid.min.css" />
+    <Content Include="weonline\assets\vendor\bootstrap\css\bootstrap-grid.rtl.css" />
+    <Content Include="weonline\assets\vendor\bootstrap\css\bootstrap-grid.rtl.min.css" />
+    <Content Include="weonline\assets\vendor\bootstrap\css\bootstrap-reboot.css" />
+    <Content Include="weonline\assets\vendor\bootstrap\css\bootstrap-reboot.min.css" />
+    <Content Include="weonline\assets\vendor\bootstrap\css\bootstrap-reboot.rtl.css" />
+    <Content Include="weonline\assets\vendor\bootstrap\css\bootstrap-reboot.rtl.min.css" />
+    <Content Include="weonline\assets\vendor\bootstrap\css\bootstrap-utilities.css" />
+    <Content Include="weonline\assets\vendor\bootstrap\css\bootstrap-utilities.min.css" />
+    <Content Include="weonline\assets\vendor\bootstrap\css\bootstrap-utilities.rtl.css" />
+    <Content Include="weonline\assets\vendor\bootstrap\css\bootstrap-utilities.rtl.min.css" />
+    <Content Include="weonline\assets\vendor\bootstrap\css\bootstrap.css" />
+    <Content Include="weonline\assets\vendor\bootstrap\css\bootstrap.min.css" />
+    <Content Include="weonline\assets\vendor\bootstrap\css\bootstrap.rtl.css" />
+    <Content Include="weonline\assets\vendor\bootstrap\css\bootstrap.rtl.min.css" />
+    <Content Include="weonline\assets\vendor\bootstrap\js\bootstrap.bundle.js" />
+    <Content Include="weonline\assets\vendor\bootstrap\js\bootstrap.bundle.min.js" />
+    <Content Include="weonline\assets\vendor\bootstrap\js\bootstrap.esm.js" />
+    <Content Include="weonline\assets\vendor\bootstrap\js\bootstrap.esm.min.js" />
+    <Content Include="weonline\assets\vendor\bootstrap\js\bootstrap.js" />
+    <Content Include="weonline\assets\vendor\bootstrap\js\bootstrap.min.js" />
+    <Content Include="weonline\assets\vendor\glightbox\css\glightbox.css" />
+    <Content Include="weonline\assets\vendor\glightbox\css\glightbox.min.css" />
+    <Content Include="weonline\assets\vendor\glightbox\css\plyr.css" />
+    <Content Include="weonline\assets\vendor\glightbox\css\plyr.min.css" />
+    <Content Include="weonline\assets\vendor\glightbox\js\glightbox.js" />
+    <Content Include="weonline\assets\vendor\glightbox\js\glightbox.min.js" />
+    <Content Include="weonline\assets\vendor\php-email-form\validate.js" />
+    <Content Include="weonline\assets\vendor\purecounter\purecounter_vanilla.js" />
+    <Content Include="weonline\assets\vendor\swiper\swiper-bundle.min.css" />
+    <Content Include="weonline\assets\vendor\swiper\swiper-bundle.min.js" />
+    <Content Include="weonline\assets\vendor\typed.js\typed.js" />
+    <Content Include="weonline\assets\vendor\typed.js\typed.min.js" />
+    <Content Include="weonline\blog-single.html" />
+    <Content Include="weonline\forms\contact.php" />
+    <Content Include="weonline\forms\Readme.txt" />
+    <Content Include="weonline\index.html" />
+    <Content Include="weonline\portfolio-details.html" />
+    <Content Include="weonline\Readme.txt" />
     <Content Include="favicon.ico" />
     <Content Include="fonts\glyphicons-halflings-regular.svg" />
     <Content Include="Global.asax" />
@@ -367,74 +579,6 @@
     <Content Include="Areas\HelpPage\Views\Help\DisplayTemplates\CollectionModelDescription.cshtml" />
     <Content Include="Areas\HelpPage\Views\Help\DisplayTemplates\ApiGroup.cshtml" />
     <Content Include="Areas\HelpPage\Views\Help\Api.cshtml" />
-    <Content Include="weonline\blog.html" />
-    <Content Include="weonline\css\custom.css" />
-    <Content Include="weonline\css\default-skin\default-skin.css" />
-    <Content Include="weonline\css\default-skin\default-skin.png" />
-    <Content Include="weonline\css\default-skin\default-skin.svg" />
-    <Content Include="weonline\css\default-skin\preloader.gif" />
-    <Content Include="weonline\css\style.css" />
-    <Content Include="weonline\css\style.min.css" />
-    <Content Include="weonline\css\styles-merged.css" />
-    <Content Include="weonline\css\vendor\animate.css" />
-    <Content Include="weonline\css\vendor\bootstrap.min.css" />
-    <Content Include="weonline\css\vendor\default-skin.css" />
-    <Content Include="weonline\css\vendor\flexslider.css" />
-    <Content Include="weonline\css\vendor\icomoon.css" />
-    <Content Include="weonline\css\vendor\magnific-popup.css" />
-    <Content Include="weonline\css\vendor\owl.carousel.min.css" />
-    <Content Include="weonline\css\vendor\owl.theme.default.min.css" />
-    <Content Include="weonline\css\vendor\photoswipe.css" />
-    <Content Include="weonline\fonts\icomoon demo\demo-files\demo.css" />
-    <Content Include="weonline\fonts\icomoon demo\demo-files\demo.js" />
-    <Content Include="weonline\fonts\icomoon demo\demo.html" />
-    <Content Include="weonline\fonts\icomoon demo\fonts\icomoon.svg" />
-    <Content Include="weonline\fonts\icomoon demo\Read Me.txt" />
-    <Content Include="weonline\fonts\icomoon demo\style.css" />
-    <Content Include="weonline\fonts\icomoon\icomoon.svg" />
-    <Content Include="weonline\gulpfile.js" />
-    <Content Include="weonline\img\facebook.png" />
-    <Content Include="weonline\img\img_2.jpg" />
-    <Content Include="weonline\img\img_3.jpg" />
-    <Content Include="weonline\img\img_showcase_1.jpg" />
-    <Content Include="weonline\img\img_showcase_2.jpg" />
-    <Content Include="weonline\img\laptop_1.jpg" />
-    <Content Include="weonline\img\logo%402x.png" />
-    <Content Include="weonline\img\logo.png" />
-    <Content Include="weonline\img\person_1.jpg" />
-    <Content Include="weonline\img\person_2.jpg" />
-    <Content Include="weonline\img\person_3.jpg" />
-    <Content Include="weonline\img\person_4.jpg" />
-    <Content Include="weonline\img\person_5.jpg" />
-    <Content Include="weonline\img\person_6.jpg" />
-    <Content Include="weonline\img\person_7.jpg" />
-    <Content Include="weonline\img\twitter.png" />
-    <Content Include="weonline\img\uber.png" />
-    <Content Include="weonline\index.html" />
-    <Content Include="weonline\js\custom.js" />
-    <Content Include="weonline\js\main.js" />
-    <Content Include="weonline\js\main.min.js" />
-    <Content Include="weonline\js\scripts.js" />
-    <Content Include="weonline\js\scripts.min.js" />
-    <Content Include="weonline\js\vendor\bootstrap.min.js" />
-    <Content Include="weonline\js\vendor\circle-progress.min.js" />
-    <Content Include="weonline\js\vendor\html5shiv.min.js" />
-    <Content Include="weonline\js\vendor\jquery.appear.js" />
-    <Content Include="weonline\js\vendor\jquery.appear.min.js" />
-    <Content Include="weonline\js\vendor\jquery.countTo.js" />
-    <Content Include="weonline\js\vendor\jquery.easing.1.3.js" />
-    <Content Include="weonline\js\vendor\jquery.flexslider-min.js" />
-    <Content Include="weonline\js\vendor\jquery.magnific-popup.min.js" />
-    <Content Include="weonline\js\vendor\jquery.min.js" />
-    <Content Include="weonline\js\vendor\jquery.stellar.min.js" />
-    <Content Include="weonline\js\vendor\jquery.waypoints.min.js" />
-    <Content Include="weonline\js\vendor\owl.carousel.min.js" />
-    <Content Include="weonline\js\vendor\respond.min.js" />
-    <Content Include="weonline\login.html" />
-    <Content Include="weonline\pricing.html" />
-    <Content Include="weonline\README.txt" />
-    <Content Include="weonline\signup.html" />
-    <Content Include="weonline\tour.html" />
     <EntityDeploy Include="Models\CugModel.edmx">
       <Generator>EntityModelCodeGenerator</Generator>
       <LastGenOutput>CugModel.Designer.cs</LastGenOutput>
@@ -442,6 +586,123 @@
     <Content Include="Models\CugModel.edmx.diagram">
       <DependentUpon>CugModel.edmx</DependentUpon>
     </Content>
+    <Content Include="weonline\assets\vendor\bootstrap-icons\bootstrap-icons.json" />
+    <Content Include="weonline\assets\vendor\bootstrap-icons\bootstrap-icons.scss" />
+    <Content Include="weonline\assets\vendor\bootstrap-icons\fonts\bootstrap-icons.woff" />
+    <Content Include="weonline\assets\vendor\bootstrap-icons\fonts\bootstrap-icons.woff2" />
+    <Content Include="weonline\assets\vendor\bootstrap\css\bootstrap-grid.css.map" />
+    <Content Include="weonline\assets\vendor\bootstrap\css\bootstrap-grid.min.css.map" />
+    <Content Include="weonline\assets\vendor\bootstrap\css\bootstrap-grid.rtl.css.map" />
+    <Content Include="weonline\assets\vendor\bootstrap\css\bootstrap-grid.rtl.min.css.map" />
+    <Content Include="weonline\assets\vendor\bootstrap\css\bootstrap-reboot.css.map" />
+    <Content Include="weonline\assets\vendor\bootstrap\css\bootstrap-reboot.min.css.map" />
+    <Content Include="weonline\assets\vendor\bootstrap\css\bootstrap-reboot.rtl.css.map" />
+    <Content Include="weonline\assets\vendor\bootstrap\css\bootstrap-reboot.rtl.min.css.map" />
+    <Content Include="weonline\assets\vendor\bootstrap\css\bootstrap-utilities.css.map" />
+    <Content Include="weonline\assets\vendor\bootstrap\css\bootstrap-utilities.min.css.map" />
+    <Content Include="weonline\assets\vendor\bootstrap\css\bootstrap-utilities.rtl.css.map" />
+    <Content Include="weonline\assets\vendor\bootstrap\css\bootstrap-utilities.rtl.min.css.map" />
+    <Content Include="weonline\assets\vendor\bootstrap\css\bootstrap.css.map" />
+    <Content Include="weonline\assets\vendor\bootstrap\css\bootstrap.min.css.map" />
+    <Content Include="weonline\assets\vendor\bootstrap\css\bootstrap.rtl.css.map" />
+    <Content Include="weonline\assets\vendor\bootstrap\css\bootstrap.rtl.min.css.map" />
+    <Content Include="weonline\assets\vendor\bootstrap\js\bootstrap.bundle.js.map" />
+    <Content Include="weonline\assets\vendor\bootstrap\js\bootstrap.bundle.min.js.map" />
+    <Content Include="weonline\assets\vendor\bootstrap\js\bootstrap.esm.js.map" />
+    <Content Include="weonline\assets\vendor\bootstrap\js\bootstrap.esm.min.js.map" />
+    <Content Include="weonline\assets\vendor\bootstrap\js\bootstrap.js.map" />
+    <Content Include="weonline\assets\vendor\bootstrap\js\bootstrap.min.js.map" />
+    <Content Include="weonline\assets\vendor\purecounter\purecounter_vanilla.js.map" />
+    <Content Include="weonline\assets\vendor\swiper\swiper-bundle.min.js.map" />
+    <Content Include="weonline\assets\vendor\typed.js\typed.min.js.map" />
+    <Content Include="katrinedove\fonts\fontawesome-webfont.eot" />
+    <Content Include="katrinedove\fonts\fontawesome-webfont.ttf" />
+    <Content Include="katrinedove\fonts\fontawesome-webfont.woff" />
+    <Content Include="katrinedove\fonts\FontAwesome.otf" />
+    <Content Include="katrinedove\images\images.rar" />
+    <Content Include="bakerman\lib\owlcarousel\LICENSE" />
+    <Content Include="bakerman\scss\bootstrap.scss" />
+    <Content Include="bakerman\scss\bootstrap\scss\bootstrap-grid.scss" />
+    <Content Include="bakerman\scss\bootstrap\scss\bootstrap-reboot.scss" />
+    <Content Include="bakerman\scss\bootstrap\scss\bootstrap-utilities.scss" />
+    <Content Include="bakerman\scss\bootstrap\scss\bootstrap.scss" />
+    <Content Include="bakerman\scss\bootstrap\scss\forms\_floating-labels.scss" />
+    <Content Include="bakerman\scss\bootstrap\scss\forms\_form-check.scss" />
+    <Content Include="bakerman\scss\bootstrap\scss\forms\_form-control.scss" />
+    <Content Include="bakerman\scss\bootstrap\scss\forms\_form-range.scss" />
+    <Content Include="bakerman\scss\bootstrap\scss\forms\_form-select.scss" />
+    <Content Include="bakerman\scss\bootstrap\scss\forms\_form-text.scss" />
+    <Content Include="bakerman\scss\bootstrap\scss\forms\_input-group.scss" />
+    <Content Include="bakerman\scss\bootstrap\scss\forms\_labels.scss" />
+    <Content Include="bakerman\scss\bootstrap\scss\forms\_validation.scss" />
+    <Content Include="bakerman\scss\bootstrap\scss\helpers\_clearfix.scss" />
+    <Content Include="bakerman\scss\bootstrap\scss\helpers\_colored-links.scss" />
+    <Content Include="bakerman\scss\bootstrap\scss\helpers\_position.scss" />
+    <Content Include="bakerman\scss\bootstrap\scss\helpers\_ratio.scss" />
+    <Content Include="bakerman\scss\bootstrap\scss\helpers\_stretched-link.scss" />
+    <Content Include="bakerman\scss\bootstrap\scss\helpers\_text-truncation.scss" />
+    <Content Include="bakerman\scss\bootstrap\scss\helpers\_visually-hidden.scss" />
+    <Content Include="bakerman\scss\bootstrap\scss\mixins\_alert.scss" />
+    <Content Include="bakerman\scss\bootstrap\scss\mixins\_border-radius.scss" />
+    <Content Include="bakerman\scss\bootstrap\scss\mixins\_box-shadow.scss" />
+    <Content Include="bakerman\scss\bootstrap\scss\mixins\_breakpoints.scss" />
+    <Content Include="bakerman\scss\bootstrap\scss\mixins\_buttons.scss" />
+    <Content Include="bakerman\scss\bootstrap\scss\mixins\_caret.scss" />
+    <Content Include="bakerman\scss\bootstrap\scss\mixins\_clearfix.scss" />
+    <Content Include="bakerman\scss\bootstrap\scss\mixins\_color-scheme.scss" />
+    <Content Include="bakerman\scss\bootstrap\scss\mixins\_container.scss" />
+    <Content Include="bakerman\scss\bootstrap\scss\mixins\_deprecate.scss" />
+    <Content Include="bakerman\scss\bootstrap\scss\mixins\_forms.scss" />
+    <Content Include="bakerman\scss\bootstrap\scss\mixins\_gradients.scss" />
+    <Content Include="bakerman\scss\bootstrap\scss\mixins\_grid.scss" />
+    <Content Include="bakerman\scss\bootstrap\scss\mixins\_image.scss" />
+    <Content Include="bakerman\scss\bootstrap\scss\mixins\_list-group.scss" />
+    <Content Include="bakerman\scss\bootstrap\scss\mixins\_lists.scss" />
+    <Content Include="bakerman\scss\bootstrap\scss\mixins\_pagination.scss" />
+    <Content Include="bakerman\scss\bootstrap\scss\mixins\_reset-text.scss" />
+    <Content Include="bakerman\scss\bootstrap\scss\mixins\_resize.scss" />
+    <Content Include="bakerman\scss\bootstrap\scss\mixins\_table-variants.scss" />
+    <Content Include="bakerman\scss\bootstrap\scss\mixins\_text-truncate.scss" />
+    <Content Include="bakerman\scss\bootstrap\scss\mixins\_transition.scss" />
+    <Content Include="bakerman\scss\bootstrap\scss\mixins\_utilities.scss" />
+    <Content Include="bakerman\scss\bootstrap\scss\mixins\_visually-hidden.scss" />
+    <Content Include="bakerman\scss\bootstrap\scss\utilities\_api.scss" />
+    <Content Include="bakerman\scss\bootstrap\scss\vendor\_rfs.scss" />
+    <Content Include="bakerman\scss\bootstrap\scss\_accordion.scss" />
+    <Content Include="bakerman\scss\bootstrap\scss\_alert.scss" />
+    <Content Include="bakerman\scss\bootstrap\scss\_badge.scss" />
+    <Content Include="bakerman\scss\bootstrap\scss\_breadcrumb.scss" />
+    <Content Include="bakerman\scss\bootstrap\scss\_button-group.scss" />
+    <Content Include="bakerman\scss\bootstrap\scss\_buttons.scss" />
+    <Content Include="bakerman\scss\bootstrap\scss\_card.scss" />
+    <Content Include="bakerman\scss\bootstrap\scss\_carousel.scss" />
+    <Content Include="bakerman\scss\bootstrap\scss\_close.scss" />
+    <Content Include="bakerman\scss\bootstrap\scss\_containers.scss" />
+    <Content Include="bakerman\scss\bootstrap\scss\_dropdown.scss" />
+    <Content Include="bakerman\scss\bootstrap\scss\_forms.scss" />
+    <Content Include="bakerman\scss\bootstrap\scss\_functions.scss" />
+    <Content Include="bakerman\scss\bootstrap\scss\_grid.scss" />
+    <Content Include="bakerman\scss\bootstrap\scss\_helpers.scss" />
+    <Content Include="bakerman\scss\bootstrap\scss\_images.scss" />
+    <Content Include="bakerman\scss\bootstrap\scss\_list-group.scss" />
+    <Content Include="bakerman\scss\bootstrap\scss\_mixins.scss" />
+    <Content Include="bakerman\scss\bootstrap\scss\_modal.scss" />
+    <Content Include="bakerman\scss\bootstrap\scss\_nav.scss" />
+    <Content Include="bakerman\scss\bootstrap\scss\_navbar.scss" />
+    <Content Include="bakerman\scss\bootstrap\scss\_offcanvas.scss" />
+    <Content Include="bakerman\scss\bootstrap\scss\_pagination.scss" />
+    <Content Include="bakerman\scss\bootstrap\scss\_popover.scss" />
+    <Content Include="bakerman\scss\bootstrap\scss\_progress.scss" />
+    <Content Include="bakerman\scss\bootstrap\scss\_reboot.scss" />
+    <Content Include="bakerman\scss\bootstrap\scss\_root.scss" />
+    <Content Include="bakerman\scss\bootstrap\scss\_spinners.scss" />
+    <Content Include="bakerman\scss\bootstrap\scss\_tables.scss" />
+    <Content Include="bakerman\scss\bootstrap\scss\_toasts.scss" />
+    <Content Include="bakerman\scss\bootstrap\scss\_tooltip.scss" />
+    <Content Include="bakerman\scss\bootstrap\scss\_transitions.scss" />
+    <Content Include="bakerman\scss\bootstrap\scss\_type.scss" />
+    <Content Include="bakerman\scss\bootstrap\scss\_utilities.scss" />
+    <Content Include="bakerman\scss\bootstrap\scss\_variables.scss" />
     <None Include="Properties\PublishProfiles\cugonlineWebAPI - Web Deploy.pubxml" />
     <None Include="Properties\PublishProfiles\FolderProfile.pubxml" />
     <None Include="Properties\PublishProfiles\Geared4GoDaddy.pubxml" />
@@ -467,27 +728,11 @@
     <Content Include="Views\Home\Index.cshtml" />
     <Content Include="Views\Shared\Error.cshtml" />
     <Content Include="Views\Shared\_Layout.cshtml" />
-    <Content Include="weonline\css\.DS_Store" />
-    <Content Include="weonline\css\styles-merged.css.map" />
-    <Content Include="weonline\fonts\.DS_Store" />
-    <Content Include="weonline\fonts\icomoon demo\.DS_Store" />
-    <Content Include="weonline\fonts\icomoon demo\fonts\icomoon.eot" />
-    <Content Include="weonline\fonts\icomoon demo\fonts\icomoon.ttf" />
-    <Content Include="weonline\fonts\icomoon demo\fonts\icomoon.woff" />
-    <Content Include="weonline\fonts\icomoon demo\selection.json" />
-    <Content Include="weonline\fonts\icomoon\icomoon.eot" />
-    <Content Include="weonline\fonts\icomoon\icomoon.ttf" />
-    <Content Include="weonline\fonts\icomoon\icomoon.woff" />
-    <Content Include="weonline\img\.DS_Store" />
-    <Content Include="weonline\js\.DS_Store" />
-    <Content Include="weonline\js\vendor\.DS_Store" />
-    <Content Include="weonline\package.json" />
-    <Content Include="weonline\scss\.DS_Store" />
-    <Content Include="weonline\scss\style.scss" />
-    <Content Include="weonline\scss\_custom-settings.scss" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
+    <Folder Include="katrinedove\site\" />
+    <Folder Include="Views\ScriptureExternal\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="fonts\glyphicons-halflings-regular.woff2" />
@@ -554,7 +799,10 @@
       <ErrorText>This project references NuGet package(s) that are missing on this computer. Use NuGet Package Restore to download them.  For more information, see http://go.microsoft.com/fwlink/?LinkID=322105. The missing file is {0}.</ErrorText>
     </PropertyGroup>
     <Error Condition="!Exists('..\packages\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.2.0.0\build\net46\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.props')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.2.0.0\build\net46\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.props'))" />
+    <Error Condition="!Exists('..\packages\EntityFramework.6.4.4\build\EntityFramework.props')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\EntityFramework.6.4.4\build\EntityFramework.props'))" />
+    <Error Condition="!Exists('..\packages\EntityFramework.6.4.4\build\EntityFramework.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\EntityFramework.6.4.4\build\EntityFramework.targets'))" />
   </Target>
+  <Import Project="..\packages\EntityFramework.6.4.4\build\EntityFramework.targets" Condition="Exists('..\packages\EntityFramework.6.4.4\build\EntityFramework.targets')" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it.
        Other similar extension points exist, see Microsoft.Common.targets.
   <Target Name="BeforeBuild">

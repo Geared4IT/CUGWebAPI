@@ -1,0 +1,158 @@
+<Project Sdk="Microsoft.NET.Sdk.Web">
+
+  <PropertyGroup>
+    <TargetFramework>netcoreapp3.1</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <None Remove="Models\CugModel.Context.tt" />
+    <None Remove="Models\CugModel.edmx.diagram" />
+    <None Remove="Models\CugModel.tt" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Include="Models\CugModel.Context.tt">
+      <DependentUpon>CugModel.edmx</DependentUpon>
+      <LastGenOutput>CugModel.Context.cs</LastGenOutput>
+      <Generator>TextTemplatingFileGenerator</Generator>
+    </Content>
+    <Content Include="Models\CugModel.edmx.diagram">
+      <DependentUpon>CugModel.edmx</DependentUpon>
+    </Content>
+    <Content Include="Models\CugModel.tt">
+      <DependentUpon>CugModel.edmx</DependentUpon>
+      <LastGenOutput>CugModel.cs</LastGenOutput>
+      <Generator>TextTemplatingFileGenerator</Generator>
+    </Content>
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="EntityFramework" Version="6.4.4" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="3.0.0">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
+    <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="3.0.0" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="3.0.0">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
+  </ItemGroup>
+
+  <ItemGroup>
+    <Compile Update="Models\BibleAbbreviation.cs">
+      <DependentUpon>CugModel.tt</DependentUpon>
+    </Compile>
+    <Compile Update="Models\BibleBook.cs">
+      <DependentUpon>CugModel.tt</DependentUpon>
+    </Compile>
+    <Compile Update="Models\BibleBooksKJV.cs">
+      <DependentUpon>CugModel.tt</DependentUpon>
+    </Compile>
+    <Compile Update="Models\BibleFootNote.cs">
+      <DependentUpon>CugModel.tt</DependentUpon>
+    </Compile>
+    <Compile Update="Models\BibleFootNoteContent.cs">
+      <DependentUpon>CugModel.tt</DependentUpon>
+    </Compile>
+    <Compile Update="Models\BibleItalic.cs">
+      <DependentUpon>CugModel.tt</DependentUpon>
+    </Compile>
+    <Compile Update="Models\BibloMain.cs">
+      <DependentUpon>CugModel.tt</DependentUpon>
+    </Compile>
+    <Compile Update="Models\BibloUpload.cs">
+      <DependentUpon>CugModel.tt</DependentUpon>
+    </Compile>
+    <Compile Update="Models\Business.cs">
+      <DependentUpon>CugModel.tt</DependentUpon>
+    </Compile>
+    <Compile Update="Models\BusinessProduct.cs">
+      <DependentUpon>CugModel.tt</DependentUpon>
+    </Compile>
+    <Compile Update="Models\BusinessUser.cs">
+      <DependentUpon>CugModel.tt</DependentUpon>
+    </Compile>
+    <Compile Update="Models\CugModel.Context.cs">
+      <DependentUpon>CugModel.Context.tt</DependentUpon>
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+    </Compile>
+    <Compile Update="Models\CugModel.cs">
+      <DependentUpon>CugModel.tt</DependentUpon>
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+    </Compile>
+    <Compile Update="Models\CugModel.Designer.cs">
+      <DependentUpon>CugModel.edmx</DependentUpon>
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+    </Compile>
+    <Compile Update="Models\File.cs">
+      <DependentUpon>CugModel.tt</DependentUpon>
+    </Compile>
+    <Compile Update="Models\FileExtension.cs">
+      <DependentUpon>CugModel.tt</DependentUpon>
+    </Compile>
+    <Compile Update="Models\FilesLink.cs">
+      <DependentUpon>CugModel.tt</DependentUpon>
+    </Compile>
+    <Compile Update="Models\FileType.cs">
+      <DependentUpon>CugModel.tt</DependentUpon>
+    </Compile>
+    <Compile Update="Models\Main.cs">
+      <DependentUpon>CugModel.tt</DependentUpon>
+    </Compile>
+    <Compile Update="Models\MainFile.cs">
+      <DependentUpon>CugModel.tt</DependentUpon>
+    </Compile>
+    <Compile Update="Models\MainFilesLink.cs">
+      <DependentUpon>CugModel.tt</DependentUpon>
+    </Compile>
+    <Compile Update="Models\ReciprocalSeeMainRef.cs">
+      <DependentUpon>CugModel.tt</DependentUpon>
+    </Compile>
+    <Compile Update="Models\Request_detail.cs">
+      <DependentUpon>CugModel.tt</DependentUpon>
+    </Compile>
+    <Compile Update="Models\Request_master.cs">
+      <DependentUpon>CugModel.tt</DependentUpon>
+    </Compile>
+    <Compile Update="Models\SeeMain.cs">
+      <DependentUpon>CugModel.tt</DependentUpon>
+    </Compile>
+    <Compile Update="Models\sp_EmptyReferencesDetails1_Result.cs">
+      <DependentUpon>CugModel.tt</DependentUpon>
+    </Compile>
+    <Compile Update="Models\sp_EmptyReferencesDetails2_Result.cs">
+      <DependentUpon>CugModel.tt</DependentUpon>
+    </Compile>
+    <Compile Update="Models\sp_EmptyReferencesDetails_Result.cs">
+      <DependentUpon>CugModel.tt</DependentUpon>
+    </Compile>
+    <Compile Update="Models\sp_EmptyReferences_Result.cs">
+      <DependentUpon>CugModel.tt</DependentUpon>
+    </Compile>
+    <Compile Update="Models\sp_ProcessFootNoteContent_Result.cs">
+      <DependentUpon>CugModel.tt</DependentUpon>
+    </Compile>
+    <Compile Update="Models\sp_SearchFigures_Result.cs">
+      <DependentUpon>CugModel.tt</DependentUpon>
+    </Compile>
+    <Compile Update="Models\txtBox.cs">
+      <DependentUpon>CugModel.tt</DependentUpon>
+    </Compile>
+    <Compile Update="Models\UserActivity.cs">
+      <DependentUpon>CugModel.tt</DependentUpon>
+    </Compile>
+    <Compile Update="Models\UserMaster.cs">
+      <DependentUpon>CugModel.tt</DependentUpon>
+    </Compile>
+  </ItemGroup>
+
+  <ItemGroup>
+    <Service Include="{508349b6-6b84-4df5-91f0-309beebad82d}" />
+  </ItemGroup>
+
+
+</Project>

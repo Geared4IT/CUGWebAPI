@@ -17,8 +17,8 @@ namespace cugonlineWebAPI.Models
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
         public Business()
         {
-            this.BusinessUsers = new HashSet<BusinessUser>();
             this.BusinessProducts = new HashSet<BusinessProduct>();
+            this.BusinessUsers = new HashSet<BusinessUser>();
         }
     
         public long Id { get; set; }
@@ -36,8 +36,8 @@ namespace cugonlineWebAPI.Models
         public Nullable<System.DateTime> LastSyncDate { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<BusinessUser> BusinessUsers { get; set; }
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<BusinessProduct> BusinessProducts { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<BusinessUser> BusinessUsers { get; set; }
     }
 }

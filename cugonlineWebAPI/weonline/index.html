@@ -1,348 +1,742 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
+
+<head>
     <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Geared4IT.Net Online Web services and development</title>
-    <meta name="description" content="Online web services and consulting">
-    <meta name="keywords" content="online Business development. Web hosting. Support">
-    
-    <link href="https://fonts.googleapis.com/css?family=Rubik:300,400,500" rel="stylesheet"> 
-    <link rel="stylesheet" href="css/styles-merged.css">
-    <link rel="stylesheet" href="css/style.min.css">
-    <link rel="stylesheet" href="css/custom.css">
+    <meta content="width=device-width, initial-scale=1.0" name="viewport">
 
-    <!--[if lt IE 9]>
-      <script src="js/vendor/html5shiv.min.js"></script>
-      <script src="js/vendor/respond.min.js"></script>
-    <![endif]-->
-  </head>
-  <body>
-    
+    <title>Geared4IT Bootstrap Portfolio </title>
+    <meta content="" name="description">
+    <meta content="" name="keywords">
 
+    <!-- Favicons -->
+    <link href="assets/img/favicon.png" rel="icon">
+    <link href="assets/img/apple-touch-icon.png" rel="apple-touch-icon">
 
-  <!-- START: header -->
-  <header role="banner" class="probootstrap-header">
-    <div class="container-fluid">
-      <!-- <div class="row"> -->
-        <a href="index.html" class="probootstrap-logo">Geared4IT<span>.Net</span></a>
-        
-        <a href="#" class="probootstrap-burger-menu visible-xs" ><i>Menu</i></a>
-        <div class="mobile-menu-overlay"></div>
+    <!-- Vendor CSS Files -->
+    <link href="assets/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+    <link href="assets/vendor/bootstrap-icons/bootstrap-icons.css" rel="stylesheet">
+    <link href="assets/vendor/glightbox/css/glightbox.min.css" rel="stylesheet">
+    <link href="assets/vendor/swiper/swiper-bundle.min.css" rel="stylesheet">
 
-        <nav role="navigation" class="probootstrap-nav hidden-xs">
-          <ul class="probootstrap-main-nav">
-            <li><a href="index.html">Home</a></li>
-            <!--<li><a href="blog.html">Blog</a></li>-->
-            <li><a href="pricing.html">Pricing</a></li>
-            <!--<li><a href="tour.html">Tour</a></li>-->
-            <!--<li><a href="login.html">Log in</a></li>
-            <li class="probootstrap-cta"><a href="signup.html">Sign up</a></li>-->
-          </ul>
-          <div class="extra-text visible-xs">
-            <a href="#" class="probootstrap-burger-menu"><i>Menu</i></a>
-            <h5>Social</h5>
-            <ul class="social-buttons">
-              <li><a href="#"><i class="icon-twitter"></i></a></li>
-              <li><a href="#"><i class="icon-facebook"></i></a></li>
-              <li><a href="#"><i class="icon-instagram2"></i></a></li>
-            </ul>
-            <p><small>&copy; Copyright 2022. All Rights Reserved.</small></p>
-          </div>
-        </nav>
+    <!-- Template Main CSS File -->
+    <link href="assets/css/style.css" rel="stylesheet">
 
-        <section class="probootstrap-intro">
-          <div class="container">
-            <div class="row">
-              <div class="col-md-8 col-md-offset-2">
-                <h1 class="probootstrap-animate">Get your Business online today!</h1>
-                <div class="probootstrap-subtitle probootstrap-animate">
-                  <h2>Geared4IT services thrives in supporting small businesses with their online presence.</h2>
+    <!-- =======================================================
+    * Template Name: DevFolio
+    * Updated: Mar 10 2023 with Bootstrap v5.2.3
+    * Template URL: https://bootstrapmade.com/devfolio-bootstrap-portfolio-html-template/
+    * Author: BootstrapMade.com
+    * License: https://bootstrapmade.com/license/
+    ======================================================== -->
+</head>
+
+<body>
+
+    <!-- ======= Header ======= -->
+    <header id="header" class="fixed-top">
+        <div class="container d-flex align-items-center justify-content-between">
+
+            <h1 class="logo"><a href="index.html">Geared4IT</a></h1>
+            <!-- Uncomment below if you prefer to use an image logo -->
+            <!-- <a href="index.html" class="logo"><img src="assets/img/logo.png" alt="" class="img-fluid"></a>-->
+
+            <nav id="navbar" class="navbar">
+                <ul>
+                    <li><a class="nav-link scrollto active" href="#hero">Home</a></li>
+                    <li><a class="nav-link scrollto" href="#about">About</a></li>
+                    <li><a class="nav-link scrollto" href="#services">Services</a></li>
+                    <!--<li><a class="nav-link scrollto " href="#work">Work</a></li>-->
+                    <li><a class="nav-link scrollto " href="#work">Port folio</a></li>
+                    <li><a class="nav-link scrollto " href="#pricing">Pricing</a></li>
+                    <!--<li><a class="nav-link scrollto " href="#blog">Blog</a></li>-->
+                    <!--<li class="dropdown"><a href="#"><span>Drop Down</span> <i class="bi bi-chevron-down"></i></a>
+                      <ul>
+                        <li><a href="#">Drop Down 1</a></li>
+                        <li class="dropdown"><a href="#"><span>Deep Drop Down</span> <i class="bi bi-chevron-right"></i></a>
+                          <ul>
+                            <li><a href="#">Deep Drop Down 1</a></li>
+                            <li><a href="#">Deep Drop Down 2</a></li>
+                            <li><a href="#">Deep Drop Down 3</a></li>
+                            <li><a href="#">Deep Drop Down 4</a></li>
+                            <li><a href="#">Deep Drop Down 5</a></li>
+                          </ul>
+                        </li>
+                        <li><a href="#">Drop Down 2</a></li>
+                        <li><a href="#">Drop Down 3</a></li>
+                        <li><a href="#">Drop Down 4</a></li>
+                      </ul>
+                    </li>-->
+                    <li><a class="nav-link scrollto" href="#contact">Contact</a></li>
+                </ul>
+                <i class="bi bi-list mobile-nav-toggle"></i>
+            </nav><!-- .navbar -->
+
+        </div>
+    </header><!-- End Header -->
+    <!-- ======= Hero Section ======= -->
+    <div id="hero" class="hero route bg-image" style="background-image: url(assets/img/hero-bg.jpg); background-size: 90%;  ">
+        <!--style="background-image: url(assets/img/hero-bg.jpg)"-->
+        <div class="overlay-itro"></div>
+        <div class="hero-content display-table">
+            <div class="table-cell">
+                <div class="container">
+                    <!--<p class="display-6 color-d">Hello, world!</p>-->
+                    <h1 class="hero-title mb-4">I am Jacques Jafta</h1>
+                    <p class="hero-subtitle"><span class="typed" data-typed-items="Designer, Developer, Freelancer, Remote Support"></span></p>
+                    <!-- <p class="pt-3"><a class="btn btn-primary btn js-scroll px-4" href="#about" role="button">Learn More</a></p> -->
                 </div>
-                <p class="watch-intro probootstrap-animate hidden"><a href="https://vimeo.com/45830194" class="popup-vimeo">Watch the intro <i class="icon-play2"></i></a></p>
-              </div>
             </div>
-          </div>
+        </div>
+    </div><!-- End Hero Section -->
+
+    <main id="main">
+
+        <!-- ======= About Section ======= -->
+        <section id="about" class="about-mf sect-pt4 route">
+            <div class="container">
+                <div class="row">
+                    <div class="col-sm-12">
+                        <div class="box-shadow-full">
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="row">
+                                        <div class="col-sm-6 col-md-5">
+                                            <div class="about-img">
+                                                <img src="assets/img/testimonial-2.jpg" class="img-fluid rounded b-shadow-a" alt="">
+                                            </div>
+                                        </div>
+                                        <div class="col-sm-6 col-md-7">
+                                            <div class="about-info">
+                                                <p><span class="title-s">Name: </span> <span>Jacques D. Jafta</span></p>
+                                                <p><span class="title-s">Profile: </span> <span>full stack developer</span></p>
+                                                <p><span class="title-s">Email: </span> <span>gearup4it@gmail.com</span></p>
+                                                <p><span class="title-s">Phone: </span> <span>083 722 0291</span></p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="skill-mf">
+                                        <p class="title-s">Skill</p>
+                                        <span>HTML / CSS3</span> <span class="pull-right">85%</span>
+                                        <div class="progress">
+                                            <div class="progress-bar" role="progressbar" style="width: 85%;" aria-valuenow="85" aria-valuemin="0" aria-valuemax="100"></div>
+                                        </div>
+                                        <span>C#</span> <span class="pull-right">75%</span>
+                                        <div class="progress">
+                                            <div class="progress-bar" role="progressbar" style="width: 75%" aria-valuenow="75" aria-valuemin="0" aria-valuemax="100"></div>
+                                        </div>
+                                        <span>PHP</span> <span class="pull-right">50%</span>
+                                        <div class="progress">
+                                            <div class="progress-bar" role="progressbar" style="width: 50%" aria-valuenow="50" aria-valuemin="0" aria-valuemax="100"></div>
+                                        </div>
+                                        <span>JAVASCRIPT</span> <span class="pull-right">90%</span>
+                                        <div class="progress">
+                                            <div class="progress-bar" role="progressbar" style="width: 90%" aria-valuenow="90" aria-valuemin="0" aria-valuemax="100"></div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="about-me pt-4 pt-md-0">
+                                        <div class="title-box-2">
+                                            <h5 class="title-left">
+                                                About me
+                                            </h5>
+                                        </div>
+                                        <p class="lead">
+                                            20 years in the sofware development industry.
+                                            Jack of all trades, master of none.
+                                        </p>
+                                        <p class="lead">
+                                            Studied Info Tech at NMU 2000 - 2005, graduated with NDip and BTech
+                                        </p>
+                                        <p class="lead">
+                                            Support specialist and enjoy team collaboration
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section><!-- End About Section -->
+        <!-- ======= Services Section ======= -->
+        <section id="services" class="services-mf pt-5 route">
+            <div class="container">
+                <div class="row">
+                    <div class="col-sm-12">
+                        <div class="title-box text-center">
+                            <h3 class="title-a">
+                                Services
+                            </h3>
+                            <p class="subtitle-a">
+                                the delivery of technology-related services to a customer, allowing them to focus on their core business concerns
+                            </p>
+                            <div class="line-mf"></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-4">
+                        <div class="service-box">
+                            <div class="service-ico">
+                                <span class="ico-circle"><i class="bi bi-briefcase"></i></span>
+                            </div>
+                            <div class="service-content">
+                                <h2 class="s-title">Kepware Automation</h2>
+                                <p class="s-description text-center">
+                                    Kepware offers tools to control user server access, data source, or data values,
+                                    regulate read/write access, connect or disconnect client applications,
+                                    and configure secure data tunnels.
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="service-box">
+                            <div class="service-ico">
+                                <span class="ico-circle"><i class="bi bi-card-checklist"></i></span>
+                            </div>
+                            <div class="service-content">
+                                <h2 class="s-title">Web Design / Development</h2>
+                                <p class="s-description text-center">
+                                    Web design and development is an umbrella term that describes the process of
+                                    creating a website. Like the name suggests, it involves two major skill sets: web design and web development. Web design determines the look and feel of a website,
+                                    while web development determines how it functions.
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="service-box">
+                            <div class="service-ico">
+                                <span class="ico-circle"><i class="bi bi-bar-chart"></i></span>
+                            </div>
+                            <div class="service-content">
+                                <h2 class="s-title">Web Master / Hosting</h2>
+                                <p class="s-description text-center">
+                                    the process where a web hosting provider stores and maintains website files and applications on a server
+                                    to make its customers' websites accessible on the internet.
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="service-box">
+                            <div class="service-ico">
+                                <span class="ico-circle"><i class="bi bi-binoculars"></i></span>
+                            </div>
+                            <div class="service-content">
+                                <h2 class="s-title">NopCommerce Developer</h2>
+                                <p class="s-description text-center">
+                                    open-source eCommerce platform based on Microsoft's ASP.NET Core framework
+                                    and MS SQL Server 2012 backend Database. It provides a catalog frontend and an administration tool backend,
+                                    allowing shopping cart creation..
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="service-box">
+                            <div class="service-ico">
+                                <span class="ico-circle"><i class="bi bi-brightness-high"></i></span>
+                            </div>
+                            <div class="service-content">
+                                <h2 class="s-title">Shopify</h2>
+                                <p class="s-description text-center">
+                                    Shopify Inc. is a Canadian multinational e-commerce company headquartered in
+                                    Ottawa, Ontario. Shopify is the name of its proprietary
+                                    e-commerce platform for online stores and retail point-of-sale systems.
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="service-box">
+                            <div class="service-ico">
+                                <span class="ico-circle"><i class="bi bi-calendar4-week"></i></span>
+                            </div>
+                            <div class="service-content">
+                                <h2 class="s-title">Remote Support</h2>
+                                <p class="s-description text-center">
+                                    remotely access and control a computer or mobile device anytime,
+                                    anywhere using a reliable and secure remote support software
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section><!-- End Services Section -->
+        <!-- ======= Counter Section ======= -->
+        <div class="section-counter paralax-mf bg-image" style="background-image: url(assets/img/counters-bg.jpg)" hidden>
+            <div class="overlay-mf"></div>
+            <div class="container position-relative">
+                <div class="row">
+                    <div class="col-sm-3 col-lg-3">
+                        <div class="counter-box counter-box pt-4 pt-md-0">
+                            <div class="counter-ico">
+                                <span class="ico-circle"><i class="bi bi-check"></i></span>
+                            </div>
+                            <div class="counter-num">
+                                <p data-purecounter-start="0" data-purecounter-end="450" data-purecounter-duration="1" class="counter purecounter"></p>
+                                <span class="counter-text">WORKS COMPLETED</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-sm-3 col-lg-3">
+                        <div class="counter-box pt-4 pt-md-0">
+                            <div class="counter-ico">
+                                <span class="ico-circle"><i class="bi bi-journal-richtext"></i></span>
+                            </div>
+                            <div class="counter-num">
+                                <p data-purecounter-start="0" data-purecounter-end="25" data-purecounter-duration="1" class="counter purecounter"></p>
+                                <span class="counter-text">YEARS OF EXPERIENCE</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-sm-3 col-lg-3">
+                        <div class="counter-box pt-4 pt-md-0">
+                            <div class="counter-ico">
+                                <span class="ico-circle"><i class="bi bi-people"></i></span>
+                            </div>
+                            <div class="counter-num">
+                                <p data-purecounter-start="0" data-purecounter-end="550" data-purecounter-duration="1" class="counter purecounter"></p>
+                                <span class="counter-text">TOTAL CLIENTS</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-sm-3 col-lg-3">
+                        <div class="counter-box pt-4 pt-md-0">
+                            <div class="counter-ico">
+                                <span class="ico-circle"><i class="bi bi-award"></i></span>
+                            </div>
+                            <div class="counter-num">
+                                <p data-purecounter-start="0" data-purecounter-end="48" data-purecounter-duration="1" class="counter purecounter"></p>
+                                <span class="counter-text">AWARD WON</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div><!-- End Counter Section -->
+        <!--  ortfolio / Work Section -->
+
+        <section id="work" class="portfolio-mf sect-pt4 route">
+            <div class="container">
+                <div class="row">
+                    <div class="col-sm-12">
+                        <div class="title-box text-center">
+                            <h3 class="title-a">
+                                Portfolio
+                            </h3>
+                            <p class="subtitle-a">
+                                work completed and support SLA
+                            </p>
+                            <div class="line-mf"></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-4">
+                        <div class="work-box">
+                            <a href="assets/img/work-1.jpg" data-gallery="portfolioGallery" class="portfolio-lightbox">
+                                <div class="work-img">
+                                    <img src="assets/img/work-1.jpg" alt="" class="img-fluid">
+                                </div>
+                            </a>
+                            <div class="work-content">
+                                <div class="row">
+                                    <div class="col-sm-8">
+                                        <h2 class="w-title">Katrine Dove - model website</h2>
+                                        <div class="w-more">
+                                            <a href="https://geared4it.net/katrinedove/index.html" target="_blank"> <span class="w-ctegory">view Website</span> </a>
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-4" hidden>
+                                        <div class="w-like">
+                                            <a href="portfolio-details.html"> <span class="bi bi-plus-circle"></span></a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </section>
+        <!-- ======= Portfolio Section ======= -->
+        <section id="pricing" class="portfolio-mf sect-pt4 route">
+            <div class="container">
+                <div class="row">
+                    <div class="col-sm-12">
+                        <div class="title-box text-center">
+                            <h3 class="title-a">
+                                Pricing
+                            </h3>
+                            <p class="subtitle-a">
+                                Support and Services costs
+                            </p>
+                            <div class="line-mf"></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-4">
+                        <div class="work-box">
+                            <a href="assets/img/startup.jpg" data-gallery="portfolioGallery" class="portfolio-lightbox">
+                                <div class="work-img">
+                                    <img src="assets/img/startup.jpg" alt="" class="img-fluid">
+                                </div>
+                            </a>
+                            <div class="work-content">
+                                <div class="row">
+                                    <div class="col-sm-8">
+                                        <h2 class="w-title">Startup</h2>
+                                         
+                                    </div>
+                                    <div class="col-sm-4" hidden>
+                                        <div class="w-like">
+                                            <a href="portfolio-details.html"> <span class="bi bi-plus-circle"></span></a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="work-box">
+                            <a href="assets/img/business.jpg" data-gallery="portfolioGallery" class="portfolio-lightbox">
+                                <div class="work-img">
+                                    <img src="assets/img/business.jpg" alt="" class="img-fluid">
+                                </div>
+                            </a>
+                            <div class="work-content">
+                                <div class="row">
+                                    <div class="col-sm-8">
+                                        <h2 class="w-title">Business</h2>
+                                       
+                                    </div>
+                                    <div class="col-sm-4" hidden>
+                                        <div class="w-like">
+                                            <a href="portfolio-details.html"> <span class="bi bi-plus-circle"></span></a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="work-box">
+                            <a href="assets/img/Enterprise.jpg" data-gallery="portfolioGallery" class="portfolio-lightbox">
+                                <div class="work-img">
+                                    <img src="assets/img/Enterprise.jpg" alt="" class="img-fluid">
+                                </div>
+                            </a>
+                            <div class="work-content">
+                                <div class="row">
+                                    <div class="col-sm-8">
+                                        <h2 class="w-title">Enterprise</h2>
 
-      <!-- </div> -->
-    </div>
-    
-    
-  </header>
-  <!-- END: header -->
-  
-  <!-- START: section -->
-  <section class="probootstrap-section probootstrap-feature-first">
-    <div class="container">
-      <div class="row mb70" style="margin-top: -120px;">
-        <div class="col-md-4 probootstrap-animate">
-          <div class="probootstrap-box">
-              <div class="icon"><i class="icon-presentation"></i></div>
-              <h3>Web hosting</h3>
-              <p>A small river named Duden flows by their place and supplies it with the necessary regelialia. It is a paradisematic country, in which roasted parts of sentences fly into your mouth.</p>
-          </div>
-        </div>
-        <div class="col-md-4 probootstrap-animate">
-          <div class="probootstrap-box">
-              <div class="icon"><i class="icon-bargraph"></i></div>
-              <h3>Web Design</h3>
-              <p>A small river named Duden flows by their place and supplies it with the necessary regelialia. It is a paradisematic country, in which roasted parts of sentences fly into your mouth.</p>
-          </div>
-        </div>
-        <div class="col-md-4 probootstrap-animate">
-          <div class="probootstrap-box">
-              <div class="icon"><i class="icon-megaphone2"></i></div>
-              <h3>Custom Development</h3>
-              <p>A small river named Duden flows by their place and supplies it with the necessary regelialia. It is a paradisematic country, in which roasted parts of sentences fly into your mouth.</p>
-          </div>
-        </div>
-      </div>
-      <div class="row">
-        <div class="col-md-4 col-md-offset-4 probootstrap-animate">
-          <p class="text-center">
-            <a href="#" class="btn btn-primary btn-lg btn-block" role="button">Get started</a>
-          </p>
-        </div>
-      </div>
-    </div>
-  </section>
-  <!-- END: section -->
+                                    </div>
+                                    <div class="col-sm-4" hidden>
+                                        <div class="w-like">
+                                            <a href="portfolio-details.html"> <span class="bi bi-plus-circle"></span></a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        <!-- ======= Testimonials Section ======= -->
+        <div class="testimonials paralax-mf bg-image" style="background-image: url(assets/img/overlay-bg.jpg)" hidden>
+            <div class="overlay-mf"></div>
+            <div class="container">
+                <div class="row">
+                    <div class="col-md-12">
 
-  
+                        <div class="testimonials-slider swiper" data-aos="fade-up" data-aos-delay="100">
+                            <div class="swiper-wrapper">
 
-  <!-- START: section -->
-  <section class="probootstrap-section probootstrap-section-extra hidden">
-    <div class="container-fluid probootstrap-absolute">
-      <div class="row">
-        <div class="col-md-7 col-md-push-6 probootstrap-animate" data-animate-effect="fadeInRight">
-          <img src="img/img_showcase_2.jpg" alt="Free Bootstrap Template by uicookies.com" class="img-responsive shadow-left">
-        </div>
-      </div>
-    </div>
-    <div class="container">
-      <div class="row">
-        <div class="col-lg-5 col-md-5 section-heading probootstrap-animate">
-          <h2>We guide companies</h2>
-          <p class="lead">Far far away, behind the word mountains, far from the countries Vokalia and Consonantia, there live the blind texts. Separated they live in Bookmarksgrove right at the coast of the Semantics, a large language ocean.</p>
-          
-          <blockquote class="probootstrap-quote">
-            <figure class="probootstrap-quote-logo uber">
-             <img src="img/uber.png" alt="Free Bootstrap Template by uicookies.com" class="img-responsive">
-            </figure>
-            <p>&ldquo;A small river named Duden flows by their place and supplies it with the necessary regelialia. It is a paradisematic country, in which roasted parts of sentences fly into your mouth.&rdquo;</p>
-            <p class="probootstrap-quote-author"><img src="img/person_1.jpg" alt="Free Bootstrap Template by uicookies.com"> Chris Worth, Uber</p>
-          </blockquote>
-        </div>
-      </div>
-    </div>
-  </section>
-  <!-- END: section -->
+                                <div class="swiper-slide">
+                                    <div class="testimonial-box">
+                                        <div class="author-test">
+                                            <img src="assets/img/testimonial-2.jpg" alt="" class="rounded-circle b-shadow-a">
+                                            <span class="author">Xavi Alonso</span>
+                                        </div>
+                                        <div class="content-test">
+                                            <p class="description lead">
+                                                Curabitur arcu erat, accumsan id imperdiet et, porttitor at sem. Lorem ipsum dolor sit amet,
+                                                consectetur adipiscing elit.
+                                            </p>
+                                        </div>
+                                    </div>
+                                </div><!-- End testimonial item -->
 
-  <!-- START: section -->
-  <section class="probootstrap-section probootstrap-section-extra hidden">
-    <div class="container-fluid probootstrap-absolute">
-      <div class="row">
-        <div class="col-md-8 col-md-pull-2 probootstrap-animate" data-animate-effect="fadeInLeft">
-          <img src="img/laptop_1.jpg" alt="Free Bootstrap Template by uicookies.com" class="img-responsive">
-        </div>
-      </div>
-    </div>
-    <div class="container">
-      <div class="row">
-        <div class="col-lg-5 col-md-5 col-md-push-6 section-heading probootstrap-animate">
-          <h2>We design extraordinary</h2>
-          <p class="lead">Far far away, behind the word mountains, far from the countries Vokalia and Consonantia, there live the blind texts. Separated they live in Bookmarksgrove right at the coast of the Semantics, a large language ocean.</p>
-          <blockquote class="probootstrap-quote">
-            <figure class="probootstrap-quote-logo facebook">
-             <img src="img/facebook.png" alt="Free Bootstrap Template by uicookies.com" class="img-responsive">
-            </figure>
-            <p>&ldquo;A small river named Duden flows by their place and supplies it with the necessary regelialia. It is a paradisematic country, in which roasted parts of sentences fly into your mouth.&rdquo;</p>
-            <p class="probootstrap-quote-author"><img src="img/person_5.jpg" alt="Free Bootstrap Template by uicookies.com"> Janet Morris, Facebook</p>
-          </blockquote>
-        </div>
-      </div>
-    </div>
-  </section>
-  <!-- END: section -->
+                                <div class="swiper-slide">
+                                    <div class="testimonial-box">
+                                        <div class="author-test">
+                                            <img src="assets/img/testimonial-4.jpg" alt="" class="rounded-circle b-shadow-a">
+                                            <span class="author">Marta Socrate</span>
+                                        </div>
+                                        <div class="content-test">
+                                            <p class="description lead">
+                                                Curabitur arcu erat, accumsan id imperdiet et, porttitor at sem. Lorem ipsum dolor sit amet,
+                                                consectetur adipiscing elit.
+                                            </p>
+                                        </div>
+                                    </div>
+                                </div><!-- End testimonial item -->
+                            </div>
+                            <div class="swiper-pagination"></div>
+                        </div>
 
-  <!-- START: section -->
-  <section class="probootstrap-section probootstrap-section-extra last hidden">
-    <div class="container-fluid probootstrap-absolute">
-      <div class="row">
-        <div class="col-md-7 col-md-push-6 probootstrap-animate" data-animate-effect="fadeInRight">
-          <img src="img/img_showcase_1.jpg" alt="Free Bootstrap Template by uicookies.com" class="img-responsive shadow-left">
-        </div>
-      </div>
-    </div>
-    <div class="container">
-      <div class="row">
-        <div class="col-lg-5 col-md-5 section-heading probootstrap-animate">
-          <h2>We bring emotion to our product</h2>
-          <p class="lead">Far far away, behind the word mountains, far from the countries Vokalia and Consonantia, there live the blind texts. Separated they live in Bookmarksgrove right at the coast of the Semantics, a large language ocean.</p>
-          
-          <blockquote class="probootstrap-quote">
-            <figure class="probootstrap-quote-logo twitter">
-             <img src="img/twitter.png" alt="Free Bootstrap Template by uicookies.com" class="img-responsive">
-            </figure>
-            <p>&ldquo;A small river named Duden flows by their place and supplies it with the necessary regelialia. It is a paradisematic country, in which roasted parts of sentences fly into your mouth.&rdquo;</p>
-            <p class="probootstrap-quote-author"><img src="img/person_7.jpg" alt="Free Bootstrap Template by uicookies.com"> Jessa Sy, Twitter</p>
-          </blockquote>
-        </div>
-      </div>
-    </div>
-  </section>
-  <!-- END: section -->
-  <!-- START: section -->
-  <section class="probootstrap-section probootstrap-section-colored hidden">
-    <div class="container">
-      <div class="row">
-        <div class="col-md-8 col-md-offset-2 section-heading mb50 text-center probootstrap-animate">
-          <h2>More Benefits</h2>
-          <p class="lead">A small river named Duden flows by their place and supplies it with the necessary regelialia. It is a paradisematic country, in which roasted parts of sentences fly into your mouth.</p>
-        </div>
-      </div>
-      <div class="row">
-        <div class="col-md-4 col-sm-6 col-xs-12 probootstrap-animate">
-          <h3 class="heading-with-icon"><i class="icon-heart2"></i> <span>NopCommerce</span></h3>
-          <p>Far far away, behind the word mountains, far from the countries Vokalia and Consonantia, there live the blind texts. Separated they live in Bookmarksgrove right at the coast of the Semantics, a large language ocean.</p>
-        </div>
-        <div class="col-md-4 col-sm-6 col-xs-12 probootstrap-animate">
-          <h3 class="heading-with-icon"><i class="icon-rocket"></i> <span>We guide companies</span></h3>
-          <p>Far far away, behind the word mountains, far from the countries Vokalia and Consonantia, there live the blind texts. Separated they live in Bookmarksgrove right at the coast of the Semantics, a large language ocean.</p>
-        </div>
-        <div class="clearfix visible-sm-block"></div>
-        <div class="col-md-4 col-sm-6 col-xs-12 probootstrap-animate">
-          <h3 class="heading-with-icon"><i class="icon-image"></i> <span>We design extraordinary</span></h3>
-          <p>Far far away, behind the word mountains, far from the countries Vokalia and Consonantia, there live the blind texts. Separated they live in Bookmarksgrove right at the coast of the Semantics, a large language ocean.</p>
-        </div>
-        <div class="clearfix visible-md-block"></div>
-        <div class="col-md-4 col-sm-6 col-xs-12 probootstrap-animate">
-          <h3 class="heading-with-icon"><i class="icon-briefcase"></i> <span>NopCommerce 2</span></h3>
-          <p>Far far away, behind the word mountains, far from the countries Vokalia and Consonantia, there live the blind texts. Separated they live in Bookmarksgrove right at the coast of the Semantics, a large language ocean.</p>
-        </div>
-        <div class="clearfix visible-sm-block"></div>
-        <div class="col-md-4 col-sm-6 col-xs-12 probootstrap-animate">
-          <h3 class="heading-with-icon"><i class="icon-chat"></i> <span>We guide companies</span></h3>
-          <p>Far far away, behind the word mountains, far from the countries Vokalia and Consonantia, there live the blind texts. Separated they live in Bookmarksgrove right at the coast of the Semantics, a large language ocean.</p>
-        </div>
-        <div class="col-md-4 col-sm-6 col-xs-12 probootstrap-animate">
-          <h3 class="heading-with-icon"><i class="icon-colours"></i> <span>We design extraordinary</span></h3>
-          <p>Far far away, behind the word mountains, far from the countries Vokalia and Consonantia, there live the blind texts. Separated they live in Bookmarksgrove right at the coast of the Semantics, a large language ocean.</p>
-        </div>
-        <div class="clearfix visible-sm-block"></div>
-      </div>
-    </div>
-  </section>
-  <!-- END: section -->
+                        <!-- <div id="testimonial-mf" class="owl-carousel owl-theme">
 
-  <section class="probootstrap-section">
-    <div class="container">
-      <div class="row">
-        <div class="col-md-8 col-md-offset-2 section-heading mb50 text-center">
-          <h2>Our Services</h2>
-          <p class="lead">A small river named Duden flows by their place and supplies it with the necessary regelialia. It is a paradisematic country, in which roasted parts of sentences fly into your mouth.</p>
-        </div>
-      </div>
-      <div class="row">
-        <div class="col-md-4 col-sm-6 col-xs-12">
-            <h3 class="mb30">NopCommerce</h3>
-          <p>Far far away, behind the word mountains, far from the countries Vokalia and Consonantia, there live the blind texts. Separated they live in Bookmarksgrove right at the coast of the Semantics, a large language ocean.</p>
-          <p><a href="#" class="link-with-icon">Learn More <i class=" icon-chevron-right"></i></a></p>
-        </div>
-        <div class="col-md-4 col-sm-6 col-xs-12">
-          <h3 class="mb30">Shopify</h3>
-          <p>Far far away, behind the word mountains, far from the countries Vokalia and Consonantia, there live the blind texts. Separated they live in Bookmarksgrove right at the coast of the Semantics, a large language ocean.</p>
-          <p><a href="#" class="link-with-icon">Learn More <i class=" icon-chevron-right"></i></a></p>
-        </div>
-        <div class="col-md-4 col-sm-6 col-xs-12">
-          <h3 class="mb30">WordPress</h3>
-          <p>Far far away, behind the word mountains, far from the countries Vokalia and Consonantia, there live the blind texts. Separated they live in Bookmarksgrove right at the coast of the Semantics, a large language ocean.</p>
-          <p><a href="#" class="link-with-icon">Learn More <i class=" icon-chevron-right"></i></a></p>
-        </div>
-      </div>
-    </div>
-  </section>
-  <!-- END: section -->
-  
-  <!-- START: footer -->
-  <footer role="contentinfo" class="probootstrap-footer">
-    <div class="container">
-      <div class="row">
-        <div class="col-md-6">
-          <div class="probootstrap-footer-widget">
-            <h3>About</h3>
-            <p>A small river named Duden flows by their place and supplies it with the necessary regelialia. It is a paradisematic country, in which roasted parts of sentences fly into your mouth.</p>
-            <p><a href="#" class="link-with-icon">Learn More <i class=" icon-chevron-right"></i></a></p>
-          </div>
-        </div>
-        <div class="col-md-4 hidden">
-          <div class="probootstrap-footer-widget">
-            <h3>Blog</h3>
-            <ul class="probootstrap-blog-list">
-              <li>
-                <a href="#">
-                  <figure><img src="img/img_2.jpg" alt="Free Bootstrap Template by uicookies.com" class="img-responsive"></figure>
-                  <div class="text">
-                    <h4>River named Duden flows</h4>
-                    <p>A small river named Duden flows by their place</p>
-                  </div>
-                </a>
-              </li>
-              <li>
-                <a href="#">
-                  <figure><img src="img/img_3.jpg" alt="Free Bootstrap Template by uicookies.com" class="img-responsive"></figure>
-                  <div class="text">
-                    <h4>River named Duden flows</h4>
-                    <p>A small river named Duden flows by their place</p>
-                  </div>
-                </a>
-              </li>
-              <li>
-                <a href="#">
-                  <figure><img src="img/img_2.jpg" alt="Free Bootstrap Template by uicookies.com" class="img-responsive"></figure>
-                  <div class="text">
-                    <h4>River named Duden flows</h4>
-                    <p>A small river named Duden flows by their place</p>
-                  </div>
-                </a>
-              </li>
-            </ul>
-          </div>
-        </div>
-        <div class="col-md-6">
-          <div class="probootstrap-footer-widget">
-            <h3>Contact</h3>
-            <ul class="probootstrap-contact-info">
-              <li><i class="icon-location2"></i> <span>49 Cape Road, 5 Ways</span></li>
-              <li><i class="icon-mail"></i><span>gearup4it@gmail.com</span></li>
-              <li><i class="icon-phone2"></i><span>083 722 0291</span></li>
-            </ul>
-            
-          </div>
-        </div>
-      </div>
-      <div class="row mt40">
-        <div class="col-md-12 text-center">
-          <ul class="probootstrap-footer-social">
-            <li><a href="https://twitter.com/geared4it"><i class="icon-twitter"></i></a></li>
-            <li><a href="https://www.facebook.com/Geared4IT/"><i class="icon-facebook"></i></a></li>
-            <li><a href="https://www.instagram.com/jacquesjafta"><i class="icon-instagram2"></i></a></li>
-          </ul>
-          <p>
-            <small>&copy; 2022 <a href="https://uicookies.com/" target="_blank">uiCookies:Sublime</a>. All Rights Reserved. <br> Designed &amp; Developed by <a href="https://uicookies.com/" target="_blank">uicookies.com</a> Demo Images: Unsplash</small>
-          </p>
-          
-        </div>
-      </div>
-    </div>
-  </footer>
-  <!-- END: footer -->
+                        </div> -->
+                    </div>
+                </div>
+            </div>
+        </div><!-- End Testimonials Section -->
+        <!-- ======= Blog Section ======= -->
+        <section id="blog" class="blog-mf sect-pt4 route" hidden>
+            <div class="container">
+                <div class="row">
+                    <div class="col-sm-12">
+                        <div class="title-box text-center">
+                            <h3 class="title-a">
+                                Blog
+                            </h3>
+                            <p class="subtitle-a">
+                                Lorem ipsum, dolor sit amet consectetur adipisicing elit.
+                            </p>
+                            <div class="line-mf"></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-4">
+                        <div class="card card-blog">
+                            <div class="card-img">
+                                <a href="blog-single.html"><img src="assets/img/post-1.jpg" alt="" class="img-fluid"></a>
+                            </div>
+                            <div class="card-body">
+                                <div class="card-category-box">
+                                    <div class="card-category">
+                                        <h6 class="category">Travel</h6>
+                                    </div>
+                                </div>
+                                <h3 class="card-title"><a href="blog-single.html">See more ideas about Travel</a></h3>
+                                <p class="card-description">
+                                    Proin eget tortor risus. Pellentesque in ipsum id orci porta dapibus. Praesent sapien massa, convallis
+                                    a pellentesque nec,
+                                    egestas non nisi.
+                                </p>
+                            </div>
+                            <div class="card-footer">
+                                <div class="post-author">
+                                    <a href="#">
+                                        <img src="assets/img/testimonial-2.jpg" alt="" class="avatar rounded-circle">
+                                        <span class="author">Morgan Freeman</span>
+                                    </a>
+                                </div>
+                                <div class="post-date">
+                                    <span class="bi bi-clock"></span> 10 min
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="card card-blog">
+                            <div class="card-img">
+                                <a href="blog-single.html"><img src="assets/img/post-2.jpg" alt="" class="img-fluid"></a>
+                            </div>
+                            <div class="card-body">
+                                <div class="card-category-box">
+                                    <div class="card-category">
+                                        <h6 class="category">Web Design</h6>
+                                    </div>
+                                </div>
+                                <h3 class="card-title"><a href="blog-single.html">See more ideas about Travel</a></h3>
+                                <p class="card-description">
+                                    Proin eget tortor risus. Pellentesque in ipsum id orci porta dapibus. Praesent sapien massa, convallis
+                                    a pellentesque nec,
+                                    egestas non nisi.
+                                </p>
+                            </div>
+                            <div class="card-footer">
+                                <div class="post-author">
+                                    <a href="#">
+                                        <img src="assets/img/testimonial-2.jpg" alt="" class="avatar rounded-circle">
+                                        <span class="author">Morgan Freeman</span>
+                                    </a>
+                                </div>
+                                <div class="post-date">
+                                    <span class="bi bi-clock"></span> 10 min
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="card card-blog">
+                            <div class="card-img">
+                                <a href="blog-single.html"><img src="assets/img/post-3.jpg" alt="" class="img-fluid"></a>
+                            </div>
+                            <div class="card-body">
+                                <div class="card-category-box">
+                                    <div class="card-category">
+                                        <h6 class="category">Web Design</h6>
+                                    </div>
+                                </div>
+                                <h3 class="card-title"><a href="blog-single.html">See more ideas about Travel</a></h3>
+                                <p class="card-description">
+                                    Proin eget tortor risus. Pellentesque in ipsum id orci porta dapibus. Praesent sapien massa, convallis
+                                    a pellentesque nec,
+                                    egestas non nisi.
+                                </p>
+                            </div>
+                            <div class="card-footer">
+                                <div class="post-author">
+                                    <a href="#">
+                                        <img src="assets/img/testimonial-2.jpg" alt="" class="avatar rounded-circle">
+                                        <span class="author">Morgan Freeman</span>
+                                    </a>
+                                </div>
+                                <div class="post-date">
+                                    <span class="bi bi-clock"></span> 10 min
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section><!-- End Blog Section -->
+        <!-- ======= Contact Section ======= -->
+        <section id="contact" class="paralax-mf footer-paralax bg-image sect-mt4 route" style="background-image: url(assets/img/overlay-bg.jpg)">
+            <div class="overlay-mf"></div>
+            <div class="container">
+                <div class="row">
+                    <div class="col-sm-12">
+                        <div class="contact-mf">
+                            <div id="contact" class="box-shadow-full">
+                                <div class="row">
+                                    <div class="col-md-6" hidden>
+                                        <div class="title-box-2">
+                                            <h5 class="title-left">
+                                                Send Message Us
+                                            </h5>
+                                        </div>
+                                        <div>
+                                            <form action="forms/contact.php" method="post" role="form" class="php-email-form">
+                                                <div class="row">
+                                                    <div class="col-md-12 mb-3">
+                                                        <div class="form-group">
+                                                            <input type="text" name="name" class="form-control" id="name" placeholder="Your Name" required>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-md-12 mb-3">
+                                                        <div class="form-group">
+                                                            <input type="email" class="form-control" name="email" id="email" placeholder="Your Email" required>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-md-12 mb-3">
+                                                        <div class="form-group">
+                                                            <input type="text" class="form-control" name="subject" id="subject" placeholder="Subject" required>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-md-12">
+                                                        <div class="form-group">
+                                                            <textarea class="form-control" name="message" rows="5" placeholder="Message" required></textarea>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-md-12 text-center my-3">
+                                                        <div class="loading">Loading</div>
+                                                        <div class="error-message"></div>
+                                                        <div class="sent-message">Your message has been sent. Thank you!</div>
+                                                    </div>
+                                                    <div class="col-md-12 text-center">
+                                                        <button type="submit" class="button button-a button-big button-rouded">Send Message</button>
+                                                    </div>
+                                                </div>
+                                            </form>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="title-box-2 pt-4 pt-md-0">
+                                            <h5 class="title-left">
+                                                Get in Touch
+                                            </h5>
+                                        </div>
+                                        <div class="more-info">
+                                            <p class="lead" hidden>
+                                                Lorem ipsum dolor sit amet consectetur adipisicing elit. Facilis dolorum dolorem soluta quidem
+                                                expedita aperiam aliquid at.
+                                                Totam magni ipsum suscipit amet? Autem nemo esse laboriosam ratione nobis
+                                                mollitia inventore?
+                                            </p>
+                                            <ul class="list-ico">
+                                                <li><span class="bi bi-geo-alt"></span> 22 Wingate Mansion,Gqeberha</li>
+                                                <li><span class="bi bi-phone"></span>083 722 0291</li>
+                                                <li><span class="bi bi-envelope"></span> gearup4it@gmail.com</li>
+                                            </ul>
+                                        </div>
+                                        <div class="socials">
+                                            <ul>
+                                                <li><a href="https://web.facebook.com/Geared4IT/" target="_blank"><span class="ico-circle"><i class="bi bi-facebook"></i></span></a></li>
+                                                <li><a href="https://www.instagram.com/jacquesjafta/" target="_blank"><span class="ico-circle"><i class="bi bi-instagram"></i></span></a></li>
+                                                <li><a href="https://twitter.com/gearup4it/" target="_blank"><span class="ico-circle"><i class="bi bi-twitter"></i></span></a></li>
+                                                <li><a href="https://www.linkedin.com/in/jacques-jafta-536b1935/" target="_blank"><span class="ico-circle"><i class="bi bi-linkedin"></i></span></a></li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section><!-- End Contact Section -->
 
+    </main><!-- End #main -->
+    <!-- ======= Footer ======= -->
+    <footer>
+        <div class="container">
+            <div class="row">
+                <div class="col-sm-12">
+                    <div class="copyright-box">
+                        <p class="copyright">&copy; Copyright <strong>DevFolio</strong>. All Rights Reserved</p>
+                        <div class="credits">
+                            <!--
+                              All the links in the footer should remain intact.
+                              You can delete the links only if you purchased the pro version.
+                              Licensing information: https://bootstrapmade.com/license/
+                              Purchase the pro version with working PHP/AJAX contact form: https://bootstrapmade.com/buy/?theme=DevFolio
+                            -->
+                            Designed by <a href="https://bootstrapmade.com/">BootstrapMade</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </footer><!-- End  Footer -->
 
+    <div id="preloader"></div>
+    <a href="#" class="back-to-top d-flex align-items-center justify-content-center"><i class="bi bi-arrow-up-short"></i></a>
 
-  <script src="js/scripts.min.js"></script>
-  <script src="js/main.min.js"></script>
-  <script src="js/custom.js"></script>
-  </body>
+    <!-- Vendor JS Files -->
+    <script src="assets/vendor/purecounter/purecounter_vanilla.js"></script>
+    <script src="assets/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+    <script src="assets/vendor/glightbox/js/glightbox.min.js"></script>
+    <script src="assets/vendor/swiper/swiper-bundle.min.js"></script>
+    <script src="assets/vendor/typed.js/typed.min.js"></script>
+    <script src="assets/vendor/php-email-form/validate.js"></script>
+
+    <!-- Template Main JS File -->
+    <script src="assets/js/main.js"></script>
+
+</body>
+
 </html>
