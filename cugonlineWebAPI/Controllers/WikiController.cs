@@ -148,7 +148,33 @@ namespace cugonlineWebAPI.Controllers
 
         }
 
-       
+        [Route("GetGoodTeachings")]
+        [HttpGet]
+        [CacheFilter(TimeDuration = 999999)] //milliseconds
+        public List<GoodTeachingDTO> GetGoodTeachings()
+        {
+            var results = new List<GoodTeachingDTO>();
+
+            results = (from a in cugDB.authors
+                       join b in cugDB.books on a.author_id equals b.author_id
+                       join c in cugDB.chapters on b.book_id equals c.book_id
+
+                       select new GoodTeachingDTO
+                       {
+                           author_id = a.author_id,
+                           author_code = a.author_code,
+                           full_name = a.full_name,
+                           book_id = b.book_id,
+                           title = b.title,
+                           volume_number = b.volume_number.Value,
+                           chapter_id = c.chapter_id,
+                           chapter_number = c.chapter_number.Value,
+                           chapter_title = c.chapter_title,
+                           chapter_content= c.chapter_content
+                       }).ToList();
+            return results;
+        }
+
         [Route("GetBibles")]
         [HttpGet]
         [CacheFilter(TimeDuration = 999999)] //milliseconds
@@ -445,6 +471,21 @@ namespace cugonlineWebAPI.Controllers
         {
             public Data data { get; set; }
             public Meta meta { get; set; }
+        }
+
+        //Goodd Teaching DTO
+        public class GoodTeachingDTO
+        {
+            public int author_id { get; set; } 
+            public string author_code { get; set; }
+            public string full_name { get; set; }
+            public int book_id { get; set; }
+            public string title { get; set; }
+            public int volume_number { get; set; }
+            public int chapter_id { get; set; }
+            public int chapter_number { get; set; }
+            public string chapter_title { get; set; }
+            public string chapter_content { get; set; }
         }
 
     }

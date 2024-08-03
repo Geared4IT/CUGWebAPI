@@ -193,6 +193,9 @@
     <Compile Include="Areas\HelpPage\SampleGeneration\TextSample.cs" />
     <Compile Include="Areas\HelpPage\XmlDocumentationProvider.cs" />
     <Compile Include="Caching\CacheFilter.cs" />
+    <Compile Include="Models\author.cs">
+      <DependentUpon>CugModel.tt</DependentUpon>
+    </Compile>
     <Compile Include="Models\Bibles.cs" />
     <Compile Include="Controllers\BusinessUsersController.cs" />
     <Compile Include="Controllers\BibloController.cs" />
@@ -236,6 +239,9 @@
     <Compile Include="Models\BibloUpload.cs">
       <DependentUpon>CugModel.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\book.cs">
+      <DependentUpon>CugModel.tt</DependentUpon>
+    </Compile>
     <Compile Include="Models\Business.cs">
       <DependentUpon>CugModel.tt</DependentUpon>
     </Compile>
@@ -243,6 +249,9 @@
       <DependentUpon>CugModel.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\BusinessUser.cs">
+      <DependentUpon>CugModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\chapter.cs">
       <DependentUpon>CugModel.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\Contact.cs" />

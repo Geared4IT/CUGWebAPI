@@ -52,6 +52,9 @@ namespace cugonlineWebAPI.Models
         public virtual DbSet<Business> Businesses { get; set; }
         public virtual DbSet<BusinessProduct> BusinessProducts { get; set; }
         public virtual DbSet<BusinessUser> BusinessUsers { get; set; }
+        public virtual DbSet<author> authors { get; set; }
+        public virtual DbSet<book> books { get; set; }
+        public virtual DbSet<chapter> chapters { get; set; }
     
         public virtual ObjectResult<sp_ProcessFootNoteContent_Result> sp_ProcessFootNoteContent(string idx)
         {

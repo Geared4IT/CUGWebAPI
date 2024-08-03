@@ -32,6 +32,11 @@
         <AssociationConnector Association="testModel.FK_BusinessProducts_Business" />
         <EntityTypeShape EntityType="testModel.BusinessUser" Width="1.5" PointX="17.75" PointY="13.25" />
         <AssociationConnector Association="testModel.FK_BusinessUsers_Business" />
+        <EntityTypeShape EntityType="testModel.author" Width="1.5" PointX="8.375" PointY="16.125" />
+        <EntityTypeShape EntityType="testModel.book" Width="1.5" PointX="10.625" PointY="15.875" />
+        <EntityTypeShape EntityType="testModel.chapter" Width="1.5" PointX="12.875" PointY="15.875" />
+        <AssociationConnector Association="testModel.FK__books__author_id__57A801BA" />
+        <AssociationConnector Association="testModel.FK__chapters__book_i__5A846E65" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

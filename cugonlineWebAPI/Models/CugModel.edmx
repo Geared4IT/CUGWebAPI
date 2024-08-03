@@ -5,6 +5,14 @@
     <!-- SSDL content -->
     <edmx:StorageModels>
     <Schema Namespace="testModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012.Azure" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="authors">
+          <Key>
+            <PropertyRef Name="author_id" />
+          </Key>
+          <Property Name="author_id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="author_code" Type="varchar" MaxLength="3" Nullable="false" />
+          <Property Name="full_name" Type="varchar" MaxLength="255" Nullable="false" />
+        </EntityType>
         <!--Errors Found During Generation:
 warning 6002: The table/view 'test.dbo.BibleAbbreviations' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
         <EntityType Name="BibleAbbreviations">
@@ -96,6 +104,15 @@ warning 6002: The table/view 'test.dbo.BibleItalics' does not have a primary key
           <Property Name="Id" Type="int" Nullable="false" />
           <Property Name="SortOrder" Type="int" />
         </EntityType>
+        <EntityType Name="books">
+          <Key>
+            <PropertyRef Name="book_id" />
+          </Key>
+          <Property Name="book_id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="title" Type="varchar" MaxLength="255" Nullable="false" />
+          <Property Name="author_id" Type="int" />
+          <Property Name="volume_number" Type="int" />
+        </EntityType>
         <EntityType Name="Business">
           <Key>
             <PropertyRef Name="Id" />
@@ -156,7 +173,17 @@ warning 6002: The table/view 'test.dbo.BibleItalics' does not have a primary key
           <Property Name="IsActive" Type="bit" Nullable="false" />
           <Property Name="DateCreated" Type="datetime" Nullable="false" />
           <Property Name="LastSyncDate" Type="datetime" />
-          <Property Name="ImagePath" Type="varchar" MaxLength="150" />
+          <Property Name="ImagePath" Type="nvarchar" MaxLength="150" />
+        </EntityType>
+        <EntityType Name="chapters">
+          <Key>
+            <PropertyRef Name="chapter_id" />
+          </Key>
+          <Property Name="chapter_id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="book_id" Type="int" />
+          <Property Name="chapter_number" Type="int" />
+          <Property Name="chapter_title" Type="varchar" MaxLength="512" />
+          <Property Name="chapter_content" Type="nvarchar(max)" />
         </EntityType>
         <!--Errors Found During Generation:
 warning 6002: The table/view 'test.dbo.FileExtensions' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
@@ -180,7 +207,7 @@ warning 6002: The table/view 'test.dbo.FileExtensions' does not have a primary k
           <Property Name="fThumbs" Type="nvarchar" MaxLength="16" />
           <Property Name="filePath" Type="varchar" MaxLength="255" />
           <Property Name="fMainId" Type="int" Nullable="false" />
-          <Property Name="fileID" Type="int" Nullable="false" StoreGeneratedPattern="Identity" />
+          <Property Name="fileID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
         </EntityType>
         <!--Errors Found During Generation:
 warning 6002: The table/view 'test.dbo.FilesLink' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
@@ -248,13 +275,13 @@ warning 6002: The table/view 'test.dbo.FileTypes' does not have a primary key de
           <Key>
             <PropertyRef Name="id" />
           </Key>
-          <Property Name="id" Type="int" Nullable="false" StoreGeneratedPattern="Identity" />
+          <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="Idx" Type="varchar" MaxLength="200" Nullable="false" />
           <Property Name="Link" Type="varchar" MaxLength="200" Nullable="false" />
           <Property Name="Title" Type="varchar" MaxLength="200" Nullable="false" />
           <Property Name="CategoryN" Type="varchar" MaxLength="200" Nullable="false" />
           <Property Name="CatFlag" Type="varchar" MaxLength="200" Nullable="false" />
-          <Property Name="DateCreated" Type="smalldatetime" Nullable="false" />
+          <Property Name="DateCreated" Type="datetime" Nullable="false" />
         </EntityType>
         <!--Errors Found During Generation:
 warning 6002: The table/view 'test.dbo.Request_detail' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
@@ -265,9 +292,9 @@ warning 6002: The table/view 'test.dbo.Request_detail' does not have a primary k
             <PropertyRef Name="Id" />
           </Key>
           <Property Name="Idx" Type="int" Nullable="false" />
-          <Property Name="Update_date" Type="smalldatetime" Nullable="false" />
+          <Property Name="Update_date" Type="datetime" Nullable="false" />
           <Property Name="Update_detail" Type="nvarchar(max)" />
-          <Property Name="Id" Type="int" Nullable="false" StoreGeneratedPattern="Identity" />
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
         </EntityType>
         <!--Errors Found During Generation:
 warning 6002: The table/view 'test.dbo.Request_master' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
@@ -280,9 +307,9 @@ warning 6002: The table/view 'test.dbo.Request_master' does not have a primary k
           </Key>
           <Property Name="Idx" Type="real" Nullable="false" />
           <Property Name="Request_name" Type="nvarchar(max)" Nullable="false" />
-          <Property Name="Date_req" Type="smalldatetime" Nullable="false" />
-          <Property Name="Date_fin" Type="smalldatetime" />
-          <Property Name="Id" Type="int" Nullable="false" StoreGeneratedPattern="Identity" />
+          <Property Name="Date_req" Type="datetime" Nullable="false" />
+          <Property Name="Date_fin" Type="datetime" />
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
         </EntityType>
         <EntityType Name="SeeMain">
           <Key>
@@ -290,7 +317,7 @@ warning 6002: The table/view 'test.dbo.Request_master' does not have a primary k
           </Key>
           <Property Name="Idx" Type="nvarchar" MaxLength="250" />
           <Property Name="Link" Type="nvarchar" MaxLength="250" />
-          <Property Name="Title" Type="nvarchar" MaxLength="50" />
+          <Property Name="Title" Type="varchar" MaxLength="100" />
           <Property Name="categoryN" Type="nchar" MaxLength="10" />
           <Property Name="catFlag" Type="nvarchar(max)" />
           <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
@@ -341,6 +368,30 @@ warning 6002: The table/view 'test.dbo.txtBox' does not have a primary key defin
           <Property Name="isSuperAdmin" Type="bit" />
           <Property Name="isNew" Type="bit" />
         </EntityType>
+        <Association Name="FK__books__author_id__57A801BA">
+          <End Role="authors" Type="Self.authors" Multiplicity="0..1" />
+          <End Role="books" Type="Self.books" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="authors">
+              <PropertyRef Name="author_id" />
+            </Principal>
+            <Dependent Role="books">
+              <PropertyRef Name="author_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__chapters__book_i__5A846E65">
+          <End Role="books" Type="Self.books" Multiplicity="0..1" />
+          <End Role="chapters" Type="Self.chapters" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="books">
+              <PropertyRef Name="book_id" />
+            </Principal>
+            <Dependent Role="chapters">
+              <PropertyRef Name="book_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <Association Name="FK_BusinessProducts_Business">
           <End Role="Business" Type="Self.Business" Multiplicity="0..1" />
           <End Role="BusinessProducts" Type="Self.BusinessProducts" Multiplicity="*" />
@@ -368,20 +419,15 @@ warning 6002: The table/view 'test.dbo.txtBox' does not have a primary key defin
         <Function Name="sp_EmptyReferences" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="strLength" Type="int" Mode="In" />
         </Function>
-        <Function Name="sp_EmptyReferencesDetails" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="ph17694754111">
-          <Parameter Name="strLength" Type="int" Mode="In" />
-          <Parameter Name="type" Type="nvarchar" Mode="In" />
-        </Function>
-        <Function Name="sp_SearchFigures" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="ph17694754111">
-          <Parameter Name="Search" Type="varchar" Mode="In" />
-          <Parameter Name="isStartsWith" Type="bit" Mode="In" />
-        </Function>
         <EntityContainer Name="testModelStoreContainer">
+          <EntitySet Name="authors" EntityType="Self.authors" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="BibloMain" EntityType="Self.BibloMain" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="BibloUploads" EntityType="Self.BibloUploads" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="books" EntityType="Self.books" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Business" EntityType="Self.Business" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="BusinessProducts" EntityType="Self.BusinessProducts" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="BusinessUsers" EntityType="Self.BusinessUsers" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="chapters" EntityType="Self.chapters" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Files" EntityType="Self.Files" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Main" EntityType="Self.Main" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="MainFiles" EntityType="Self.MainFiles" Schema="dbo" store:Type="Tables" />
@@ -489,6 +535,14 @@ warning 6002: The table/view 'test.dbo.txtBox' does not have a primary key defin
     [txtBox].[txtContent] AS [txtContent]
     FROM [dbo].[txtBox] AS [txtBox]</DefiningQuery>
           </EntitySet>
+          <AssociationSet Name="FK__books__author_id__57A801BA" Association="Self.FK__books__author_id__57A801BA">
+            <End Role="authors" EntitySet="authors" />
+            <End Role="books" EntitySet="books" />
+          </AssociationSet>
+          <AssociationSet Name="FK__chapters__book_i__5A846E65" Association="Self.FK__chapters__book_i__5A846E65">
+            <End Role="books" EntitySet="books" />
+            <End Role="chapters" EntitySet="chapters" />
+          </AssociationSet>
           <AssociationSet Name="FK_BusinessProducts_Business" Association="Self.FK_BusinessProducts_Business">
             <End Role="Business" EntitySet="Business" />
             <End Role="BusinessProducts" EntitySet="BusinessProducts" />
@@ -512,7 +566,7 @@ warning 6002: The table/view 'test.dbo.txtBox' does not have a primary key defin
           <Property Name="Title" Type="String" MaxLength="200" FixedLength="false" Unicode="false" Nullable="false" />
           <Property Name="CategoryN" Type="String" MaxLength="200" FixedLength="false" Unicode="false" Nullable="false" />
           <Property Name="CatFlag" Type="String" MaxLength="200" FixedLength="false" Unicode="false" Nullable="false" />
-          <Property Name="DateCreated" Type="DateTime" Nullable="false" Precision="0" />
+          <Property Name="DateCreated" Type="DateTime" Nullable="false" Precision="3" />
         </EntityType>
         <EntityType Name="FileExtension">
           <Key>
@@ -545,7 +599,7 @@ warning 6002: The table/view 'test.dbo.txtBox' does not have a primary key defin
             <PropertyRef Name="Id" />
           </Key>
           <Property Name="Idx" Type="Int32" Nullable="false" />
-          <Property Name="Update_date" Type="DateTime" Nullable="false" Precision="0" />
+          <Property Name="Update_date" Type="DateTime" Nullable="false" Precision="3" />
           <Property Name="Update_detail" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
           <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
         </EntityType>
@@ -558,8 +612,8 @@ warning 6002: The table/view 'test.dbo.txtBox' does not have a primary key defin
           </Key>
           <Property Name="Idx" Type="Single" Nullable="false" />
           <Property Name="Request_name" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" Nullable="false" />
-          <Property Name="Date_req" Type="DateTime" Nullable="false" Precision="0" />
-          <Property Name="Date_fin" Type="DateTime" Precision="0" />
+          <Property Name="Date_req" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="Date_fin" Type="DateTime" Precision="3" />
           <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
         </EntityType>
         <EntityType Name="txtBox">
@@ -626,6 +680,17 @@ warning 6002: The table/view 'test.dbo.txtBox' does not have a primary key defin
             <Parameter Name="Search" Mode="In" Type="String" />
             <Parameter Name="isStartsWith" Mode="In" Type="Boolean" />
           </FunctionImport>
+          <EntitySet Name="authors" EntityType="testModel.author" />
+          <EntitySet Name="books" EntityType="testModel.book" />
+          <EntitySet Name="chapters" EntityType="testModel.chapter" />
+          <AssociationSet Name="FK__books__author_id__57A801BA" Association="testModel.FK__books__author_id__57A801BA">
+            <End Role="author" EntitySet="authors" />
+            <End Role="book" EntitySet="books" />
+          </AssociationSet>
+          <AssociationSet Name="FK__chapters__book_i__5A846E65" Association="testModel.FK__chapters__book_i__5A846E65">
+            <End Role="book" EntitySet="books" />
+            <End Role="chapter" EntitySet="chapters" />
+          </AssociationSet>
           <!--<FunctionImport Name="sp_EmptyReferencesDetails1" ReturnType="Collection(testModel.sp_EmptyReferencesDetails1_Result)">
             <Parameter Name="strLength" Mode="In" Type="Int32" />
             <Parameter Name="type" Mode="In" Type="String" />
@@ -691,7 +756,7 @@ warning 6002: The table/view 'test.dbo.txtBox' does not have a primary key defin
           </Key>
           <Property Name="Idx" Type="String" MaxLength="250" FixedLength="false" Unicode="true" />
           <Property Name="Link" Type="String" MaxLength="250" FixedLength="false" Unicode="true" />
-          <Property Name="Title" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="Title" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
           <Property Name="categoryN" Type="String" MaxLength="10" FixedLength="true" Unicode="true" />
           <Property Name="catFlag" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
           <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
@@ -937,7 +1002,7 @@ warning 6002: The table/view 'test.dbo.txtBox' does not have a primary key defin
           <Property Name="IsActive" Type="Boolean" Nullable="false" />
           <Property Name="DateCreated" Type="DateTime" Nullable="false" Precision="3" />
           <Property Name="LastSyncDate" Type="DateTime" Precision="3" />
-          <Property Name="ImagePath" Type="String" MaxLength="150" FixedLength="false" Unicode="false" />
+          <Property Name="ImagePath" Type="String" MaxLength="150" FixedLength="false" Unicode="true" />
           <NavigationProperty Name="Business" Relationship="testModel.FK_BusinessUsers_Business" FromRole="BusinessUser" ToRole="Business" />
         </EntityType>
         <Association Name="FK_BusinessUsers_Business">
@@ -972,6 +1037,61 @@ warning 6002: The table/view 'test.dbo.txtBox' does not have a primary key defin
           <Property Type="Int32" Name="LastUpdatedBy" Nullable="true" />
           <Property Type="String" Name="CurrentStatus" Nullable="true" MaxLength="10" />
         </ComplexType>
+        <EntityType Name="author">
+          <Key>
+            <PropertyRef Name="author_id" />
+          </Key>
+          <Property Name="author_id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="author_code" Type="String" Nullable="false" MaxLength="3" FixedLength="false" Unicode="false" />
+          <Property Name="full_name" Type="String" Nullable="false" MaxLength="255" FixedLength="false" Unicode="false" />
+          <NavigationProperty Name="books" Relationship="testModel.FK__books__author_id__57A801BA" FromRole="author" ToRole="book" />
+        </EntityType>
+        <EntityType Name="book">
+          <Key>
+            <PropertyRef Name="book_id" />
+          </Key>
+          <Property Name="book_id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="title" Type="String" Nullable="false" MaxLength="255" FixedLength="false" Unicode="false" />
+          <Property Name="author_id" Type="Int32" />
+          <Property Name="volume_number" Type="Int32" />
+          <NavigationProperty Name="author" Relationship="testModel.FK__books__author_id__57A801BA" FromRole="book" ToRole="author" />
+          <NavigationProperty Name="chapters" Relationship="testModel.FK__chapters__book_i__5A846E65" FromRole="book" ToRole="chapter" />
+        </EntityType>
+        <EntityType Name="chapter">
+          <Key>
+            <PropertyRef Name="chapter_id" />
+          </Key>
+          <Property Name="chapter_id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="book_id" Type="Int32" />
+          <Property Name="chapter_number" Type="Int32" />
+          <Property Name="chapter_title" Type="String" MaxLength="512" FixedLength="false" Unicode="false" />
+          <Property Name="chapter_content" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="book" Relationship="testModel.FK__chapters__book_i__5A846E65" FromRole="chapter" ToRole="book" />
+        </EntityType>
+        <Association Name="FK__books__author_id__57A801BA">
+          <End Type="testModel.author" Role="author" Multiplicity="0..1" />
+          <End Type="testModel.book" Role="book" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="author">
+              <PropertyRef Name="author_id" />
+            </Principal>
+            <Dependent Role="book">
+              <PropertyRef Name="author_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__chapters__book_i__5A846E65">
+          <End Type="testModel.book" Role="book" Multiplicity="0..1" />
+          <End Type="testModel.chapter" Role="chapter" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="book">
+              <PropertyRef Name="book_id" />
+            </Principal>
+            <Dependent Role="chapter">
+              <PropertyRef Name="book_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
       </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -1319,34 +1439,36 @@ warning 6002: The table/view 'test.dbo.txtBox' does not have a primary key defin
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
-          <FunctionImportMapping FunctionImportName="sp_EmptyReferencesDetails2" FunctionName="testModel.Store.sp_EmptyReferencesDetails">
-            <ResultMapping>
-              <ComplexTypeMapping TypeName="testModel.sp_EmptyReferencesDetails2_Result">
-                <ScalarProperty Name="id" ColumnName="id" />
-                <ScalarProperty Name="Idx" ColumnName="Idx" />
-                <ScalarProperty Name="body" ColumnName="body" />
-                <ScalarProperty Name="Title" ColumnName="Title" />
-                <ScalarProperty Name="CategoryN" ColumnName="CategoryN" />
-                <ScalarProperty Name="currentStatus" ColumnName="currentStatus" />
-                <ScalarProperty Name="LastUpdatedBy" ColumnName="LastUpdatedBy" />
-                <ScalarProperty Name="LastUpdated" ColumnName="LastUpdated" />
-              </ComplexTypeMapping>
-            </ResultMapping>
-          </FunctionImportMapping>
-          <FunctionImportMapping FunctionImportName="sp_SearchFigures" FunctionName="testModel.Store.sp_SearchFigures">
-            <ResultMapping>
-              <ComplexTypeMapping TypeName="testModel.sp_SearchFigures_Result">
-                <ScalarProperty Name="Id" ColumnName="Id" />
-                <ScalarProperty Name="Idx" ColumnName="Idx" />
-                <ScalarProperty Name="Title" ColumnName="Title" />
-                <ScalarProperty Name="Body" ColumnName="Body" />
-                <ScalarProperty Name="Meaning" ColumnName="Meaning" />
-                <ScalarProperty Name="LastUpdated" ColumnName="LastUpdated" />
-                <ScalarProperty Name="LastUpdatedBy" ColumnName="LastUpdatedBy" />
-                <ScalarProperty Name="CurrentStatus" ColumnName="CurrentStatus" />
-              </ComplexTypeMapping>
-            </ResultMapping>
-          </FunctionImportMapping>
+          <EntitySetMapping Name="authors">
+            <EntityTypeMapping TypeName="testModel.author">
+              <MappingFragment StoreEntitySet="authors">
+                <ScalarProperty Name="full_name" ColumnName="full_name" />
+                <ScalarProperty Name="author_code" ColumnName="author_code" />
+                <ScalarProperty Name="author_id" ColumnName="author_id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="books">
+            <EntityTypeMapping TypeName="testModel.book">
+              <MappingFragment StoreEntitySet="books">
+                <ScalarProperty Name="volume_number" ColumnName="volume_number" />
+                <ScalarProperty Name="author_id" ColumnName="author_id" />
+                <ScalarProperty Name="title" ColumnName="title" />
+                <ScalarProperty Name="book_id" ColumnName="book_id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="chapters">
+            <EntityTypeMapping TypeName="testModel.chapter">
+              <MappingFragment StoreEntitySet="chapters">
+                <ScalarProperty Name="chapter_content" ColumnName="chapter_content" />
+                <ScalarProperty Name="chapter_title" ColumnName="chapter_title" />
+                <ScalarProperty Name="chapter_number" ColumnName="chapter_number" />
+                <ScalarProperty Name="book_id" ColumnName="book_id" />
+                <ScalarProperty Name="chapter_id" ColumnName="chapter_id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
           </EntityContainerMapping>
       </Mapping>
     </edmx:Mappings>
